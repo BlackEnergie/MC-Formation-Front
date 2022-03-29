@@ -13,24 +13,12 @@ class DemandeFormation extends Component {
         super(props);   
         this.state={
             showModalConfirmation:false,
-            selectedOption:'Formation',
-            radios : [
-              { 
-                id: 1,
-                name: 'Atelier',
-                value: 'atelier'
-               
-              },
-              { 
-                id: 2,
-                name: 'Formation', 
-                value: '2'
-              },
-            ]
+            selectedOption:"",
+            sujet:"",
+            detailDemande:""
         }
     }
-    async componentDidMount() {
-    }
+
     async creationDemande(){
         const requestOptions = {
             method: 'POST',
@@ -46,20 +34,6 @@ class DemandeFormation extends Component {
                 }
             });
     }
-    handleChange = id => {
-      this.setState(prevState=>({
-        radios: prevState.radios.map(radio =>{
-          if(radio.id === id){
-            return{
-              ...radio,
-              checked : !radio.checked,
-            }
-          }
-        return radio
-      }),
-    }))
-  };
-
     renderModalConfirmation(){
         return(
             <Modal size="md" show={this.state.showModalConfirmation} onHide={()=>this.setState({showModalConfirmation:false})}>
@@ -86,29 +60,33 @@ class DemandeFormation extends Component {
                   </h1>
                 </div>
               </div>
-            <div className="row justify-content-md-center  mt-3">
+              <div className="row justify-content-md-center  mt-3">
                 <div className="col col-lg-5">
-                  {
-                  this.renderModalConfirmation()
-                  }
+                {
+                this.renderModalConfirmation()
+                }
                 <Form>
-                      <Form.Label htmlFor="inputSujet">Sélectionnez le type de formation</Form.Label>
-                      <br></br>
-                      {/* <Form.Check type="radio" label="Atelier" id ="1" checked={this.state.selectedOption === 'atelier'} onChange={()=>this.setState({selectedOption:'atelier'})></Form.Check>
-                      <Form.Check type="radio" label="Formation" id ="2" checked={this.state.selectedOption === 'formation'} onChange={()=>this.setState({selectedOption:'formation'})></Form.Check> */}
-                      {['radio'].map((type) => (
-                        <div key={`default-${type}`} className="mb-3">
-                          <Form.Check 
-                            type={type}
-                            id={`default-${type}`}
-                            label={`default ${type}`}
-                          />
-
+                    <Form.Label htmlFor="inputSujet">Sélectionnez le type de formation</Form.Label>
+                    <br></br>
+                       {['radio'].map((type) => (
+                        <div key={`inline-${type}`} className="mb-3">
                           <Form.Check
-                            disabled
+                            inline
+                            label="Atelier"
+                            value="atelier"
+                            name="group1"
                             type={type}
-                            label={`disabled ${type}`}
-                            id={`disabled-default-${type}`}
+                            id={`inline-${type}-1`}
+                            onChange={(e)=>this.setState({selectedOption:e.target.value})}
+                          />
+                          <Form.Check
+                            inline
+                            label="Formation"
+                            value="formation"
+                            name="group1"
+                            type={type}
+                            id={`inline-${type}-2`}
+                            onChange={(e)=>this.setState({selectedOption:e.target.value})}
                           />
                         </div>
                       ))}
@@ -117,15 +95,15 @@ class DemandeFormation extends Component {
                            <Example />
                          </Form.Group><Form.Group className="mt-3">
                            <Form.Label htmlFor="inputSujet">Indiquez le sujet de la formation</Form.Label>
-                           <Form.Control type="text" id="inputSujet" placeholder="Ex : Trésorie" />
+                           <Form.Control type="text" id="inputSujet" placeholder="Ex : Trésorie" value={this.state.sujet} onChange={(e)=>this.setState({sujet:e.target.value})} />
                          </Form.Group><Form.Group className="mt-3">
                            <Form.Label>Ajoutez des détails sur votre demande de formation</Form.Label>
-                           <Form.Control as="textarea" rows={5} />
-                         </Form.Group><Button className="mt-3 d-flex" variant="outline-primary" onClick={() => this.setState({ showModalConfirmation: true })}>Valider</Button></>
-                </Form>
+                           <Form.Control as="textarea" rows={5} value={this.state.detailDemande} onChange={(e)=>this.setState({detailDemande:e.target.value})}/>
+                        </Form.Group><Button className="mt-3 d-flex" variant="outline-primary" onClick={() => this.setState({ showModalConfirmation: true })}>Valider</Button>
+                 </Form>
                 </div>
             </div>
-            
+            </div>
             )
         }
     }
