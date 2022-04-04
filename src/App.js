@@ -2,10 +2,13 @@ import logo from './logo.svg';
 import React from 'react';
 import './App.css';
 import Connexion from './Connexion/Connexion';
+import Header from './Connexion/Header';
+import Footer from './Connexion/Footer';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+
   <head>
     <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet'
           integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN' crossOrigin='anonymous'/>
@@ -20,9 +23,15 @@ function App() {
     <script>var Alert = ReactBootstrap.Alert;</script>
   </head>
 
+
   return (
+      <>
+        <Header/>
         <Connexion/>
+        <Footer/>
+      </>
   );
+
 }
 
 export default App;

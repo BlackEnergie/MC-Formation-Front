@@ -1,10 +1,7 @@
 import './Connexion.css';
-import Header from './Header'
-import Footer from './Footer'
 
 import GoogleLogin from 'react-google-login';
-import { useState } from 'react';
-
+import React, {Component, useState } from 'react';
 
 import Button from 'react-bootstrap/Button';
 import NavDropdown from 'react-bootstrap/NavDropdown';
@@ -13,78 +10,80 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 
 
-function Connexion() {
-    const [loginData, setLoginData] = useState(
-        localStorage.getItem('loginData')
-            ? JSON.parse(localStorage.getItem('loginData'))
-            : null
-    );
+/*const database = [{username: "test@gmail.com",password: "pass1"},{username: "user2",password: "pass2"}];*/
 
-    //result vient de l'api avec l'erreur
-    const handleFailure = (result) => {
-        alert(result);
+
+class Connexion extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            input: {},
+            errors: {}
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     };
 
-    // googleData vient de l'api avec les informations de l'utilisateur
-    const handleLogin = async (googleData) => {
-        console.log(googleData)
-        const res = await fetch('/api/google-login', {
-            method: 'POST',
-            body: JSON.stringify({
-                token: googleData.tokenId,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
+
+    handleChange(event) {
+        let input = this.state.input;
+        input[event.target.name] = event.target.value;
+        this.setState({
+            input
         });
-
-        const data = await res.json();
-        setLoginData(data);
-        localStorage.setItem('loginData', JSON.stringify(data));
     };
 
-    //supprimer les infos si l'utilisateur de déco
-    const handleLogout = () => {
-        localStorage.removeItem('loginData');
-        setLoginData(null);
-    };
 
-    return (
-        <html>
-        <Header/>
+    handleSubmit(event) {
+        event.preventDefault();
+        console.log(this.state.input.Email)
+        console.log(this.state.input.Mdp)
+        if (this.state.input.Email == "test1@gmail.com")
+            console.log("test ici")
 
-        <body>
+    }
+
+
+    render() {
+        return (
+            <body>
             <div className="div-Connexion">
-                <img src={require("../Img/profilblue.png")} id ="logo_connexion" alt="logo-mc" />
+                <img src={require("../Img/logoblue_bgwht.png")} id="logo_connexion" alt="logo-mc"/>
                 <h1 id="titreConnexion">Connectez-vous à l'espace <br/> Formation de MIAGE Connection</h1>
-                <div id="boutonGoogle">
-                    {
-                        loginData ? (
-                            <div>
-                                <h3>Vous êtes connectés avec {loginData.email}</h3>
-                                <button onClick={handleLogout}>Se déconnecter</button>
-                            </div>
-                        ) : (
-                            <GoogleLogin
-                                clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                                buttonText="Log in with Google"
-                                onSuccess={handleLogin}
-                                onFailure={handleFailure}
-                                cookiePolicy={'single_host_origin'}
-                            > Continuer avec Google</GoogleLogin>
-                        )}
-                </div>
 
-                <div>
-                    <a id ="contactVP" href="">Entrer en contact avec VP Formation</a>
+                <form id="Form-Connexion">
+                    <div className="form-group">
+                        <input
+                            type="email"
+                            className="form-control"
+                            placeholder="Email"
+                            onChange={this.handleChange}
+                            value={this.state.input.Email}
+                            name="Email"/>
+                        <div className="text-danger">{this.state.errors.Email}</div>
+                    </div>
+                    <div className="form-group mt-3 mb-3">
+                        <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Mot de passe"
+                            onChange={this.handleChange}
+                            value={this.state.input.Mdp}
+                            name="Mdp"
+                        />
+                        <div class="text-danger">{this.state.errors.Mdp}</div>
+                    </div>
+                    <input type="button" className="form-group btn btn-primary" onClick={this.handleSubmit} value="Se Connecter"/>
+                </form>
+
+                <div id="contactVP">
+                    <a href="">Entrer en contact avec VP Formation</a>
                 </div>
             </div>
-        </body>
-
-        <Footer/>
-
-        </html>
-    );
+            </body>
+        );
+    }
 }
 
 export default Connexion;

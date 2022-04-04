@@ -13,7 +13,6 @@ import './Header.css';
 let loginData = "test";
 let loginAdmin = "test";
 
-
 function Header (){
     return(
         <header>

@@ -1,14 +1,9 @@
-html{
-    height:100vh !important;
-    display:flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
+
 
 .div-Connexion {
     text-align: center;
     color: black;
-    margin-top: 3rem;
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,22 +13,22 @@ html{
 
 #logo_connexion{
     width : 15%;
-    margin-bottom:1rem;
 }
 
 #titreConnexion{
     border-bottom: solid;
-    font-size : 2rem;
-    margin-bottom: 2rem;
+    font-size : 1.5rem;
+    margin-bottom: 1rem;
 }
 
 
-#boutonGoogle{
-    margin-bottom:2rem;
+#Form-Connexion{
+    margin-bottom:1rem;
 }
 
 #contactVP{
     font-size: 1rem;
+    margin-bottom:0.5rem;
 }
 
 .Icones{
