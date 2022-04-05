@@ -1,7 +1,7 @@
 import './Connexion.css';
 import React, {Component} from 'react';
-import Utilisateur from "../api/model/Utilisateur";
-import Api from "../api/Api";
+import Utilisateur from "../Api/model/Utilisateur";
+import Api from "../Api/Api";
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 
@@ -45,7 +45,10 @@ class Connexion extends Component {
         console.log(this.state.input.email)
         console.log(this.state.input.mdp)
         let utilisateur = this.mapFormToUtilisateur();
+        console.log("test ici");
+        console.log(utilisateur);
         this.api.postAuthentification(utilisateur).then(data =>{
+            console.log("test ici 2");
             if(!data.error){
                 this.setState({token: data});
                 const { cookies } = this.props;
@@ -57,6 +60,7 @@ class Connexion extends Component {
         }).catch(e=>{
             console.log(e);
         })
+
     }
     render() {
         return (
@@ -87,7 +91,15 @@ class Connexion extends Component {
                         
                     </div>
                     <div>{this.state.error}</div>
-                    <input type="button" className="form-group btn btn-primary" onClick={(e) => {this.handleSubmit(e)}} value="Se Connecter"/>
+                    <input type="button" className="form-group btn btn-primary" onClick={(e) => {this.handleSubmit(e)}} value="Se Connecter" alt="buttonConnexion"/>
+                    {
+                        this.props.cookies.get("token")  ? (
+                            <div id="right-side-navbar" label="testSuccess">
+                                Vous êtes connectés avec le '{this.props.cookies.get("token").roles[0]}'
+                            </div>
+                        ) : (<div></div>)
+                    }
+
                 </form>
 
                 <div id="contactVP">

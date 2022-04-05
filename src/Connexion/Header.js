@@ -61,7 +61,7 @@ class Header extends Component{
                                     ) : (
                                         <div id="right-side-navbar">
                                             <button href="" className="boutonNavbar">
-                                                <img src={require('../Img/login.png')} alt="" className="Icones" />
+                                                <img src={require('../Img/login.png')} alt="IconeConnexion" className="Icones" />
                                                 <Nav.Link>Connecter</Nav.Link>
                                             </button>
                                         </div>
