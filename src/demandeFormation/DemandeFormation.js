@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 import Select from 'react-select';
-import Button from "react-bootstrap/Button"
 import Domaine from "../api/model/Domaine";
 import Demande from "../api/model/Demande";
-import Api from "../api/Api";
 
 let domainesSelected = null;
+
+const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+  ];
 
 class DemandeFormation extends Component {
     constructor() {
@@ -40,6 +44,7 @@ class DemandeFormation extends Component {
         let demande = this.mapFormToDemande();
         console.log("handle submit")
         console.log(demande)
+        this.postDemande()
     }
 
     mapFormToDemande() {
@@ -96,6 +101,18 @@ class DemandeFormation extends Component {
             console.log("validated")
             this.handleSubmit();
         }
+    }
+
+    async postDemande() {
+        // POST request using fetch with async/await
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: 'React POST Request Example' })
+        };
+        const response = await fetch('https://reqres.in/api/posts', requestOptions);
+        const data = await response.json();
+        console.log(`data: `, data)
     }
 
     render() {
@@ -155,12 +172,6 @@ class DemandeFormation extends Component {
 
 export default DemandeFormation;
 
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
-
 class SelectComp extends Component {
 
     state = {
@@ -169,7 +180,7 @@ class SelectComp extends Component {
 
     handleChange = (selectedOption) => {
         this.setState({ selectedOption });
-        this.props.handleChangeDomaines(selectedOption);
+        console.log(this.state);
     };
 
     render() {
@@ -177,8 +188,8 @@ class SelectComp extends Component {
         return (
                 <Select
                 isMulti 
-                value={selectedOption}
-                onChange={this.handleChange}
+                value={selectedOption || ''}
+                onChange={e => this.setState({ selectedOption: e.target.value || null })}
                 options={options}
                 />
             );
