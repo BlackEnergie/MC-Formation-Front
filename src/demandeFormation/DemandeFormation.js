@@ -1,55 +1,57 @@
 import React, {Component} from 'react';
-import {components, default as ReactSelect} from "react-select";
+import Select from 'react-select';
 import Button from "react-bootstrap/Button"
-import Modal from "react-bootstrap/Modal"
 import Domaine from "../api/model/Domaine";
 import Demande from "../api/model/Demande";
 import Api from "../api/Api";
+
+let domainesSelected = null;
 
 class DemandeFormation extends Component {
     constructor() {
         super();
         this.state = {
-            input: {},
+            sujet: '', 
+            detail: '', 
             errors: {},
-            showModalConfirmation: false
         };
         this.ChildElement = React.createRef();
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeDomaines = this.handleChangeDomaines.bind(this);
+        this.handleChangeDetail = this.handleChangeDetail.bind(this);
+        this.handleChangeSujet = this.handleChangeSujet.bind(this);
+        this.validate = this.validate.bind(this);
     }
 
-    handleChange(event) {
-        let input = this.state.input;
-        input[event.target.name] = event.target.value;
-        this.setState({
-            input
-        });
+    handleChangeDomaines(params) {
+        domainesSelected = params
+        console.log(`Domaines selected:`, domainesSelected)
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
-        if (this.state.showModalConfirmation) {
-            let demande = this.mapFormToDemande();
-            Api.postDemande(demande).then(
-                res => console.log(res)
-            );
-
-        }
+    handleChangeDetail(event) {
+        this.setState({detail: event.target.value});
     }
 
-    mapFormToDemande(): Demande {
-        let childElement = this.ChildElement.current;
-        let input = this.state.input;
-        let demande = new Demande();
+    handleChangeSujet(event) {
+        this.setState({sujet: event.target.value});
+    }
+
+    handleSubmit() {
+        
+        let demande = this.mapFormToDemande();
+        console.log("handle submit")
+        console.log(demande)
+    }
+
+    mapFormToDemande() {
+        let demande = new Demande()
+        let domaines = []
         demande.date = Date.now();
-        demande.sujet = input["sujet"];
-        demande.detail = input["detail"];
-        let domaines = [];
-        childElement.state.optionSelected.forEach(instance => {
+        demande.sujet = this.state.sujet;
+        demande.detail = this.state.detail;
+        domainesSelected.forEach(element => {
             let domaine = new Domaine();
-            domaine.code = instance.value;
-            domaine.libelle = instance.label;
+            domaine.code = element.value;
+            domaine.libelle = element.label;
             domaines.push(domaine);
         })
         demande.domaines = domaines;
@@ -58,111 +60,89 @@ class DemandeFormation extends Component {
 
     resetForm() {
         let childElement = this.ChildElement.current;
-        let input = {};
         childElement.setState({optionSelected: null});
-        input["sujet"] = "";
-        input["detail"] = "";
-        this.setState({input: input});
+        this.setState(
+            {domaines: [], sujet: '', detail: '', errors: {}}
+            );
     }
 
     validate() {
-        let childElement = this.ChildElement.current;
-        let input = this.state.input;
+        
         let errors = {};
         let isValid = true;
-
-        if (!input["sujet"]) {
+        
+        console.log('try reading state')
+        console.log(this.state)
+        if (!this.state.sujet) {
             isValid = false;
+            console.log("sujet unvalidated")
             errors["sujet"] = "Renseigner un sujet.";
         }
-        if (!input["detail"]) {
+        if (!this.state.detail) {
             isValid = false;
+            console.log("detail unvalidated")
             errors["detail"] = "Renseigner les détails de la demande.";
         }
-        if (childElement.state.optionSelected === null || childElement.state.optionSelected.length === 0) {
+        if (!domainesSelected) {
             isValid = false;
+            console.log("domaines unvalidated")
             errors["domaines"] = "Renseigner au moins un domaine.";
         }
         this.setState({
             errors: errors
         });
-        if (isValid) {
-            this.setState({showModalConfirmation: true})
-        }
-        return isValid;
-    }
 
-    renderModalConfirmation() {
-        return (
-            <Modal size="md" show={this.state.showModalConfirmation}
-                   onHide={() => this.setState({showModalConfirmation: false})}>
-                <Modal.Header>
-                    <Modal.Title>Confirmer la demande de formation</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Voulez-vous confirmer la demande de formation ?
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button type="submit" className="justify-content-center align-items-center"
-                            variant="outline-success" size="lg" onClick={(e) => {
-                        this.handleSubmit(e);
-                        this.setState({showModalConfirmation: false})
-                    }}>Valider</Button>{' '}
-                    <Button className="justify-content-center align-items-center" variant="outline-danger" size="lg"
-                            onClick={() => this.setState({showModalConfirmation: false})}>Annuler</Button>
-                </Modal.Footer>
-            </Modal>
-        )
+        if (isValid) {
+            console.log("validated")
+            this.handleSubmit();
+        }
     }
 
     render() {
         return (
-            <div class="DemandeFormation">
-                {this.renderModalConfirmation()}
-                <div class="row justify-content-md-center  mt-3">
-                    <div class="col col-lg-5 border border-dark">
-                        <h1 class="justify-content-center align-items-center">
+            <div className="DemandeFormation">
+                <div className="row justify-content-md-center  mt-3">
+                    <div className="col col-lg-5 border border-dark">
+                        <h1 className="justify-content-center align-items-center">
                             <u>DEMANDE DE FORMATION</u>
                         </h1>
                     </div>
                 </div>
-                <div class="row justify-content-md-center  mt-3">
-                    <div class="col col-lg-5">
+                <div className="row justify-content-md-center  mt-3">
+                    <div className="col col-lg-5">
                         <form>
-                            <div class="form-group">
-                                <label for="name" class="mt-2 mb-2">Indiquez le ou les domaines de formation ?</label>
-                                <Select ref={this.ChildElement}/>
-                                <div class="text-danger">{this.state.errors.domaines}</div>
+                            <div className="form-group">
+                                <label htmlFor="name" className="mt-2 mb-2">Indiquez le ou les domaines de formation ?</label>
+                                <SelectComp ref={this.ChildElement} handleChangeDomaines={this.handleChangeDomaines.bind(this)}/>
+                                <div className="text-danger">{this.state.errors.domaines}</div>
                             </div>
-                            <div class="form-group">
-                                <label for="sujet" class="mt-2">Indiquez le sujet de la formation</label>
+                            <div className="form-group">
+                                <label htmlFor="sujet" className="mt-2">Indiquez le sujet de la formation</label>
                                 <input
                                     type="text"
                                     name="sujet"
-                                    value={this.state.input.sujet}
-                                    onChange={this.handleChange}
-                                    class="form-control mt-2"
+                                    value={this.state.sujet}
+                                    onChange={this.handleChangeSujet}
+                                    className="form-control mt-2"
                                     placeholder="Ex : Trésorie"
                                     id="email"/>
-                                <div class="text-danger">{this.state.errors.sujet}</div>
+                                <div className="text-danger">{this.state.errors.sujet}</div>
                             </div>
-                            <div class="form-group">
-                                <label for="detail" class="mt-2">Ajoutez des détails sur votre demande de
+                            <div className="form-group">
+                                <label htmlFor="detail" className="mt-2">Ajoutez des détails sur votre demande de
                                     formation</label>
                                 <textarea
                                     name="detail"
-                                    value={this.state.input.detail}
-                                    onChange={this.handleChange}
+                                    value={this.state.detail}
+                                    onChange={this.handleChangeDetail}
                                     placeholder="Date, déroulement, pré-requis, ..."
-                                    class="form-control mt-2"
+                                    className="form-control mt-2"
                                     rows="7"/>
-                                <div class="text-danger">{this.state.errors.detail}</div>
+                                <div className="text-danger">{this.state.errors.detail}</div>
                             </div>
-                            <div class="row mt-2 justify-content-center align-items-center">
-                                <div class="col col-lg-2">
-                                    <input type="button" value="Valider" class="btn btn-primary" onClick={() => {
-                                        this.validate()
-                                    }}/>
+                            <div className="row mt-2 justify-content-center align-items-center">
+                                <div className="col col-lg-2">
+                                    <input type="button" value="Valider" className="btn btn-primary" onClick={this.validate}/>
                                 </div>
                             </div>
                         </form>
@@ -175,64 +155,34 @@ class DemandeFormation extends Component {
 
 export default DemandeFormation;
 
-class Select extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            optionSelected: null,
-            listOptions: [
-                {value: '1', label: 'Chocolate'},
-                {value: '2', label: 'Strawberry'},
-                {value: '3', label: 'Vanilla'}
-            ]
-        };
-    }
+const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+  ];
 
-    async componentDidMount() {
-        this.recuperationDesDomaines();
-    }
+class SelectComp extends Component {
 
-    handleChange = (selected) => {
-        this.setState({
-            optionSelected: selected
-        });
+    state = {
+        selectedOption: null,
     };
 
-    option = (props) => {
-        return (
-            <div>
-                <components.Option {...props}>
-                    <input
-                        type="checkbox"
-                        checked={props.isSelected}
-                        onChange={() => null}
-                    />{" "}
-                    <label>{props.label}</label>
-                </components.Option>
-            </div>
-        );
+    handleChange = (selectedOption) => {
+        this.setState({ selectedOption });
+        this.props.handleChangeDomaines(selectedOption);
     };
 
     render() {
+        const { selectedOption } = this.state;
         return (
-            <span
-                data-toggle="popover"
-                data-trigger="focus"
-                data-content="Domaines de formation"
-            >
-        <ReactSelect
-            options={this.state.listOptions}
-            isMulti
-            closeMenuOnSelect={false}
-            hideSelectedOptions={false}
-            components={this.option}
-            placeholder="Ex : Informatique"
-            onChange={this.handleChange}
-            allowSelectAll={true}
-            value={this.state.optionSelected}
-        />
-      </span>
-        );
+                <Select
+                isMulti 
+                value={selectedOption}
+                onChange={this.handleChange}
+                options={options}
+                />
+            );
     }
+
 }
 

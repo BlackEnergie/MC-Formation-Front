@@ -1,6 +1,6 @@
 export default class Api {
 
-    private URL = {
+    URL = {
         SERVER: 'http://localhost:8080',
         DEMANDE: '/demande',
         DONNEES: '/data',
@@ -8,20 +8,20 @@ export default class Api {
         POST: '/creer'
     }
 
-    private CONTENT_TYPE = {
+    CONTENT_TYPE = {
         json: 'application/json',
         html: 'text/html'
     }
 
-    private postDemandeUrl() {
+    postDemandeUrl() {
         return this.URL.SERVER + this.URL.DEMANDE + this.URL.POST;
     }
 
-    private getDomainesUrl() {
+    getDomainesUrl() {
         return this.URL.SERVER + this.URL.DONNEES + this.URL.DOMAINES;
     }
 
-    getRequestOptions(method: string, contentType: string, body: any) {
+    getRequestOptions(method, contentType, body) {
         if (typeof body !== "string") {
             body = JSON.stringify(body);
         }
@@ -50,7 +50,7 @@ export default class Api {
             })
     }
 
-    async postDemande(demande: Demande) {
+    async postDemande(demande) {
         let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json, demande);
         fetch(this.postDemandeUrl(), request)
             .then(response => {
