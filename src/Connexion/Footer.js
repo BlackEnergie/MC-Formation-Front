@@ -1,5 +1,6 @@
 import React from 'react';
 import './Footer.css';
+import { withCookies} from 'react-cookie';
 
 function Footer (){
     return(
@@ -16,4 +17,4 @@ function Footer (){
         </footer>
     )
 }
-export default Footer;
+export default withCookies(Footer);

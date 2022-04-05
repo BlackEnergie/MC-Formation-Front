@@ -1,30 +1,28 @@
 import './Connexion.css';
-
-import GoogleLogin from 'react-google-login';
-import React, {Component, useState } from 'react';
-
-import Button from 'react-bootstrap/Button';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import Container from 'react-bootstrap/Container';
-
-
-/*const database = [{username: "test@gmail.com",password: "pass1"},{username: "user2",password: "pass2"}];*/
-
+import React, {Component} from 'react';
+import Utilisateur from "../api/model/Utilisateur";
+import Api from "../api/Api";
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
 
 class Connexion extends Component {
 
-    constructor() {
-        super();
-        this.state = {
-            input: {},
-            errors: {}
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
     };
 
+    constructor(props) {
+        super(props);
+        const {cookies} =props;
+        this.state = {
+            input: {},
+            error: '',
+            token: cookies.get('token') || ''
+        };
+        this.api=new Api();
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
     handleChange(event) {
         let input = this.state.input;
@@ -34,20 +32,34 @@ class Connexion extends Component {
         });
     };
 
-
+    mapFormToUtilisateur(){
+        let input = this.state.input;
+        let utilisateur = new Utilisateur();
+        utilisateur.nomUtilisateur = input["email"];
+        utilisateur.password = input["mdp"];
+        return utilisateur;
+    }
+    
     handleSubmit(event) {
         event.preventDefault();
-        console.log(this.state.input.Email)
-        console.log(this.state.input.Mdp)
-        if (this.state.input.Email == "test1@gmail.com")
-            console.log("test ici")
-
+        console.log(this.state.input.email)
+        console.log(this.state.input.mdp)
+        let utilisateur = this.mapFormToUtilisateur();
+        this.api.postAuthentification(utilisateur).then(data =>{
+            if(!data.error){
+                this.setState({token: data});
+                const { cookies } = this.props;
+                cookies.set('token', data, { path: '/' });
+            }
+            else{
+                this.setState({error: "Mauvais identifiant et mot de passe."});
+            }
+        }).catch(e=>{
+            console.log(e);
+        })
     }
-
-
     render() {
         return (
-            <body>
             <div className="div-Connexion">
                 <img src={require("../Img/logoblue_bgwht.png")} id="logo_connexion" alt="logo-mc"/>
                 <h1 id="titreConnexion">Connectez-vous à l'espace <br/> Formation de MIAGE Connection</h1>
@@ -55,35 +67,35 @@ class Connexion extends Component {
                 <form id="Form-Connexion">
                     <div className="form-group">
                         <input
+                            id="email"
                             type="email"
                             className="form-control"
                             placeholder="Email"
                             onChange={this.handleChange}
-                            value={this.state.input.Email}
-                            name="Email"/>
-                        <div className="text-danger">{this.state.errors.Email}</div>
+                            name="email"/>
+                        
                     </div>
                     <div className="form-group mt-3 mb-3">
                         <input
+                            id="mdp"
                             type="password"
                             className="form-control"
                             placeholder="Mot de passe"
                             onChange={this.handleChange}
-                            value={this.state.input.Mdp}
-                            name="Mdp"
+                            name="mdp"
                         />
-                        <div class="text-danger">{this.state.errors.Mdp}</div>
+                        
                     </div>
-                    <input type="button" className="form-group btn btn-primary" onClick={this.handleSubmit} value="Se Connecter"/>
+                    <div>{this.state.error}</div>
+                    <input type="button" className="form-group btn btn-primary" onClick={(e) => {this.handleSubmit(e)}} value="Se Connecter"/>
                 </form>
 
                 <div id="contactVP">
-                    <a href="">Entrer en contact avec VP Formation</a>
+                    <a href="/">Entrer en contact avec VP Formation</a>
                 </div>
             </div>
-            </body>
         );
     }
 }
 
-export default Connexion;
+export default withCookies(Connexion);
