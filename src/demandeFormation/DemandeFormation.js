@@ -16,13 +16,14 @@ const DemandeFormation = () => {
     const [sujet, setSujet] = useState('');
     const [detail, setDetail] = useState('');
     const [errors, setErrors] = useState({});
-    const [domaines, setDomaines] = useState(null);
+    const [domaines, setDomaines] = useState([]);
     const notify = () => toast.success('Demande de formation envoyée');
 
     const handleSubmit = () => {
         
         let demande = mapFormToDemande();
         notify()
+        console.log(demande);
         resetForm()
     }
 
@@ -45,7 +46,7 @@ const DemandeFormation = () => {
         setSujet('');
         setDetail('');
         setErrors({});
-        setDomaines(null);
+        setDomaines([]);
     }
 
     const validate = () => {
@@ -61,7 +62,7 @@ const DemandeFormation = () => {
             isValid = false;
             errors["detail"] = "Renseigner les détails de la demande.";
         }
-        if (!domaines) {
+        if (domaines.length === 0) {
             isValid = false;
             errors["domaines"] = "Renseigner au moins un domaine.";
         }
@@ -119,7 +120,7 @@ const DemandeFormation = () => {
                                 <input type="button" value="Valider" className="btn btn-primary" onClick={validate}/>
                             </div>
                             <div className="p-2">
-                                <input type="button" value="Reset" className="btn btn-secondary" onClick={resetForm}/>
+                                <input type="button" value="Reset" className="btn btn-primary" onClick={resetForm}/>
                             </div>
                         </div>
                     </form>
