@@ -4,10 +4,23 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
+import { Toaster } from 'react-hot-toast';
 
 ReactDOM.render(
     <React.StrictMode>
         <App/>
+        <Toaster
+            position="bottom-left"
+            toastOptions={{
+                // Define default options
+                className: '',
+                duration: 5000,
+                style: {
+                  background: 'white',
+                  color: 'green',
+                },
+              }} 
+        />
     </React.StrictMode>,
     document.getElementById('root')
 );

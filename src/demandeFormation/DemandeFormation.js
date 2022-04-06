@@ -1,199 +1,162 @@
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
 import Select from 'react-select';
 import Domaine from "../api/model/Domaine";
 import Demande from "../api/model/Demande";
-
-let domainesSelected = null;
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const options = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' },
-  ];
+];
 
-class DemandeFormation extends Component {
-    constructor() {
-        super();
-        this.state = {
-            sujet: '', 
-            detail: '', 
-            errors: {},
-        };
-        this.ChildElement = React.createRef();
-        this.handleChangeDomaines = this.handleChangeDomaines.bind(this);
-        this.handleChangeDetail = this.handleChangeDetail.bind(this);
-        this.handleChangeSujet = this.handleChangeSujet.bind(this);
-        this.validate = this.validate.bind(this);
-    }
+const DemandeFormation = () => {
 
-    handleChangeDomaines(params) {
-        domainesSelected = params
-        console.log(`Domaines selected:`, domainesSelected)
-    }
+    const [sujet, setSujet] = useState('');
+    const [detail, setDetail] = useState('');
+    const [errors, setErrors] = useState({});
+    const [domaines, setDomaines] = useState(null);
 
-    handleChangeDetail(event) {
-        this.setState({detail: event.target.value});
-    }
-
-    handleChangeSujet(event) {
-        this.setState({sujet: event.target.value});
-    }
-
-    handleSubmit() {
+    const handleSubmit = () => {
         
-        let demande = this.mapFormToDemande();
-        console.log("handle submit")
-        console.log(demande)
-        this.postDemande()
+        let demande = mapFormToDemande();
+        console.log(demande);
+        resetForm()
     }
 
-    mapFormToDemande() {
+    const mapFormToDemande = () => {
         let demande = new Demande()
-        let domaines = []
+        let domainesArr = []
         demande.date = Date.now();
-        demande.sujet = this.state.sujet;
-        demande.detail = this.state.detail;
-        domainesSelected.forEach(element => {
+        demande.sujet = sujet;
+        demande.detail = detail;
+        domaines.forEach(element => {
             let domaine = new Domaine();
             domaine.code = element.value;
             domaine.libelle = element.label;
-            domaines.push(domaine);
+            domainesArr.push(domaine);
         })
-        demande.domaines = domaines;
+        demande.domaines = domainesArr;
         return demande;
     }
 
-    resetForm() {
-        let childElement = this.ChildElement.current;
-        childElement.setState({optionSelected: null});
-        this.setState(
-            {domaines: [], sujet: '', detail: '', errors: {}}
-            );
+    const resetForm = () => {
+        setSujet('');
+        setDetail('');
+        setErrors({});
+        setDomaines(null);
     }
 
-    validate() {
+    const validate = () => {
         
         let errors = {};
         let isValid = true;
         
-        console.log('try reading state')
-        console.log(this.state)
-        if (!this.state.sujet) {
+        if (!sujet) {
             isValid = false;
-            console.log("sujet unvalidated")
             errors["sujet"] = "Renseigner un sujet.";
         }
-        if (!this.state.detail) {
+        if (!detail) {
             isValid = false;
-            console.log("detail unvalidated")
             errors["detail"] = "Renseigner les détails de la demande.";
         }
-        if (!domainesSelected) {
+        if (!domaines) {
             isValid = false;
-            console.log("domaines unvalidated")
             errors["domaines"] = "Renseigner au moins un domaine.";
         }
-        this.setState({
-            errors: errors
-        });
-
         if (isValid) {
-            console.log("validated")
-            this.handleSubmit();
+            handleSubmit();
+        }
+        else {
+            setErrors(errors);
         }
     }
 
-    async postDemande() {
-        // POST request using fetch with async/await
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: 'React POST Request Example' })
-        };
-        const response = await fetch('https://reqres.in/api/posts', requestOptions);
-        const data = await response.json();
-        console.log(`data: `, data)
-    }
+    const notify = () => toast.success('Demande de formation envoyée');
 
-    render() {
-        return (
-            <div className="DemandeFormation">
-                <div className="row justify-content-md-center  mt-3">
-                    <div className="col col-lg-5 border border-dark">
-                        <h1 className="justify-content-center align-items-center">
-                            <u>DEMANDE DE FORMATION</u>
-                        </h1>
-                    </div>
-                </div>
-                <div className="row justify-content-md-center  mt-3">
-                    <div className="col col-lg-5">
-                        <form>
-                            <div className="form-group">
-                                <label htmlFor="name" className="mt-2 mb-2">Indiquez le ou les domaines de formation ?</label>
-                                <SelectComp ref={this.ChildElement} handleChangeDomaines={this.handleChangeDomaines.bind(this)}/>
-                                <div className="text-danger">{this.state.errors.domaines}</div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="sujet" className="mt-2">Indiquez le sujet de la formation</label>
-                                <input
-                                    type="text"
-                                    name="sujet"
-                                    value={this.state.sujet}
-                                    onChange={this.handleChangeSujet}
-                                    className="form-control mt-2"
-                                    placeholder="Ex : Trésorie"
-                                    id="email"/>
-                                <div className="text-danger">{this.state.errors.sujet}</div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="detail" className="mt-2">Ajoutez des détails sur votre demande de
-                                    formation</label>
-                                <textarea
-                                    name="detail"
-                                    value={this.state.detail}
-                                    onChange={this.handleChangeDetail}
-                                    placeholder="Date, déroulement, pré-requis, ..."
-                                    className="form-control mt-2"
-                                    rows="7"/>
-                                <div className="text-danger">{this.state.errors.detail}</div>
-                            </div>
-                            <div className="row mt-2 justify-content-center align-items-center">
-                                <div className="col col-lg-2">
-                                    <input type="button" value="Valider" className="btn btn-primary" onClick={this.validate}/>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+    return (
+        <div className="DemandeFormation">
+            <div className="row justify-content-md-center  mt-3">
+                <div className="col col-lg-5 border border-dark">
+                    <h1 className="justify-content-center align-items-center">
+                        <u>DEMANDE DE FORMATION</u>
+                    </h1>
                 </div>
             </div>
-        );
-    }
+            <div className="row justify-content-md-center  mt-3">
+                <div className="col col-lg-5">
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="name" className="mt-2 mb-2">Indiquez le ou les domaines de formation ?</label>
+                            <SelectComp domaines={domaines} handleChange={setDomaines}/>
+                            <div className="text-danger">{errors.domaines}</div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="sujet" className="mt-2">Indiquez le sujet de la formation</label>
+                            <input
+                                type="text"
+                                name="sujet"
+                                value={sujet}
+                                onChange={event => setSujet(event.target.value)}
+                                className="form-control mt-2"
+                                placeholder="Ex : Trésorie"
+                                id="email"/>
+                            <div className="text-danger">{errors.sujet}</div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="detail" className="mt-2">Ajoutez des détails sur votre demande de
+                                formation</label>
+                            <textarea
+                                name="detail"
+                                value={detail}
+                                onChange={event => setDetail(event.target.value)}
+                                placeholder="Date, déroulement, pré-requis, ..."
+                                className="form-control mt-2"
+                                rows="7"/>
+                            <div className="text-danger">{errors.detail}</div>
+                        </div>
+                        <div className="row mt-2 justify-content-center align-items-center">
+                            <div className="col col-lg-2">
+                                <input type="button" value="Valider" className="btn btn-primary" onClick={notify}/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default DemandeFormation;
 
-class SelectComp extends Component {
+const SelectComp = ({ domaines, handleChange }) => {
 
-    state = {
-        selectedOption: null,
-    };
+    useEffect(() => {
+        const url = "https://api.adviceslip.com/advice"
 
-    handleChange = (selectedOption) => {
-        this.setState({ selectedOption });
-        console.log(this.state);
-    };
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url);
+                const json = await response.json();
+                console.log(json);
+                } catch (error) {
+                console.log("error", error);
+                }
+        };
 
-    render() {
-        const { selectedOption } = this.state;
-        return (
-                <Select
-                isMulti 
-                value={selectedOption || ''}
-                onChange={e => this.setState({ selectedOption: e.target.value || null })}
-                options={options}
-                />
-            );
-    }
+        fetchData();
+    }, []);
 
+    return (
+        <Select
+            isMulti 
+            isClearable
+            isSearchable={false}  
+            defaultValue={domaines}
+            value={domaines}
+            onChange={handleChange}
+            options={options}
+        />
+    );
 }
-
