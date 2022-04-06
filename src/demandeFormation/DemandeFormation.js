@@ -17,18 +17,18 @@ const DemandeFormation = () => {
     const [detail, setDetail] = useState('');
     const [errors, setErrors] = useState({});
     const [domaines, setDomaines] = useState(null);
+    const notify = () => toast.success('Demande de formation envoyée');
 
     const handleSubmit = () => {
         
         let demande = mapFormToDemande();
-        console.log(demande);
+        notify()
         resetForm()
     }
 
     const mapFormToDemande = () => {
         let demande = new Demande()
         let domainesArr = []
-        demande.date = Date.now();
         demande.sujet = sujet;
         demande.detail = detail;
         domaines.forEach(element => {
@@ -73,8 +73,6 @@ const DemandeFormation = () => {
         }
     }
 
-    const notify = () => toast.success('Demande de formation envoyée');
-
     return (
         <div className="DemandeFormation">
             <div className="row justify-content-md-center  mt-3">
@@ -84,8 +82,8 @@ const DemandeFormation = () => {
                     </h1>
                 </div>
             </div>
-            <div className="row justify-content-md-center  mt-3">
-                <div className="col col-lg-5">
+            <div className="row justify-content-md-center mt-3">
+                <div className="col col-lg-5 ">
                     <form>
                         <div className="form-group">
                             <label htmlFor="name" className="mt-2 mb-2">Indiquez le ou les domaines de formation ?</label>
@@ -116,9 +114,12 @@ const DemandeFormation = () => {
                                 rows="7"/>
                             <div className="text-danger">{errors.detail}</div>
                         </div>
-                        <div className="row mt-2 justify-content-center align-items-center">
-                            <div className="col col-lg-2">
-                                <input type="button" value="Valider" className="btn btn-primary" onClick={notify}/>
+                        <div className="d-flex justify-content-center">
+                            <div className="p-2">
+                                <input type="button" value="Valider" className="btn btn-primary" onClick={validate}/>
+                            </div>
+                            <div className="p-2">
+                                <input type="button" value="Reset" className="btn btn-secondary" onClick={resetForm}/>
                             </div>
                         </div>
                     </form>

@@ -10,7 +10,7 @@ ReactDOM.render(
     <React.StrictMode>
         <App/>
         <Toaster
-            position="bottom-left"
+            position="top-right"
             toastOptions={{
                 // Define default options
                 className: '',
