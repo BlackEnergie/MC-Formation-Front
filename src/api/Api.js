@@ -26,16 +26,10 @@ export default class Api {
     async postAuthentification(utilisateur) {
         let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json, utilisateur);
         let donnee;
-        console.log("test ici 3");
-        console.log(request);
-        console.log(this.postAuthentificationURL());
          await fetch(this.postAuthentificationURL(), request)
         .then(function(response) {
-            console.log("test ici 4");
-
             return response.json();
           }).then(function(data) {
-            console.log(data);
             donnee= data;
           });
         return donnee;

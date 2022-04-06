@@ -1,7 +1,7 @@
 import './Connexion.css';
 import React, {Component} from 'react';
-import Utilisateur from "../Api/model/Utilisateur";
-import Api from "../Api/Api";
+import Utilisateur from "../api/model/Utilisateur";
+import Api from "../api/Api";
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 
@@ -42,13 +42,8 @@ class Connexion extends Component {
     
     handleSubmit(event) {
         event.preventDefault();
-        console.log(this.state.input.email)
-        console.log(this.state.input.mdp)
         let utilisateur = this.mapFormToUtilisateur();
-        console.log("test ici");
-        console.log(utilisateur);
         this.api.postAuthentification(utilisateur).then(data =>{
-            console.log("test ici 2");
             if(!data.error){
                 this.setState({token: data});
                 const { cookies } = this.props;

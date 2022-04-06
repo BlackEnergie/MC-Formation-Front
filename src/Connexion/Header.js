@@ -38,7 +38,7 @@ class Header extends Component{
                             <Nav className="me-auto">
                                 {/*Partie Bouton Espace Admin*/}
                                 { 
-                                    cookies.get("token") && cookies.get("token").roles[0]==="ROLE_ADMIN" ? (
+                                    cookies.get("token") && cookies.get("token").roles[0]==="ROLE_BN" ? (
                                         <div id="right-side-navbar">
                                             <button href="" className="boutonNavbar">
                                                 <img src={require('../Img/parametres-des-engrenages.png')} alt="" className="Icones" />

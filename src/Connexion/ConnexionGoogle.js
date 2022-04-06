@@ -27,7 +27,6 @@ function Connexion() {
 
     // googleData vient de l'api avec les informations de l'utilisateur
     const handleLogin = async (googleData) => {
-        console.log(googleData)
         const res = await fetch('/api/google-login', {
             method: 'POST',
             body: JSON.stringify({
