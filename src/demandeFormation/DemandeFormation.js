@@ -4,8 +4,7 @@ import Demande from "../api/model/Demande";
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import Api from '../api/Api';
-import { Select } from 'antd';
-import 'antd/dist/antd.css';
+import Select from 'react-select';
 
 const DemandeFormation = () => {
 
@@ -76,12 +75,16 @@ const DemandeFormation = () => {
 
     useEffect(() => {
         async function someOtherFunc() {
+            let optionsArray = []
             
         setLoading(true)
         let api = new Api();
         api.getDomaines()
             .then((res) => { 
-                setOptions(res);
+                for (const element of res) {
+                    optionsArray.push({value: element.code, label:element.libelle});
+                }
+                setOptions(optionsArray);
                 setLoading(false);
             })
             .catch(function(err) {  
@@ -155,28 +158,19 @@ export default DemandeFormation;
 
 const SelectComp = ({ domaines, options, handleChange }) => {
 
-    const { Option } = Select;
-
-    const children = [];
-
-    for (const element of options) {
-        children.push(<Option key={element.code} title={element.description} >{element.libelle}</Option>);
-    }
-
     return (
-        <>
-            <Select
-            mode="multiple"
-            showArrow="true"
-            allowClear
-            style={{ width: '100%' }}
-            placeholder="Please select"
+        <Select
+            isMulti 
+            isClearable
+            isSearchable={false}  
             defaultValue={domaines}
+            value={domaines}
+            placeholder="Veuillez selectionner au moins un domaine"
             onChange={handleChange}
-            >
-            {children}
-            </Select>
-
-        </>    
+            options={options}
+        />
     );
 }
+
+
+
