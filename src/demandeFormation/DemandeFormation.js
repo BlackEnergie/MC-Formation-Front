@@ -96,7 +96,7 @@ const DemandeFormation = () => {
                 console.log(err);
             });
         }
-        
+
         someOtherFunc();
     }, []);
 
@@ -115,7 +115,7 @@ const DemandeFormation = () => {
                     <form>
                         <div className="form-group">
                             <label htmlFor="name" className="mt-2 mb-2">Indiquez le ou les domaines de formation ?</label>
-                            <SelectComp domaines={domaines.libelle} options={options} handleChange={setDomaines}/>
+                            <SelectComp domaines={domaines} options={options} handleChange={setDomaines}/>
                             <div className="text-danger">{hasUnfilled.domaines}</div>
                         </div>
                         <div className="form-group">
