@@ -4,8 +4,6 @@ import Connexion from './Connexion/Connexion';
 import Header from './Connexion/Header';
 import Footer from './Connexion/Footer';
 
-import { withCookies, Cookies } from 'react-cookie';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
