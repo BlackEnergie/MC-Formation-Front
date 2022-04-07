@@ -1,0 +1,26 @@
+footer{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2B309B;
+    color:white;
+}
+
+#contact_mail{
+    padding-left: 2%;
+}
+
+.footer_div{
+    width:33%;
+}
+
+#footer-img {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+}
+
+#logo-footer{
+    width:20%;
+}

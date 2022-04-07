@@ -5,7 +5,8 @@ export default class Api {
         DEMANDE: '/demande',
         DONNEES: '/data',
         DOMAINES: '/domaines',
-        POST: '/creer'
+        POST: '/creer',
+        UTILISATEUR: '/api/auth/signin'
     }
 
     CONTENT_TYPE = {
@@ -21,13 +22,18 @@ export default class Api {
         return this.URL.SERVER + this.URL.DONNEES + this.URL.DOMAINES;
     }
 
+
+    postAuthentificationURL() {
+        return this.URL.SERVER + this.URL.UTILISATEUR
+    }
+
     getRequestOptions(method, contentType, body) {
         if (typeof body !== "string") {
             body = JSON.stringify(body);
         }
         return {
             method: method,
-            headers: {contentType},
+            headers: {'Content-Type':contentType},
             body: body
         }
     }
@@ -54,6 +60,19 @@ export default class Api {
                     window.alert("Une erreur est survenue pendant la création de la demande de formation");
                 }
             });
+        }
+    }
+
+    async postAuthentification(utilisateur) {
+        let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json, utilisateur);
+        let donnee;
+         await fetch(this.postAuthentificationURL(), request)
+        .then(function(response) {
+            return response.json();
+          }).then(function(data) {
+            donnee= data;
+          });
+        return donnee;
     }
 
 }

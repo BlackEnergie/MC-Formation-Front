@@ -1,0 +1,45 @@
+#right-side-navbar{
+    display:flex;
+    justify-content: center;
+}
+
+.boutonNavbar{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border-radius : 5px;
+    margin: 0 1rem 0 0;
+    padding:0 0.3rem 0 0.3rem;
+}
+
+#header-connexion{
+    background-color: #2B309B;
+    color: white !important;
+    display:flex;
+    justify-content: space-between;
+    padding : 0 3rem 0 3rem;
+}
+
+
+#imageNavBar{
+    height: 4rem;
+    width: 4rem;
+    margin-bottom:0;
+}
+
+#navbarBrand{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    color:white;
+}
+
+.nav-link{
+    color:#2B309B !important;
+    margin:0;
+    padding:0.3rem !important;
+}
+
+.container{
+    max-width:100%;
+}

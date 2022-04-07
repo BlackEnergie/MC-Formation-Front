@@ -1,29 +1,21 @@
 import React from 'react';
-import DemandeFormation from './demandeFormation/DemandeFormation';
-import Navbar from 'react-bootstrap/Navbar';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
 import './App.css';
+import Connexion from './Connexion/Connexion';
+import Header from './Connexion/Header';
+import Footer from './Connexion/Footer';
 
-const App = () => {
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-    return (
-    <>
-        <div className="Header">
-            <Navbar variant="dark" bg="custom-background" className="Navbar">
-                <Container>
-                    <Navbar.Brand href="#home">Miage Connection - Formation</Navbar.Brand>
-                    <Nav className="me-auto">
-                        <Nav.Link href="#home"></Nav.Link>
-                    </Nav>
-                </Container>
-            </Navbar>
-        </div>
-        <div className="App">
-            <DemandeFormation/>
-        </div>
-    </>
-    )
+function App() {
+
+  return (
+      <>
+        <Header/>
+        <Connexion/>
+        <Footer/>
+      </>
+  );
+
 }
 
 export default App;
