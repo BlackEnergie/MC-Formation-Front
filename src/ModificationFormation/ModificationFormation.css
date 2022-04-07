@@ -1,0 +1,28 @@
+.main{
+    height:100%;
+}
+.row{
+    margin:0 !important;
+}
+
+a,
+a label {
+    cursor: pointer;
+}
+
+#arborescence{
+    min-width:320px;
+    max-width:380px;
+    border-right: solid rgba(100,100,100,0.4) 0.7px ;
+}
+
+.iconesArborescence{
+    max-width:50px !important;
+}
+
+/*
+#right-side{
+    width:100%;
+}
+
+*/

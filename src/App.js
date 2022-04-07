@@ -1,10 +1,9 @@
 import React from 'react';
 import './App.css';
-import Connexion from './Connexion/Connexion';
+import ModificationFormation from './ModificationFormation/ModificationFormation';
 import Header from './Connexion/Header';
 import Footer from './Connexion/Footer';
 
-import { withCookies, Cookies } from 'react-cookie';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -13,7 +12,7 @@ function App() {
   return (
       <>
         <Header/>
-        <Connexion/>
+        <ModificationFormation/>
         <Footer/>
       </>
   );
