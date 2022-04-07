@@ -76,23 +76,27 @@ const DemandeFormation = () => {
     useEffect(() => {
         async function someOtherFunc() {
             let optionsArray = []
-            try {
-                let api = new Api();
-                api.getDomaines().then((result) => {
-                    let i=1;
-                    for (const element of result) {
-                        optionsArray.push({value: i, label:element.libelle});
-                        i+=1;
-                      }
-                    setOptions(optionsArray);
-                    setLoading(false);
-                });
-            } catch(e) {
+            
+        setLoading(true)
+        let api = new Api();
+        api.getDomaines()
+            .then((res) => { 
+                setOptions(optionsArray);
+                let i=1;
+                for (const element of res) {
+                    optionsArray.push({value: i, label:element.libelle});
+                    i+=1;
+                }
+                setOptions(optionsArray);
+                setLoading(false);
+            })
+            .catch(function(err) {  
                 setHasErrorAPI(true);
                 setLoading(false);
-                console.log(e);
-            }
+                console.log(err);
+            });
         }
+        
         someOtherFunc();
     }, []);
 

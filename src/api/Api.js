@@ -38,15 +38,10 @@ export default class Api {
         });
     }
 
-    getDomaines = async () => {
-        
-        let domaines = {};
+    getDomaines = () => {
         let request = this.getRequestOptions('GET', this.CONTENT_TYPE.json);
-        return fetch(this.getDomainesUrl(), request)                
-            .then((res) => res.json())
-            .then((json) => {
-                return json;
-            });
+        return fetch(this.getDomainesUrl(), request)
+            .then((res) => res.json());
     }
 
     async postDemande(demande) {
