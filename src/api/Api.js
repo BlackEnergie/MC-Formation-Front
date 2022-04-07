@@ -33,7 +33,7 @@ export default class Api {
         }
         return {
             method: method,
-            headers: {'Content-Type':contentType},
+            headers: {'Content-Type': contentType},
             body: body
         }
     }
@@ -60,18 +60,18 @@ export default class Api {
                     window.alert("Une erreur est survenue pendant la création de la demande de formation");
                 }
             });
-        }
     }
+
 
     async postAuthentification(utilisateur) {
         let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json, utilisateur);
         let donnee;
-         await fetch(this.postAuthentificationURL(), request)
-        .then(function(response) {
-            return response.json();
-          }).then(function(data) {
-            donnee= data;
-          });
+        await fetch(this.postAuthentificationURL(), request)
+            .then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                donnee = data;
+            });
         return donnee;
     }
 
