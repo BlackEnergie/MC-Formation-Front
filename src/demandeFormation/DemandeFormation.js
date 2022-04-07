@@ -4,19 +4,18 @@ import Domaine from "../api/model/Domaine";
 import Demande from "../api/model/Demande";
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-];
+import Api from '../api/Api';
 
 const DemandeFormation = () => {
 
     const [sujet, setSujet] = useState('');
     const [detail, setDetail] = useState('');
-    const [errors, setErrors] = useState({});
+    const [hasUnfilled, setHasUnfilled] = useState({});
     const [domaines, setDomaines] = useState([]);
+    const [options, setOptions] = useState([]);
+    const [hasErrorAPI, setHasErrorAPI] =  useState(false);
+    const [loading, setLoading] =  useState(false);
+
     const notify = () => toast.success('Demande de formation envoyée');
 
     const handleSubmit = () => {
@@ -45,36 +44,60 @@ const DemandeFormation = () => {
     const resetForm = () => {
         setSujet('');
         setDetail('');
-        setErrors({});
+        setHasUnfilled({});
         setDomaines([]);
     }
 
     const validate = () => {
         
-        let errors = {};
+        let hasUnfilled = {};
         let isValid = true;
         
         if (!sujet) {
             isValid = false;
-            errors["sujet"] = "Renseigner un sujet.";
+            hasUnfilled["sujet"] = "Renseigner un sujet.";
         }
         if (!detail) {
             isValid = false;
-            errors["detail"] = "Renseigner les détails de la demande.";
+            hasUnfilled["detail"] = "Renseigner les détails de la demande.";
         }
         if (domaines.length === 0) {
             isValid = false;
-            errors["domaines"] = "Renseigner au moins un domaine.";
+            hasUnfilled["domaines"] = "Renseigner au moins un domaine.";
         }
         if (isValid) {
             handleSubmit();
         }
         else {
-            setErrors(errors);
+            setHasUnfilled(hasUnfilled);
         }
     }
 
+    useEffect(() => {
+        async function someOtherFunc() {
+            let optionsArray = []
+            try {
+                let api = new Api();
+                api.getDomaines().then((result) => {
+                    let i=1;
+                    for (const element of result) {
+                        optionsArray.push({value: i, label:element.libelle});
+                        i+=1;
+                      }
+                    setOptions(optionsArray);
+                    setLoading(false);
+                });
+            } catch(e) {
+                setHasErrorAPI(true);
+                setLoading(false);
+                console.log(e);
+            }
+        }
+        someOtherFunc();
+    }, []);
+
     return (
+        loading ? <div>Loading...</div> : hasErrorAPI ? <div>Error occured while fetching data.</div> :
         <div className="DemandeFormation">
             <div className="row justify-content-md-center  mt-3">
                 <div className="col col-lg-5 border border-dark">
@@ -88,8 +111,8 @@ const DemandeFormation = () => {
                     <form>
                         <div className="form-group">
                             <label htmlFor="name" className="mt-2 mb-2">Indiquez le ou les domaines de formation ?</label>
-                            <SelectComp domaines={domaines} handleChange={setDomaines}/>
-                            <div className="text-danger">{errors.domaines}</div>
+                            <SelectComp domaines={domaines.libelle} options={options} handleChange={setDomaines}/>
+                            <div className="text-danger">{hasUnfilled.domaines}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="sujet" className="mt-2">Indiquez le sujet de la formation</label>
@@ -101,7 +124,7 @@ const DemandeFormation = () => {
                                 className="form-control mt-2"
                                 placeholder="Ex : Trésorie"
                                 id="email"/>
-                            <div className="text-danger">{errors.sujet}</div>
+                            <div className="text-danger">{hasUnfilled.sujet}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="detail" className="mt-2">Ajoutez des détails sur votre demande de
@@ -113,7 +136,7 @@ const DemandeFormation = () => {
                                 placeholder="Date, déroulement, pré-requis, ..."
                                 className="form-control mt-2"
                                 rows="7"/>
-                            <div className="text-danger">{errors.detail}</div>
+                            <div className="text-danger">{hasUnfilled.detail}</div>
                         </div>
                         <div className="d-flex justify-content-center">
                             <div className="p-2">
@@ -132,23 +155,7 @@ const DemandeFormation = () => {
 
 export default DemandeFormation;
 
-const SelectComp = ({ domaines, handleChange }) => {
-
-    useEffect(() => {
-        const url = "https://api.adviceslip.com/advice"
-
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url);
-                const json = await response.json();
-                console.log(json);
-                } catch (error) {
-                console.log("error", error);
-                }
-        };
-
-        fetchData();
-    }, []);
+const SelectComp = ({ domaines, options, handleChange }) => {
 
     return (
         <Select

@@ -38,16 +38,15 @@ export default class Api {
         });
     }
 
-    async getDomaines() {
+    getDomaines = async () => {
+        
+        let domaines = {};
         let request = this.getRequestOptions('GET', this.CONTENT_TYPE.json);
-        fetch(this.getDomainesUrl(), request)
-            .then(response => {
-                if (response.ok) {
-                    console.log(response)
-                } else {
-                    window.alert('Erreur lors de la connection avec le serveur')
-                }
-            })
+        return fetch(this.getDomainesUrl(), request)                
+            .then((res) => res.json())
+            .then((json) => {
+                return json;
+            });
     }
 
     async postDemande(demande) {
