@@ -1,6 +1,7 @@
 import './Connexion.css';
 import React, {Component} from 'react';
 import Utilisateur from "../api/model/Utilisateur";
+import Accueil from "../Accueil/Accueil"
 import Api from "../api/Api";
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
@@ -30,7 +31,7 @@ class Connexion extends Component {
         this.setState({
             input
         });
-    };
+    }
 
     mapFormToUtilisateur(){
         let input = this.state.input;
@@ -59,10 +60,12 @@ class Connexion extends Component {
     }
     render() {
         return (
+            <>
+            { 
+            this.state.token==="" ? (
             <div className="div-Connexion">
                 <img src={require("../Img/logoblue_bgwht.png")} id="logo_connexion" alt="logo-mc"/>
                 <h1 id="titreConnexion">Connectez-vous à l'espace <br/> Formation de MIAGE Connection</h1>
-
                 <form id="Form-Connexion">
                     <div className="form-group">
                         <input
@@ -83,24 +86,17 @@ class Connexion extends Component {
                             onChange={this.handleChange}
                             name="mdp"
                         />
-                        
                     </div>
                     <div>{this.state.error}</div>
                     <input type="button" className="form-group btn btn-primary" onClick={(e) => {this.handleSubmit(e)}} value="Se Connecter" alt="buttonConnexion"/>
-                    {
-                        this.props.cookies.get("token")  ? (
-                            <div id="right-side-navbar" label="testSuccess">
-                                Vous êtes connectés avec le '{this.props.cookies.get("token").roles[0]}'
-                            </div>
-                        ) : (<div></div>)
-                    }
-
                 </form>
-
                 <div id="contactVP">
                     <a href="/">Entrer en contact avec VP Formation</a>
                 </div>
-            </div>
+                </div>
+            ) : (<Accueil/>)
+            }
+            </>
         );
     }
 }

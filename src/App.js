@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
-import ModificationFormation from './ModificationFormation/ModificationFormation';
-import Header from './Connexion/Header';
-import Footer from './Connexion/Footer';
 
+import Connexion from './Connexion/Connexion';
+import Header from './Header/Header';
+import Footer from './Footer/Footer';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -12,10 +12,7 @@ function App() {
   return (
       <>
         <Header/>
-          <body>
-
-            <ModificationFormation/>
-          </body>
+        <Connexion/>
         <Footer/>
       </>
   );
