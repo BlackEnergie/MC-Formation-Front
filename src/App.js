@@ -12,7 +12,10 @@ function App() {
   return (
       <>
         <Header/>
-        <ModificationFormation/>
+          <body>
+
+            <ModificationFormation/>
+          </body>
         <Footer/>
       </>
   );

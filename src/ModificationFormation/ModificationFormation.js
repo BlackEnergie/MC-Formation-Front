@@ -21,7 +21,7 @@ class ModificationFormation extends Component {
             showComponent: 0,
             afficherTout: false
         }
-    }
+    };
 
     afficherTout() {
         if (this.state.afficherTout === false) {
@@ -33,7 +33,7 @@ class ModificationFormation extends Component {
                 afficherTout: false
             })
         }
-    }
+    };
 
     render() {
         return (
@@ -84,9 +84,7 @@ class ModificationFormation extends Component {
                                     <>
                                         <tr>
                                             <td>
-
                                             </td>
-
                                             <td className="d-inline-flex">
                                                 <img src={require('../Img/un-journal.png')} alt="" className="Icones me-4"/>
                                                 <a
@@ -95,7 +93,6 @@ class ModificationFormation extends Component {
                                                     Informations
                                                 </a>
                                             </td>
-
                                         </tr>
 
                                         <tr>
@@ -105,7 +102,7 @@ class ModificationFormation extends Component {
                                             <td className="d-inline-flex">
                                                 <img src={require('../Img/un-journal.png')} alt="" className="Icones me-4"/>
                                                 <a
-                                                    onClick={() => this.setState({showComponent: 1})}
+                                                    onClick={() => this.setState({showComponent: 3})}
                                                     className="text-decoration-none link-dark">
                                                     Fil Conducteur
                                                 </a>
@@ -120,7 +117,7 @@ class ModificationFormation extends Component {
                         </div>
                     </div>
 
-                    <div className="col-md">
+                    <div className="col-md" id="informations">
                         {
                             (this.state.showComponent === 1) ? (
                                 <InformationsGeneralesFormation/>
