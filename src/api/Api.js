@@ -1,3 +1,8 @@
+import toast from 'react-hot-toast';
+
+const notifySucess= () => toast.success('Les informations ont bien été envoyé');
+const notifyError = () => toast.error('Une erreur est survenue');
+
 export default class Api {
 
     URL = {
@@ -27,7 +32,17 @@ export default class Api {
         return this.URL.SERVER + this.URL.UTILISATEUR
     }
 
-    getRequestOptions(method, contentType, body) {
+    getRequestOptions(method, contentType, bearer, body) {
+        if (typeof body !== "string") {
+            body = JSON.stringify(body);
+        }
+        return {
+            method: method,
+            headers: {'Content-Type': contentType,'Authorization':'Bearer '+bearer},
+            body: body
+        }
+    }
+    getRequestOptionsWithoutBearer(method, contentType, body) {
         if (typeof body !== "string") {
             body = JSON.stringify(body);
         }
@@ -44,27 +59,29 @@ export default class Api {
         });
     }
 
-    getDomaines = () => {
-        let request = this.getRequestOptions('GET', this.CONTENT_TYPE.json);
+    async getDomaines(bearer){
+        let request = this.getRequestOptions('GET', this.CONTENT_TYPE.json,bearer);
         return fetch(this.getDomainesUrl(), request)
             .then((res) => res.json());
     }
 
-    async postDemande(demande) {
-        let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json, demande);
+    async postDemande(demande,bearer) {
+        let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json, bearer, demande);
+        console.log(request)
         fetch(this.postDemandeUrl(), request)
             .then(response => {
-                if (response.ok) {
-                    window.alert("La demande de formation est créée")
-                } else {
-                    window.alert("Une erreur est survenue pendant la création de la demande de formation");
+                if (!response.ok) {
+                    notifyError()
+                }
+                else{
+                    notifySucess()
                 }
             });
     }
 
 
     async postAuthentification(utilisateur) {
-        let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json, utilisateur);
+        let request = this.getRequestOptionsWithoutBearer('POST', this.CONTENT_TYPE.json, utilisateur);
         let donnee;
         await fetch(this.postAuthentificationURL(), request)
             .then(function (response) {

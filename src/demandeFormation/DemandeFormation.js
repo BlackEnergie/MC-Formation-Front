@@ -1,13 +1,15 @@
 import React, {useEffect} from 'react';
 import Domaine from "../api/model/Domaine";
 import Demande from "../api/model/Demande";
+import Association from "../api/model/Association";
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import Api from '../api/Api';
 import Select from 'react-select';
+import { withCookies, Cookies } from 'react-cookie';
 
+const cookies = new Cookies();
 const DemandeFormation = () => {
-
     const [sujet, setSujet] = useState('');
     const [detail, setDetail] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({});
@@ -16,14 +18,18 @@ const DemandeFormation = () => {
     const [hasErrorAPI, setHasErrorAPI] =  useState(false);
     const [loading, setLoading] =  useState(false);
 
-    const notify = () => toast.success('Demande de formation envoyée');
-
     const handleSubmit = () => {
-        
         let demande = mapFormToDemande();
-        notify()
-        console.log(demande);
-        resetForm()
+        let api = new Api();
+        api.postDemande(demande,cookies.get("token").accessToken)
+        .then(() => { 
+            resetForm()
+        })
+        .catch(function(err) {  
+            setHasErrorAPI(true);
+            console.log(err);
+        });
+        
     }
 
     const mapFormToDemande = () => {
@@ -31,10 +37,12 @@ const DemandeFormation = () => {
         let domainesArr = []
         demande.sujet = sujet;
         demande.detail = detail;
+        let association = new Association();
+        association.email = cookies.get("token").email
+        demande.association = association;
         domaines.forEach(element => {
             let domaine = new Domaine();
             domaine.code = element.value;
-            domaine.libelle = element.label;
             domainesArr.push(domaine);
         })
         demande.domaines = domainesArr;
@@ -79,7 +87,7 @@ const DemandeFormation = () => {
             
         setLoading(true)
         let api = new Api();
-        api.getDomaines()
+        api.getDomaines(cookies.get("token").accessToken)
             .then((res) => { 
                 for (const element of res) {
                     optionsArray.push({value: element.code, label:element.libelle});
@@ -154,7 +162,7 @@ const DemandeFormation = () => {
     );
 }
 
-export default DemandeFormation;
+export default withCookies(DemandeFormation);
 
 const SelectComp = ({ domaines, options, handleChange }) => {
 
