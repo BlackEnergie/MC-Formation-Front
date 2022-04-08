@@ -1,70 +1,70 @@
 import React, {Component} from 'react';
+import Select from 'react-select';
+import './InformationsGeneralesFormation.css';
 
-class Nom extends Component {
-    render(){
-        return(
-            <div>
-                {this.props.nom}
-            </div>
-        )
-    }
-};
+const optionsStatut = [
+    { value: 'passee', label: 'Passée' },
+    { value: 'a_venir', label: 'A venir' },
+    { value: 'termine', label: 'Terminée' },
+    { value: 'demande', label: 'Demandée' },
+  ];
+const optionsType = [
+    { value: 'atelier', label: 'Atelier' },
+    { value: 'formation', label: 'Formation' },
+  ];
+const optionsCadre = [
+    { value: 'spring', label: 'SPRING' },
+    { value: 'mic', label: 'MIC' },
+    { value: 'winter', label: 'WINTER' },
+    { value: 'cdh', label: 'CDH' },
+    { value: 'ponctuelle', label: 'Ponctuelle' },
+  ];
 
-class NamesContainer extends Component{
-    render(){
-        return(
-            <div>
-                {this.props.noms.map(nom => <Nom nom = {nom}/>)}
-            </div>
-        )
-    }
-};
+class Filtres extends React.Component {
+    state = {
+      selectedOption: null,
+      selectedOptionStatut: null
+    };
+    handleChange = (selectedOption) => {
+      this.setState({ selectedOption }, () =>
+        console.log(`Option selected:`, this.state.selectedOption)
+      );
+    };  
+    handleChangeStatut = (selectedOptionStatut) => {
+      this.setState({ selectedOptionStatut }, () =>
+        console.log(`Option selected:`, this.state.selectedOptionStatut)
+      );
+    };
+  }
+
 
 class InformationsGeneralesFormation extends Component {
 
 
-
-
-
     state={
-        noms :[
-            "Alex",
-            "Barbara",
-            "Carla",
-            "Diego",
-            "Elena",
-            "Fiona",
-            "Giovanni",
-            "Hiena",
-            "Leonardo"
-        ],
-        searchTerm:''
     }
 
-    editSearchTerm = (e) =>{
-        this.setState({searchTerm : e.target.value})
-    };
-
-    dynamicSearch = () => {
-        return this.state.noms.filter(nom => nom.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
-    };
-
-
-
     render() {
+        const { selectedOption,selectedOptionStatut } = this.state;
         return (
             <div className="col">
                 <div className="container shadow p-4 mb-3 bg-white rounded">
+                <div className="row">
+                    <div className="col-6">
                     <h3><u>
                         Informations générales
                     </u></h3>
-
                     <div className="row">
                         <h4>
                             Statut
                         </h4>
                         <p className="ms-4">
-                            <span>Formation à attribuer</span>
+                            <Select
+                                value={selectedOption}
+                                onChange={this.handleChangeStatut}
+                                options={optionsStatut}
+                                placeholder="Statut"
+                            />
                         </p>
                     </div>
 
@@ -73,7 +73,12 @@ class InformationsGeneralesFormation extends Component {
                             Cadre
                         </h4>
                         <p className="ms-4">
-                            <span>Winter</span>
+                            <Select
+                                value={selectedOption}
+                                onChange={this.handleChangeStatut}
+                                options={optionsCadre}
+                                placeholder="Cadre"
+                            />
                         </p>
                     </div>
 
@@ -82,7 +87,12 @@ class InformationsGeneralesFormation extends Component {
                             Type
                         </h4>
                         <p className="ms-4">
-                            <span>Atelier</span>
+                            <Select
+                                value={selectedOption}
+                                onChange={this.handleChangeStatut}
+                                options={optionsType}
+                                placeholder="Type"
+                            />
                         </p>
                     </div>
 
@@ -91,20 +101,19 @@ class InformationsGeneralesFormation extends Component {
                             Date
                         </h4>
                         <p className="ms-4">
-                            <span>27/08/1996</span>
+                            <input type="date" className="form-control"></input>
                         </p>
                     </div>
+                    </div>
 
-                </div>
-
-                <div className="container shadow p-4 mb-3 bg-white rounded">
+                    <div className="col-6">
                     <div className="row d-flex justify-content-between">
-                        <div className="col-10">
+                        <div className="col-9">
                             <h3><u>
                                 Domaine(s)
                             </u></h3>
                         </div>
-                        <div className="col-2">
+                        <div className="col-3">
                             <a href="#addEmployeeModal" className="btn btn-success " data-toggle="modal">
                                 <img src={require('../Img/plus.png')} className="Icones me-3"/>
                                 <span>Rajouter</span>
@@ -112,15 +121,7 @@ class InformationsGeneralesFormation extends Component {
                         </div>
 
                     </div>
-                    <div className="container">
-                        <p>
-                            TEST
-                        </p>
 
-                        <input type="text" value={this.state.searchTerm} onChange={this.editSearchTerm} placeholder={"Tapez le nom"}/>
-                        <p>voici les noms</p>
-                        <NamesContainer noms = {this.dynamicSearch()}/>
-                    </div>
                     <div className="container">
                         <div className="table-wrapper">
                             <table className="table table-striped table-hover">
@@ -154,16 +155,25 @@ class InformationsGeneralesFormation extends Component {
                             </table>
                         </div>
                     </div>
+                    </div>
+                    </div>
                 </div>
 
                 <div className="container shadow p-4 mb-3 bg-white rounded">
+                    
+
+
+
+
+                <div className="row">
+                <div className="col-6">
                     <div className="row d-flex justify-content-between">
-                        <div className="col-10">
+                        <div className="col-9">
                             <h3><u>
                                 Formateur(s)
                             </u></h3>
                         </div>
-                        <div className="col-2">
+                        <div className="col-3">
                             <a href="#addEmployeeModal" className="btn btn-success " data-toggle="modal">
                                 <img src={require('../Img/plus.png')} className="Icones me-3"/>
                                 <span>Rajouter</span>
@@ -207,14 +217,14 @@ class InformationsGeneralesFormation extends Component {
                     </div>
                 </div>
 
-                <div className="container shadow p-4 mb-3 bg-white rounded">
+                <div className="col-6">
                     <div className="row d-flex justify-content-between">
-                        <div className="col-10">
+                        <div className="col-9">
                             <h3><u>
                                 Association(s)
                             </u></h3>
                         </div>
-                        <div className="col-2">
+                        <div className="col-3">
                             <a href="#addEmployeeModal" className="btn btn-success " data-toggle="modal">
                                 <img src={require('../Img/plus.png')} className="Icones me-3"/>
                                 <span>Rajouter</span>
@@ -223,7 +233,6 @@ class InformationsGeneralesFormation extends Component {
 
                     </div>
 
-                    <div className="container">
                         <div className="table-wrapper">
                             <table className="table table-striped table-hover">
                                 <thead>
@@ -258,6 +267,7 @@ class InformationsGeneralesFormation extends Component {
                     </div>
                 </div>
             </div>
+        </div>
     )
     }
 
