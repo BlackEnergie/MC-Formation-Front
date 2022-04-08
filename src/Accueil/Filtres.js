@@ -1,60 +1,82 @@
 import React from 'react';
 import Select from 'react-select';
 
-const optionsStatut = [
-  { value: 'passee', label: 'Passée' },
-  { value: 'a_venir', label: 'A venir' },
-  { value: 'termine', label: 'Terminé' },
+const statuts = [
+    { value: 'demandee', label: 'Demandée' },
+    { value: 'passee', label: 'A attribuer' },
+    { value: 'a_venir', label: 'A venir' },
+    { value: 'passee', label: 'Passée' },
 ];
-
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
+const domaines=[
+  { value: 'tresorerie', label: 'Trésorerie' },
+  { value: 'administration', label: 'Administration' },
+  { value: 'ressourceshumaines', label: 'Ressources Humaines' },
+    { value: 'communication', label: 'Communication' },
+    { value: 'partenariat', label: 'Partenariat' },
+];
+const options=[];
+const cadres=[
+    { value: 'winter', label: 'Winter' },
+    { value: 'spring', label: 'Spring' },
+    { value: 'cdh', label: "Congrès d'Hiver" },
+    { value: 'jnm', label: 'Journée Nationale Miagiste' },
+    { value: 'intensivecamp', label: 'Miage Intesive Camp' },
 ];
 
 class Filtres extends React.Component {
   state = {
-    selectedOption: null,
-    selectedOptionStatut: null
+    selectedOptionStatut: null,
+    selectedOptionDomaine: null,
+    selectedOptionCadre: null,
+    selectedOptionFormateur: null,
   };
-  handleChange = (selectedOption) => {
-    this.setState({ selectedOption }, () =>
-      console.log(`Option selected:`, this.state.selectedOption)
-    );
-  };  
-  handleChangeStatut = (selectedOptionStatut) => {
-    this.setState({ selectedOptionStatut }, () =>
-      console.log(`Option selected:`, this.state.selectedOptionStatut)
-    );
-  };
+    handleChangeStatut = (selectedOptionStatut) => {
+        this.setState({ selectedOptionStatut }, () =>
+          console.log(`Option selected:`, this.state.selectedOptionStatut)
+        );
+    };
+    handleChangeDomaine = (selectedOptionDomaine) => {
+        this.setState({ selectedOptionDomaine }, () =>
+            console.log(`Option selected:`, this.state.selectedOptionDomaine)
+        );
+    };
+    handleChangeCadre = (selectedOptionCadre) => {
+        this.setState({ selectedOptionCadre }, () =>
+            console.log(`Option selected:`, this.state.selectedOptionCadre)
+        );
+    };
+    handleChangeFormateur = (selectedOptionFormateur) => {
+        this.setState({ selectedOptionFormateur }, () =>
+            console.log(`Option selected:`, this.state.selectedOptionFormateur)
+        );
+    };
   
   render() {
-    const { selectedOption,selectedOptionStatut } = this.state;
+    const { selectedOptionStatut,selectedOptionDomaine,selectedOptionCadre,selectedOptionFormateur } = this.state;
     return (
         <>
             <label><u>Statut</u></label>
             <Select
                 value={selectedOptionStatut}
                 onChange={this.handleChangeStatut}
-                options={optionsStatut}
+                options={statuts}
                 placeholder="Ex : Passée "
                 isMulti
             />
             <label><u>Domaine</u></label>
             <Select
-                value={selectedOption}
-                onChange={this.handleChange}
-                options={options}
+                value={selectedOptionDomaine}
+                onChange={this.handleChangeDomaine}
+                options={domaines}
                 placeholder="Ex : Audit-Qualité "
                 isMulti
                 isSearchable
             />
             <label><u>Formateur</u></label>
             <Select
-                value={selectedOption}
-                onChange={this.handleChange}
-                options={options}
+                value={selectedOptionFormateur}
+                onChange={this.handleChangeFormateur}
+                options={cadres}
                 placeholder=""
                 isMulti
                 isSearchable
@@ -62,9 +84,9 @@ class Filtres extends React.Component {
             />
             <label><u>Cadre</u></label>
             <Select
-                value={selectedOption}
-                onChange={this.handleChange}
-                options={options}
+                value={selectedOptionCadre}
+                onChange={this.handleChangeCadre}
+                options={cadres}
                 placeholder="Ex : Winter "
                 isMulti
             />
