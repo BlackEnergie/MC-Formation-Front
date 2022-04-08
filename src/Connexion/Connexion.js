@@ -45,7 +45,7 @@ class Connexion extends Component {
         event.preventDefault();
         let utilisateur = this.mapFormToUtilisateur();
         this.api.postAuthentification(utilisateur).then(data =>{
-            if(!data.error){
+            if(data){
                 this.setState({token: data});
                 const { cookies } = this.props;
                 cookies.set('token', data, { path: '/' });

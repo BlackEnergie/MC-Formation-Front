@@ -85,7 +85,10 @@ export default class Api {
         let donnee;
         await fetch(this.postAuthentificationURL(), request)
             .then(function (response) {
-                return response.json();
+                if(response.status ===200){
+                    return response.json();
+                } return null;
+
             }).then(function (data) {
                 donnee = data;
             });

@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import React, {useState, useEffect, Component} from 'react';
 import { withCookies, Cookies } from 'react-cookie';
 import Filtres from './Filtres'
 import { instanceOf } from 'prop-types';
@@ -7,6 +7,8 @@ import DemandeFormation from '../demandeFormation/DemandeFormation';
 const cookies = new Cookies();
 
 class Accueil extends Component {
+    
+
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired
       };
@@ -18,11 +20,11 @@ class Accueil extends Component {
             
         }
         this.handleClick = this.handleClick.bind(this)
-    }
+    };
 
     handleClick(){
         this.setState({showFormDemande:true})
-      }
+      };
 
     renderButtonAsso(){
         return(
@@ -41,7 +43,9 @@ class Accueil extends Component {
             }   
          </>
         )
-    }
+    };
+
+
     render() {
         return(
             <>
@@ -86,6 +90,7 @@ class Accueil extends Component {
                             </div>
                         </div>
                         <div className="hint-text mt-2">1 à 2 sur <b>2</b> résultats</div>
+
                         <table className="table table-bordered mt-2">
                             <thead>
                                 <tr>
@@ -96,29 +101,37 @@ class Accueil extends Component {
                                     <th scope="col">Association(s) demandante(s)</th>
                                     <th scope="col">Formateur(s)</th>
                                     <th scope="col">Date</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                <td>Passée</td>
-                                <td>Winter</td>
-                                <td>Audit - Qualité</td>
-                                <td>Audit de sa structure</td>
-                                <td>JMC Bordeaux</td>
-                                <td>Théo Perrin</td>
-                                <td>13/03/2021</td>
+                                    <td>Passée</td>
+                                    <td>Winter</td>
+                                    <td>Audit - Qualité</td>
+                                    <td>Audit de sa structure</td>
+                                    <td>JMC Bordeaux</td>
+                                    <td>Théo Perrin</td>
+                                    <td>13/03/2021</td>
+                                    <a href="#editEmployeeModal" data-toggle="modal">
+                                            <img src={require('../Img/delete.png')} className="Icones"/>
+                                    </a>
                                 </tr>
                                 <tr>
-                                <td>Passée</td>
-                                <td>Winter</td>
-                                <td>Audit - Qualité</td>
-                                <td>Audit de sa structure</td>
-                                <td>JMC Bordeaux</td>
-                                <td>Théo Perrin</td>
-                                <td>13/03/2021</td>
+                                    <td>Passée</td>
+                                    <td>Winter</td>
+                                    <td>Audit - Qualité</td>
+                                    <td>Audit de sa structure</td>
+                                    <td>JMC Bordeaux</td>
+                                    <td>Théo Perrin</td>
+                                    <td>13/03/2021</td>
+                                    <a href="#editEmployeeModal" className="edit" data-toggle="modal">
+                                            <img src={require('../Img/delete.png')} className="Icones"/>
+                                    </a>
                                 </tr>
                             </tbody>
                         </table>
+
                         <div className="d-flex justify-content-center">
                             <button type="button" className="btn btn-primary mt-5">Afficher plus...</button>
                         </div>
