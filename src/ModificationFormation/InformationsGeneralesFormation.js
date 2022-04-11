@@ -108,12 +108,12 @@ class InformationsGeneralesFormation extends Component {
 
                     <div className="col-6">
                     <div className="row d-flex justify-content-between">
-                        <div className="col-9">
+                        <div className="col-8">
                             <h3><u>
                                 Domaine(s)
                             </u></h3>
                         </div>
-                        <div className="col-3">
+                        <div className="col-4">
                             <a href="#addEmployeeModal" className="btn btn-success " data-toggle="modal">
                                 <img src={require('../Img/plus.png')} className="Icones me-3"/>
                                 <span>Rajouter</span>
@@ -168,12 +168,12 @@ class InformationsGeneralesFormation extends Component {
                 <div className="row">
                 <div className="col-6">
                     <div className="row d-flex justify-content-between">
-                        <div className="col-9">
+                        <div className="col-8">
                             <h3><u>
                                 Formateur(s)
                             </u></h3>
                         </div>
-                        <div className="col-3">
+                        <div className="col-4">
                             <a href="#addEmployeeModal" className="btn btn-success " data-toggle="modal">
                                 <img src={require('../Img/plus.png')} className="Icones me-3"/>
                                 <span>Rajouter</span>
@@ -219,12 +219,12 @@ class InformationsGeneralesFormation extends Component {
 
                 <div className="col-6">
                     <div className="row d-flex justify-content-between">
-                        <div className="col-9">
+                        <div className="col-8">
                             <h3><u>
                                 Association(s)
                             </u></h3>
                         </div>
-                        <div className="col-3">
+                        <div className="col-4">
                             <a href="#addEmployeeModal" className="btn btn-success " data-toggle="modal">
                                 <img src={require('../Img/plus.png')} className="Icones me-3"/>
                                 <span>Rajouter</span>

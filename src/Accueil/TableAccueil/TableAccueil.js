@@ -4,10 +4,12 @@ import Donnee from '../json/data.json';
 import {AiOutlineZoomIn} from "react-icons/ai";
 import {IconContext} from "react-icons"
 
-const TableAccueil = () =>{
+const TableAccueil = ({afficherDetail}) =>{
+
     useEffect(() => {
         tableSort()
     },[]);
+
 
     const DisplayData = Donnee.data.map(
         (info) => {
@@ -21,7 +23,7 @@ const TableAccueil = () =>{
                     <td>{info.formateur}</td>
                     <td>{info.date}</td>
                     <td>
-                        <a href="/" className="edit">
+                        <a href="" className="edit" >
                             <IconContext.Provider value={{className: "AiOutlineZoomIn"}}>
                                 <AiOutlineZoomIn className="Icones"/>
                             </IconContext.Provider>
@@ -44,7 +46,7 @@ const TableAccueil = () =>{
                 <th scope="col">Cadre</th>
                 <th scope="col">Domaine(s)</th>
                 <th scope="col">Titre</th>
-                <th scope="col">Association(s) demandante(s)</th>
+                <th scope="col">Association</th>
                 <th scope="col">Formateur(s)</th>
                 <th scope="col">Date</th>
                 <th scope="col">Action</th>
