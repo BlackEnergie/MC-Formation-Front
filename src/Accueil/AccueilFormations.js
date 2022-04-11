@@ -96,6 +96,7 @@ class Accueil extends Component {
                                     <th scope="col">Association(s) demandante(s)</th>
                                     <th scope="col">Formateur(s)</th>
                                     <th scope="col">Date</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -107,6 +108,11 @@ class Accueil extends Component {
                                 <td>JMC Bordeaux</td>
                                 <td>Théo Perrin</td>
                                 <td>13/03/2021</td>
+                                <td>
+                                        <a href="#editEmployeeModal" className="edit" data-toggle="modal">
+                                            <img src={require('../Img/delete.png')} className="Icones"/>
+                                        </a>
+                                    </td>
                                 </tr>
                                 <tr>
                                 <td>Passée</td>
@@ -116,6 +122,11 @@ class Accueil extends Component {
                                 <td>JMC Bordeaux</td>
                                 <td>Théo Perrin</td>
                                 <td>13/03/2021</td>
+                                <td>
+                                        <a href="#editEmployeeModal" className="edit" data-toggle="modal">
+                                            <img src={require('../Img/delete.png')} className="Icones"/>
+                                        </a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

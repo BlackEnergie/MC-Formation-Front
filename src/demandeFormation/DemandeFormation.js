@@ -9,6 +9,7 @@ import Select from 'react-select';
 import { withCookies, Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
+
 const DemandeFormation = () => {
     const [sujet, setSujet] = useState('');
     const [detail, setDetail] = useState('');

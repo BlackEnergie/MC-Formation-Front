@@ -9,8 +9,8 @@ import { Toaster } from 'react-hot-toast';
 
 ReactDOM.render(
     <React.StrictMode>
-        <CookiesProvider>
-          <App />
+      <CookiesProvider>
+          <App/>
           <Toaster
             position="top-right"
             toastOptions={{
@@ -21,8 +21,8 @@ ReactDOM.render(
                   color: 'black',
                 },
               }} 
-        />
-        </CookiesProvider>
+          />
+      </CookiesProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );
