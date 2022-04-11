@@ -73,10 +73,11 @@ class Filtres extends React.Component {
                 isSearchable
             />
             <label><u>Formateur</u></label>
+            {/*<input type="search" id="form1" className="form-control"/>*/}
             <Select
                 value={selectedOptionFormateur}
                 onChange={this.handleChangeFormateur}
-                options={cadres}
+                //options={cadres}
                 placeholder=""
                 isMulti
                 isSearchable
@@ -103,8 +104,8 @@ class Filtres extends React.Component {
                 </div>
             </div>
             <div className="mt-2">
-              <button type="button" className="btn btn-primary m-2">Reset</button>
-              <button type="button" className="btn btn-primary">Valider</button>
+                <button type="button" className="btn btn-primary m-2">Effacer</button>
+                <button type="button" className="btn btn-primary m-2">Valider</button>
             </div>
       </>
     );

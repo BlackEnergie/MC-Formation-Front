@@ -60,10 +60,10 @@ class Connexion extends Component {
     }
     render() {
         return (
-            <>
+            <div className="flex-grow-1 overflow-auto mt-4">
             { 
             this.state.token==="" ? (
-            <div className="div-Connexion">
+            <div className="div-Connexion ">
                 <img src={require("../Img/logoblue_bgwht.png")} id="logo_connexion" alt="logo-mc"/>
                 <h1 id="titreConnexion">Connectez-vous à l'espace <br/> Formation de MIAGE Connection</h1>
                 <form id="Form-Connexion">
@@ -96,7 +96,7 @@ class Connexion extends Component {
                 </div>
             ) : (<Accueil/>)
             }
-            </>
+            </div>
         );
     }
 }

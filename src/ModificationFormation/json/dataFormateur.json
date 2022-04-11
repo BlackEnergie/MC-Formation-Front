@@ -1,0 +1,17 @@
+{ "data":
+  [
+    {
+      "id": 1,
+      "nomFormateur": "Maxence Tauzin"
+    },
+    {
+      "id": 2,
+      "nomFormateur": "Hugo Roger"
+    },
+    {
+      "id": 3,
+      "nomFormateur": "Maxime Poudroux"
+    }
+  ]
+}
+

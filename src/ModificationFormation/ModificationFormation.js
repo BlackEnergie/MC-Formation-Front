@@ -64,8 +64,7 @@ class ModificationFormation extends Component {
                                     <td>
                                         <a
                                             className="text-decoration-none link-dark"
-                                            onClick={() => this.afficherTout()}
-                                        >
+                                            onClick={() => this.afficherTout()}>
                                             Fiche de Formation
                                         </a>
                                     </td>
@@ -117,7 +116,7 @@ class ModificationFormation extends Component {
                         </div>
                     </div>
 
-                    <div className="col-md" id="informations">
+                    <div className="col" >
                         {
                             (this.state.showComponent === 1) ? (
                                 <InformationsGeneralesFormation/>
