@@ -1,0 +1,56 @@
+{ "data":
+    [
+      {
+        "id": 1,  
+        "type": "Formation",
+        "objetsPedagogiques": [
+          {
+            "id" : 1,
+            "objet": "A determiner"
+          },
+          {
+            "id" : 2,
+            "objet":"A determiner"
+          }
+        ],
+        "Objet": "Un Objet de formation",
+        "detail": "Wesh 1",
+        "domaines": [
+          {
+            "code": "1",
+            "libelle": "Affaires académiques",
+            "description": "Relations entre votre association et son environnement universitaire et fédératif."
+          },
+          {
+            "code": "2",
+            "libelle": "Association d'alumni",
+            "description": "Gestion d'une association d'anciens élèves."
+          }
+        ],
+        "dateDemande": "2022-04-11",
+        "BesoinsMaterielsFormation": [
+          {
+            "id": "1",
+            "nom": "Tableau"
+          },
+          {
+            "id": "2",
+            "nom": "Projecteur"
+          },
+          {
+            "id": "3",
+            "nom": "Feutres"
+          },
+          {
+            "id": "4",
+            "nom": "Capotes"
+          },
+          {
+            "id": "5",
+            "nom": "Adeterminer"
+            
+          }
+        ]
+      }
+    ]
+  }
