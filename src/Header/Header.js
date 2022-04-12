@@ -5,6 +5,12 @@ import './Header.css';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 
+import {AiFillSetting} from 'react-icons/ai';
+import {GiExitDoor} from 'react-icons/gi';
+import {BsFillPersonFill} from 'react-icons/bs';
+
+
+
 const cookies = new Cookies();
 
 class Header extends Component{
@@ -41,7 +47,7 @@ class Header extends Component{
                                     cookies.get("token") && cookies.get("token").roles[0]==="ROLE_BN" ? (
                                         <div id="right-side-navbar">
                                             <button href="" className="boutonNavbar">
-                                                <img src={require('../Img/parametres-des-engrenages.png')} alt="" className="Icones" />
+                                                <AiFillSetting className="Icones"/>
                                                 <Nav.Link href="#home" >Espace Admin</Nav.Link>
                                             </button>
                                         </div>
@@ -53,7 +59,7 @@ class Header extends Component{
                                     cookies.get('token') ? (
                                         <div id="right-side-navbar">
                                             <button onClick={this.removeCookie} className="boutonNavbar">
-                                                <img src={require('../Img/logout.png')} alt="" className="Icones" />
+                                                <GiExitDoor className="Icones"/>
                                                 <Nav.Link>Se Déconnecter</Nav.Link>
                                             </button>
                                         </div>
@@ -61,7 +67,7 @@ class Header extends Component{
                                     ) : (
                                         <div id="right-side-navbar">
                                             <button href="" className="boutonNavbar">
-                                                <img src={require('../Img/login.png')} alt="IconeConnexion" className="Icones" />
+                                                <BsFillPersonFill className="Icones"/>
                                                 <Nav.Link>Connecter</Nav.Link>
                                             </button>
                                         </div>

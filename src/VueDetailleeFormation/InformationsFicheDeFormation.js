@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {AiOutlinePlusCircle} from 'react-icons/ai'
-import {IconContext} from "react-icons"
-import './informatonsFicheDeFormation.css'
+import {AiOutlinePlusCircle} from 'react-icons/ai';
+import {IconContext} from "react-icons";
 
 class InformationsFicheDeFormation extends Component {
 

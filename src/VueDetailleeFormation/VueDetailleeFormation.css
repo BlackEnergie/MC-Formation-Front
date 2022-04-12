@@ -26,11 +26,33 @@ a, a label {
     border-right: solid rgba(100,100,100,0.4) 0.7px ;
 }
 
+
+.col{
+    margin-top: 2%;
+}
+
+.tableFixHead tbody {
+    display: block;
+    overflow: auto;
+    height: 150px;
+}
+.tableFixHead thead tr {
+    display: block;
+}
+.tableFixHead th, .tableFixHead  td {
+    width: 100%;
+}
+table.table tr th:first-child,table.table tr td:first-child {
+    width: 40px;
+}
+
 .table-wrapper {
     background: #fff;
     border-radius: 3px;
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
-table.table tr th:first-child {
-    width: 40px;
+
+.AiOutlinePlusCircle-icon{
+    color: darkblue;
+    margin-right: 5px ;
 }

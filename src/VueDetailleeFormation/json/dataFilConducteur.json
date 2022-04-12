@@ -1,0 +1,18 @@
+{ "data":
+  [
+    {
+      "id": 1,
+      "plan": "Partie 1 : Faire du HTML",
+      "timing": "3h",
+      "contenu": "Toutes les balises html",
+      "methodologie": "Formation avec support powerpoint"
+    },
+    {
+      "id": 2,
+      "plan": "Partie 2 : Faire du CSS",
+      "timing": "2h",
+      "contenu": "Les blocs en CSS, changer des couleurs, les tableaux, les bordures, les marges, la taille des objets, etc.",
+      "methodologie": "Atelier pratique"
+    }
+  ]
+}

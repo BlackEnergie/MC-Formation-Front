@@ -5,7 +5,7 @@ import {instanceOf} from 'prop-types';
 import DemandeFormation from '../demandeFormation/DemandeFormation';
 import TableAccueil from './TableAccueil/TableAccueil';
 import './Accueil.css';
-import ModificationFormation from '../ModificationFormation/ModificationFormation'
+import ModificationFormation from '../VueDetailleeFormation/VueDetailleeFormation';
 
 const cookies = new Cookies();
 
@@ -64,7 +64,7 @@ class Accueil extends Component {
                 {   this.state.showDetail ?(
                     (<ModificationFormation/>)
                     ):this.state.showFormDemande === false ? (
-                            <div className="container-fluid">
+                            <div className="container-fluid" id="accueil">
                         <div className="row">
                             <div className="col-2">
                             <span className="">

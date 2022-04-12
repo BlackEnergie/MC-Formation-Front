@@ -14,7 +14,7 @@ const TableAccueil = ({afficherDetail}) =>{
     const DisplayData = Donnee.data.map(
         (info) => {
             return (
-                <tr>
+                <tr key={info.id}>
                     <td>{info.statut}</td>
                     <td>{info.cadre}</td>
                     <td>{info.domaine}</td>
@@ -24,9 +24,7 @@ const TableAccueil = ({afficherDetail}) =>{
                     <td>{info.date}</td>
                     <td>
                         <a href="" className="edit" >
-                            <IconContext.Provider value={{className: "AiOutlineZoomIn"}}>
-                                <AiOutlineZoomIn className="Icones"/>
-                            </IconContext.Provider>
+                            <AiOutlineZoomIn className="Icones"/>
                         </a>
                     </td>
                 </tr>

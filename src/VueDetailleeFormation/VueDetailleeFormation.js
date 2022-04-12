@@ -1,4 +1,4 @@
-import './ModificationFormation.css';
+import './VueDetailleeFormation.css';
 import React, {Component} from 'react';
 import InformationsGeneralesFormation from './InformationsGeneralesFormation';
 import InformationsFicheDeFormation from './InformationsFicheDeFormation';
@@ -6,9 +6,10 @@ import FilConducteurFormation from './FilConducteurFormation';
 
 import {instanceOf} from 'prop-types';
 import {withCookies, Cookies} from 'react-cookie';
+import {AiOutlineFileText, AiOutlineFolder} from "react-icons/ai";
 
 
-class ModificationFormation extends Component {
+class VueDetailleeFormation extends Component {
 
 
     static propTypes = {
@@ -37,20 +38,20 @@ class ModificationFormation extends Component {
 
     render() {
         return (
-            <div className="container-fluid" className="main">
+            <div className="container-fluid main" >
                 <div className="row">
                     <div className="col-md-3" id="arborescence">
                         <div className="row">
-                            <table className="table table-borderless">
+                            <table className="table table-borderless ">
                                 <tbody>
                                 <tr>
-                                    <td className="d-inline-flex">
-                                        <img src={require('../Img/un-journal.png')} alt="" className="Icones"/>
+                                    <td>
+                                        <AiOutlineFileText className="Icones"/>
                                     </td>
                                     <td>
                                         <a
                                             onClick={() => this.setState({showComponent: 1})}
-                                            className="text-decoration-none link-dark">
+                                            className="text-decoration-none link-dark text-start">
                                             Informations générales
                                         </a>
 
@@ -58,8 +59,8 @@ class ModificationFormation extends Component {
                                 </tr>
 
                                 <tr>
-                                    <td className="d-inline-flex">
-                                        <img src={require('../Img/folder.png')} alt="" className="Icones"/>
+                                    <td>
+                                        <AiOutlineFolder className="Icones"/>
                                     </td>
                                     <td>
                                         <a
@@ -72,7 +73,7 @@ class ModificationFormation extends Component {
                                         {this.state.afficherTout ? (
                                             <img src={require('../Img/chevron haut.png')} alt="" className="Icones"/>
                                         ) : (
-                                            <img src={require('../Img/chevron bas.png')} alt="" className="Icones"/>
+                                            <img src={require('../Img/chevron haut.png')} alt="" className="Icones"/>
                                         )
                                         }
 
@@ -85,7 +86,7 @@ class ModificationFormation extends Component {
                                             <td>
                                             </td>
                                             <td className="d-inline-flex">
-                                                <img src={require('../Img/un-journal.png')} alt="" className="Icones me-4"/>
+                                                <AiOutlineFileText className="Icones me-2"/>
                                                 <a
                                                     onClick={() => this.setState({showComponent: 2})}
                                                     className="text-decoration-none link-dark">
@@ -99,7 +100,7 @@ class ModificationFormation extends Component {
 
                                             </td>
                                             <td className="d-inline-flex">
-                                                <img src={require('../Img/un-journal.png')} alt="" className="Icones me-4"/>
+                                                <AiOutlineFileText className="Icones me-2"/>
                                                 <a
                                                     onClick={() => this.setState({showComponent: 3})}
                                                     className="text-decoration-none link-dark">
@@ -142,4 +143,4 @@ class ModificationFormation extends Component {
 
 }
 
-export default withCookies(ModificationFormation);
+export default withCookies(VueDetailleeFormation);

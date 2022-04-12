@@ -2,7 +2,7 @@
     color:black;
 }
 
-tr td a{
+#accueil tr td a{
     display:flex;
     justify-content: center;
 }
