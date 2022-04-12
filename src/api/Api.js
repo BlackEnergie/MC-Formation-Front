@@ -11,7 +11,8 @@ export default class Api {
         DONNEES: '/data',
         DOMAINES: '/domaines',
         POST: '/creer',
-        UTILISATEUR: '/api/auth/signin'
+        UTILISATEUR: '/api/auth/signin',
+        INSCRIPTION: '/api/auth/signup'
     }
 
     CONTENT_TYPE = {
@@ -21,6 +22,10 @@ export default class Api {
 
     postDemandeUrl() {
         return this.URL.SERVER + this.URL.DEMANDE + this.URL.POST;
+    }
+
+    postInscriptionUrl() {
+        return this.URL.SERVER + this.URL.INSCRIPTION;
     }
 
     getDomainesUrl() {
@@ -79,6 +84,19 @@ export default class Api {
             });
     }
 
+    async postInscription(inscription,bearer) {
+        let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json, bearer, inscription);
+        console.log(request)
+        fetch(this.postInscriptionUrl(), request)
+            .then(response => {
+                if (!response.ok) {
+                    notifyError()
+                }
+                else{
+                    notifySucess()
+                }
+            });
+    }
 
     async postAuthentification(utilisateur) {
         let request = this.getRequestOptionsWithoutBearer('POST', this.CONTENT_TYPE.json, utilisateur);
