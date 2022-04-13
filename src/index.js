@@ -4,25 +4,34 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
-import { CookiesProvider } from 'react-cookie';
 import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './context/AuthProvider';
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+} from 'react-router-dom';
 
 ReactDOM.render(
     <React.StrictMode>
-      <CookiesProvider>
-          <App/>
-          <Toaster
-            position="top-right"
-            toastOptions={{
-                className: '',
-                duration: 5000,
-                style: {
-                  background: 'white',
-                  color: 'black',
-                },
-              }} 
-          />
-      </CookiesProvider>
+      <BrowserRouter>
+        <AuthProvider>
+            <Routes>
+              <Route path="/*" element={<App />} />
+            </Routes>
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                  className: '',
+                  duration: 5000,
+                  style: {
+                    background: 'white',
+                    color: 'black',
+                  },
+                }} 
+            />
+        </AuthProvider>
+      </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')
 );

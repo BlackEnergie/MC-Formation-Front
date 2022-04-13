@@ -6,31 +6,28 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import Api from '../api/Api';
 import Select from 'react-select';
-import { withCookies, Cookies } from 'react-cookie';
-
-const cookies = new Cookies();
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const DemandeFormation = () => {
+    {/* state formulaire */}
     const [sujet, setSujet] = useState('');
     const [detail, setDetail] = useState('');
-    const [hasUnfilled, setHasUnfilled] = useState({});
     const [domaines, setDomaines] = useState([]);
+    const [hasUnfilled, setHasUnfilled] = useState({});
     const [options, setOptions] = useState([]);
-    const [hasErrorAPI, setHasErrorAPI] =  useState(false);
+
+    {/* state api */}
     const [loading, setLoading] =  useState(false);
 
+    const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
+    const location = useLocation();
+    
     const handleSubmit = () => {
         let demande = mapFormToDemande();
         let api = new Api();
-        api.postDemande(demande,cookies.get("token").accessToken)
-        .then(() => { 
-            resetForm()
-        })
-        .catch(function(err) {  
-            setHasErrorAPI(true);
-            console.log(err);
-        });
-        
+        console.log("Handle submit");
     }
 
     const mapFormToDemande = () => {
@@ -39,7 +36,7 @@ const DemandeFormation = () => {
         demande.sujet = sujet;
         demande.detail = detail;
         let association = new Association();
-        association.email = cookies.get("token").email
+        association.email = 'AMB@yopmail.fr'
         demande.association = association;
         domaines.forEach(element => {
             let domaine = new Domaine();
@@ -83,31 +80,43 @@ const DemandeFormation = () => {
     }
 
     useEffect(() => {
-        async function someOtherFunc() {
-            let optionsArray = []
-            
+        
+        let isMounted = true;
+        let optionsArray = []
+        const controller = new AbortController();
         setLoading(true)
-        let api = new Api();
-        api.getDomaines(cookies.get("token").accessToken)
-            .then((res) => { 
-                for (const element of res) {
+
+        const getDomaines = async () => {
+            try {
+                const response = await axiosPrivate.get('/data/domaines', {
+                    signal: controller.signal,
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+                    }
+                });
+                console.log(response.data);
+                for (const element of response.data) {
                     optionsArray.push({value: element.code, label:element.libelle});
-                }
-                setOptions(optionsArray);
+                    }
+                isMounted && setOptions(optionsArray);
                 setLoading(false);
-            })
-            .catch(function(err) {  
-                setHasErrorAPI(true);
+            } catch (err) {
                 setLoading(false);
-                console.log(err);
-            });
+                console.error(err);
+                navigate('/', { state: { from: location }, replace: true });
+            }
         }
 
-        someOtherFunc();
-    }, []);
+        getDomaines();
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        }
+    }, [])
 
     return (
-        loading ? <div>Loading...</div> : hasErrorAPI ? <div>Error occured while fetching data.</div> :
+        loading ? <div>Loading...</div> :
         <div className="DemandeFormation">
             <div className="row justify-content-md-center  mt-3">
                 <div className="col col-lg-5 border border-dark">
@@ -163,7 +172,7 @@ const DemandeFormation = () => {
     );
 }
 
-export default withCookies(DemandeFormation);
+export default DemandeFormation;
 
 const SelectComp = ({ domaines, options, handleChange }) => {
 

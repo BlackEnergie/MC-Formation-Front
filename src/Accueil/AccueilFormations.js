@@ -1,52 +1,38 @@
-import {Component} from 'react';
-import { withCookies, Cookies } from 'react-cookie';
 import Filtres from './Filtres'
-import { instanceOf } from 'prop-types';
 import DemandeFormation from '../demandeFormation/DemandeFormation';
+import { useState } from 'react';
 
-const cookies = new Cookies();
+const Accueil = () => {
 
-class Accueil extends Component {
-    static propTypes = {
-        cookies: instanceOf(Cookies).isRequired
-      };
-    constructor(props){
-        super(props);
-        this.state={
-            token: cookies.get('token') || '',
-            showFormDemande:false
-            
-        }
-        this.handleClick = this.handleClick.bind(this)
-    }
+    const [showFormDemande, setShowFormDemande] = useState(false);
 
-    handleClick(){
-        this.setState({showFormDemande:true})
+
+    const handleClick = () => {
+        setShowFormDemande(true)
       }
 
-    renderButtonAsso(){
+    const renderButtonAsso = () => {
         return(
             <>
             { 
-                cookies.get("token") && cookies.get("token").roles[0]==="ROLE_ASSO" ? (
                 <>    
                 <div className="demandeFormation">
-                    <button type="button" className="btn btn-primary mb-2" onClick={this.handleClick}>Demander une formation</button>
+                    <button type="button" className="btn btn-primary mb-2" onClick={handleClick}>Demander une formation</button>
                 </div>
                 <div className="demandes">
                     <button type="button" className="btn btn-primary">Voir toutes les demandes</button>
                 </div>
                </>
-                ) : (<div></div>)
             }   
          </>
         )
     }
-    render() {
-        return(
-            <>
-            { 
-            this.state.showFormDemande===false ? (
+
+    return(
+        <>
+        { 
+        this.state.showFormDemande===false ? 
+            (
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-2">
@@ -57,7 +43,7 @@ class Accueil extends Component {
                     <div className="col">
                         <div className="row">
                             <div className="col-2">
-                            {this.renderButtonAsso()}
+                            {renderButtonAsso()}
                             </div>
                             <div className="col-5">
                                 <div className="d-flex justify-content-center">
@@ -136,10 +122,10 @@ class Accueil extends Component {
                     </div>
                 </div>
             </div>
-            ): (<DemandeFormation/>)
-            }
-            </>
-        )
-    }
+            )
+            : (<DemandeFormation/>)
+        }
+        </>
+    )
 }
-export default withCookies(Accueil);
+export default Accueil;
