@@ -15,6 +15,7 @@ const FormulaireInscription = () => {
     const [ville, setVille] = useState('');
     const [mdp1, setMdp1] = useState('');
     const [mdp2, setMdp2] = useState('');
+    const [mdp, setMdp] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({});
     const [options, setOptions] = useState([]);
     const [hasErrorAPI, setHasErrorAPI] =  useState(false);
@@ -32,22 +33,15 @@ const FormulaireInscription = () => {
             setHasErrorAPI(true);
             console.log(err);
         });
-        
-    }
-
-    //MANQUE ELSE
-    var mdp = "";
-    if (mdp1 === mdp2){
-        mdp = mdp2;
     }
 
     //IL FAUT REPRENDRE LES CHAMPS EMAIL + NOMUTILISATEUR, AINSI QUE COLLEGE A VOIR (le token retourne juste rôle + mail)
     const mapFormToAssociation = () => {
-        let association = new Association("iefZZddef@geeerrdmdail.com", mdp, "wdzaaZeerZeds", acronyme, "A", nomComplet, ville)
-
+        let association = new Association("maizleeddeyenduucdydayuseea@nauetzrçcdeieazpz.ccoem", mdp, "ccsyrdçitd", acronyme, "A", nomComplet, ville)
         console.log(association);
         return association;
     }
+
 
     const resetForm = () => {
         setAcronyme(''); 
@@ -80,6 +74,7 @@ const FormulaireInscription = () => {
             hasUnfilled["mdp1"] = "Renseigner un mot de passe.";
         }
         if (mdp1 !== mdp2)
+            isValid = false;
             hasUnfilled["mdp2"] = "Les mots de passe ne correspondent pas.";
         if (isValid) {
             handleSubmit();
@@ -113,6 +108,22 @@ const FormulaireInscription = () => {
         someOtherFunc();
     }, []);
 */
+
+const clic = () => {
+    if (mdp1 !== mdp2){
+        console.error("Erreur de mdp");
+        validate();
+    }
+    else if (mdp1 == "" && mdp2 == ""){
+        console.error("vide");
+        validate();
+    }
+    else{
+        console.log("rentre")
+        validate();
+    }
+    
+ }
     return (
         loading ? <div>Loading...</div> : hasErrorAPI ? <div>Error occured while fetching data.</div> :
         <div className="FormulaireInscription">
@@ -168,7 +179,7 @@ const FormulaireInscription = () => {
                                 type="password"
                                 name="mdp1"
                                 value={mdp1}
-                                onChange={event => setMdp1(event.target.value)}
+                                onChange={event => { setMdp(event.target.value);setMdp1(event.target.value)}}
                                 className="form-control mt-2"
                                 id="email"/>
                             <div className="text-danger">{hasUnfilled.mdp1}</div>
@@ -186,7 +197,7 @@ const FormulaireInscription = () => {
                         </div>
                         <div className="d-flex justify-content-center">
                             <div className="p-2">
-                                <input type="button" value="Valider" className="btn btn-primary" onClick={validate}/>
+                                <input type="button" value="Valider" className="btn btn-primary" onClick={clic}/>
                             </div>
                             <div className="p-2">
                                 <input type="button" value="Reset" className="btn btn-primary" onClick={resetForm}/>
