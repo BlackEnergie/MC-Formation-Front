@@ -30,9 +30,6 @@ const Accueil = () => {
 
     return(
         <>
-        { 
-        this.state.showFormDemande===false ? 
-            (
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-2">
@@ -122,9 +119,6 @@ const Accueil = () => {
                     </div>
                 </div>
             </div>
-            )
-            : (<DemandeFormation/>)
-        }
         </>
     )
 }
