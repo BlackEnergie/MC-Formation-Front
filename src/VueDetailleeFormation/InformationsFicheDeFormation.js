@@ -123,20 +123,28 @@ function InformationsFicheDeFormation (){
                     
                 </div>
                 <div className="col-6">
-                            <h3 className="mt-2">
-                               Besoins matériel 
-                            </h3>
-                            <br/>
-                            <div className="card">
-                                <ul className="panel" style={{border: 0}}>
-                                    <li>{AfficherBesoinsMaterielsFormation}</li>
-                                </ul>
+                    <h3 className="mt-2">
+                        Besoins matériel 
+                    </h3>
+                    <div className="row d-flex justify-content-between">
+                    {/* Table Association */}
+                        <div className="container">
+                            <div className="table-wrapper tableFixHead" >
+                                <table className="table table-striped mt-2" >
+                                    <tbody >
+                                    {AfficherBesoinsMaterielsFormation}
+                                    </tbody>
+
+                                </table>
                             </div>
                         </div>
+                </div>
+                </div>
             </div>
             </div>
-                <div className="row mt-3"></div>
-       
+
+             
+          
         </>
     );
 }
