@@ -34,9 +34,16 @@ const FormulaireInscription = () => {
         });
         
     }
-    //IL FAUT REPRENDRE LES CHAMPS EMAIL + NOMUTILISATEUR, AINSI QUE COLLEGE A VOIR
+
+    //MANQUE ELSE
+    var mdp = "";
+    if (mdp1 === mdp2){
+        mdp = mdp2;
+    }
+
+    //IL FAUT REPRENDRE LES CHAMPS EMAIL + NOMUTILISATEUR, AINSI QUE COLLEGE A VOIR (le token retourne juste rôle + mail)
     const mapFormToAssociation = () => {
-        let association = new Association("tesstttt@gmail.com", mdp2, "tosstNom", acronyme, "B", nomComplet, ville)
+        let association = new Association("iefZZddef@geeerrdmdail.com", mdp, "wdzaaZeerZeds", acronyme, "A", nomComplet, ville)
 
         console.log(association);
         return association;
