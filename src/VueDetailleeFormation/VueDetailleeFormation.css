@@ -1,24 +1,16 @@
-.main{
-    height:100% !important;
-}
+.main{height:100% !important;}
 
-.row{
-    margin:0 !important;
-}
+.row{margin:0 !important;}
 
 a, a label {
     cursor: pointer;
 }
-.container h3{
-    color:#2B309B;
-}
+.container h3{color:#2B309B;}
 .container h4{
     margin:0;
     color:black;
 }
-.container p{
-    margin-bottom:0.2rem;
-}
+.container p{margin-bottom:0.2rem;}
 
 #arborescence{
     min-width:300px;
@@ -26,11 +18,21 @@ a, a label {
     border-right: solid rgba(100,100,100,0.4) 0.7px ;
 }
 
-
-.col{
-    margin-top: 2%;
+#bouton p {
+    margin: 0.5rem;
+}
+#buttonArriere {
+    background-color: transparent !important;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    color:#2B309B;
 }
 
+
+/* CE BLOC EST POUR AVOIR LA TABLE SCROLLABLE */
 .tableFixHead tbody {
     display: block;
     overflow: auto;
@@ -50,9 +52,4 @@ table.table tr th:first-child,table.table tr td:first-child {
     background: #fff;
     border-radius: 3px;
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
-}
-
-.AiOutlinePlusCircle-icon{
-    color: darkblue;
-    margin-right: 5px ;
 }

@@ -6,11 +6,14 @@ import FilConducteurFormation from './FilConducteurFormation';
 
 import {instanceOf} from 'prop-types';
 import {withCookies, Cookies} from 'react-cookie';
-import {AiOutlineFileText, AiOutlineFolder} from "react-icons/ai";
+import {AiOutlineFileText, AiOutlineFolder, AiOutlineHome,AiOutlineRollback} from "react-icons/ai";
+import {FaChevronDown, FaChevronUp} from "react-icons/fa";
 
 
 class VueDetailleeFormation extends Component {
-
+    revenirAccueil(){
+        this.props.setState({showDetail : false});
+    };
 
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired,
@@ -19,7 +22,7 @@ class VueDetailleeFormation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showComponent: 0,
+            showComponent: 1,
             afficherTout: false
         }
     };
@@ -41,6 +44,15 @@ class VueDetailleeFormation extends Component {
             <div className="container-fluid main" >
                 <div className="row">
                     <div className="col-md-3" id="arborescence">
+                        <div className="d-flex justify-content-left">
+                            <button type="button" id="buttonArriere"
+                                    className="btn btn-primary d-flex align-items-center"
+                                    onClick={() => this.props.updateState(0)}>
+                                <AiOutlineRollback className="Icones me-2"/>
+                                Revenir à l'accueil
+                            </button>
+                        </div>
+
                         <div className="row">
                             <table className="table table-borderless ">
                                 <tbody>
@@ -71,9 +83,9 @@ class VueDetailleeFormation extends Component {
                                     </td>
                                     <td>
                                         {this.state.afficherTout ? (
-                                            <img src={require('../Img/chevron haut.png')} alt="" className="Icones"/>
+                                            <FaChevronUp className="Icones"/>
                                         ) : (
-                                            <img src={require('../Img/chevron haut.png')} alt="" className="Icones"/>
+                                            <FaChevronDown className="Icones"/>
                                         )
                                         }
 
@@ -115,6 +127,8 @@ class VueDetailleeFormation extends Component {
                                 </tbody>
                             </table>
                         </div>
+
+
                     </div>
 
                     <div className="col" >

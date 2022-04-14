@@ -38,13 +38,24 @@ const InformationsGeneralesFormation = () =>{
     const AfficherDataInfoGenerales = Donnee.data.map(
         (info) => {
             return (
-                <tr key={info.id}>
-                    <td>{info.id}</td>
-                    <td>{info.statut}</td>
-                    <td>{info.cadre}</td>
-                    <td>{info.type}</td>
-                    <td>{info.date}</td>
-                </tr>
+                <>
+                    <tr>
+                        <th>Statut</th>
+                        <td>{info.statut}</td>
+                    </tr>
+                    <tr>
+                        <th>Cadre</th>
+                        <td>{info.cadre}</td>
+                    </tr>
+                    <tr>
+                        <th>Type</th>
+                        <td>{info.type}</td>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <td>{info.date}</td>
+                    </tr>
+                </>
             )
         }
     )
@@ -63,18 +74,8 @@ const InformationsGeneralesFormation = () =>{
                         </div>
                         <div className="container">
                             <table className="table table-striped mt-2">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Statut</th>
-                                        <th>Cadre</th>
-                                        <th>Type</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-
                                 <tbody>
-                                    {AfficherDataInfoGenerales}
+                                {AfficherDataInfoGenerales}
                                 </tbody>
                             </table>
                         </div>
@@ -93,14 +94,14 @@ const InformationsGeneralesFormation = () =>{
                             <div className="table-wrapper">
                                 <table className="table table-striped mt-2">
                                     <thead>
-                                        <tr>
-                                            <th>Code</th>
-                                            <th>Nom</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Nom</th>
+                                    </tr>
                                     </thead>
 
                                     <tbody>
-                                        {AfficherDataDomaine}
+                                    {AfficherDataDomaine}
                                     </tbody>
                                 </table>
                             </div>
@@ -131,7 +132,7 @@ const InformationsGeneralesFormation = () =>{
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        {AfficherDataFormateur}
+                                    {AfficherDataFormateur}
                                     </tbody>
                                 </table>
                             </div>
@@ -152,10 +153,10 @@ const InformationsGeneralesFormation = () =>{
                             <div className="table-wrapper tableFixHead" >
                                 <table className="table table-striped mt-2" >
                                     <thead>
-                                        <tr>
-                                            <th>Nom</th>
-                                            <th>Ville</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Ville</th>
+                                    </tr>
                                     </thead>
 
                                     <tbody >

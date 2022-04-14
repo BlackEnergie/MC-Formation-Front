@@ -2,9 +2,10 @@ import React, { useEffect,} from "react";
 import tableSort from "table-sort-js/table-sort.js";
 import Donnee from '../json/data.json';
 import {AiOutlineZoomIn} from "react-icons/ai";
-import {IconContext} from "react-icons"
+import {IconContext} from "react-icons";
+import {AiOutlineFileText, AiOutlineFolder, AiOutlineHome} from "react-icons/ai";
 
-const TableAccueil = ({afficherDetail}) =>{
+const TableAccueil = (props) =>{
 
     useEffect(() => {
         tableSort()
@@ -22,10 +23,10 @@ const TableAccueil = ({afficherDetail}) =>{
                     <td>{info.association}</td>
                     <td>{info.formateur}</td>
                     <td>{info.date}</td>
-                    <td>
-                        <a href="" className="edit" >
-                            <AiOutlineZoomIn className="Icones"/>
-                        </a>
+                    <td key={info.id}>
+                        <button className="btn" onClick={() => props.updateState(info.id)}>
+                            <AiOutlineZoomIn className="Icones me-2"/>
+                        </button>
                     </td>
                 </tr>
             )
@@ -36,24 +37,26 @@ const TableAccueil = ({afficherDetail}) =>{
 
     return(
         <>
-        <div className="hint-text mt-2">1 à {nbFormations} sur <b>{nbFormations}</b> résultats</div>
-        <table className="table table-bordered mt-2 table-sort table-arrows">
-            <thead>
-            <tr>
-                <th scope="col">Statut</th>
-                <th scope="col">Cadre</th>
-                <th scope="col">Domaine(s)</th>
-                <th scope="col">Titre</th>
-                <th scope="col">Association</th>
-                <th scope="col">Formateur(s)</th>
-                <th scope="col">Date</th>
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            {DisplayData}
-            </tbody>
-        </table>
+            <div className="hint-text mt-2">1 à {nbFormations} sur <b>{nbFormations}</b> résultats</div>
+            <div className="table-wrapper" id="tableAccueil">
+                <table className="table table-striped mt-2 table-sort table-arrows">
+                    <thead>
+                    <tr>
+                        <th scope="col">Statut</th>
+                        <th scope="col">Cadre</th>
+                        <th scope="col">Domaine(s)</th>
+                        <th scope="col">Titre</th>
+                        <th scope="col">Association</th>
+                        <th scope="col">Formateur(s)</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {DisplayData}
+                    </tbody>
+                </table>
+            </div>
         </>
     )
 
