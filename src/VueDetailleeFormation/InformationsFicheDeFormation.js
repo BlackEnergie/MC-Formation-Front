@@ -3,7 +3,6 @@ import Donnee from '../VueDetailleeFormation/json/InformationFicheDeFormation.js
 
 
 
-
 const AfficherType = Donnee.data.map(
     (info) => {
         return (
@@ -18,8 +17,8 @@ const AfficherBesoinsMaterielsFormation = Donnee.data[0].BesoinsMaterielsFormati
     (info) => {
         return (
             <tr key={info.id}>
-     
-                <li>{info.nom }</li>
+                <td></td>
+           <td>{info.nom }</td>
             </tr>
         )
     }
@@ -28,7 +27,7 @@ const AfficherBesoinsMaterielsFormation = Donnee.data[0].BesoinsMaterielsFormati
 const AfficherobjetsPedagogiques = Donnee.data[0].objetsPedagogiques.map(
     (info) => {
         return (
-            <tr key={info.id}>
+            <tr key={info.id} title={info.BesoinMater}>
                 <td>{info.id}</td>
                 <td>{info.objet }</td>
             </tr>
@@ -69,7 +68,6 @@ function InformationsFicheDeFormation (){
                     <h3 className="mt-2">
                         Objectifs pédagogiques
                     </h3>
-                   
                     <div className="col-6">
                         <div className="container">
                             <div className="table-wrapper">
@@ -100,7 +98,7 @@ function InformationsFicheDeFormation (){
                         </h3>
                     </div>
                         <div className="container">
-                        <div className="table-wrapper tableFixHead" >
+                            <div className="table-wrapper tableFixHead" >
                                 <table className="table table-striped mt-2" >
                                     <thead>
                                         <tr>
@@ -117,30 +115,32 @@ function InformationsFicheDeFormation (){
                         </div>
                 </div>
                 <div className="col-6">
-                    <h3 className="mt-2">
-                        Besoins matériel 
-                    </h3>
-                    <div className="row d-flex justify-content-between">
-                    {/* Table Association */}
-                        <div className="container">
-                            <div className="table-wrapper tableFixHead" >
+                <div className="row d-flex justify-content-between">
+                        <h3>
+                            Besoins matériel 
+                        </h3>
+                    </div>
+                    <div className="container">
+                    <div className="table-wrapper tableFixHead" >
                                 <table className="table table-striped mt-2" >
-                                <thead>
+                                    <thead>
                                         <tr>
-                                            <th>#</th>
-                                            
+                                        <th></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
+
                                     <tbody >
                                     {AfficherBesoinsMaterielsFormation}
                                     </tbody>
 
                                 </table>
                             </div>
-                        </div>
+                    </div>
+                    
                     </div>
                 </div>
-            </div>
+            
             </div>
 
              
