@@ -4,7 +4,6 @@ import Utilisateur from "../api/model/Utilisateur";
 import { useState } from 'react';
 import Api from '../api/Api';
 import Select from 'react-select';
-import toast from 'react-hot-toast';
 import { withCookies, Cookies } from 'react-cookie';
 
 
@@ -22,6 +21,9 @@ const FormulaireInscription = () => {
     const [hasErrorAPI, setHasErrorAPI] =  useState(false);
     const [loading, setLoading] =  useState(false);
 
+
+
+
     const handleSubmit = () => {
         let association = mapFormToAssociation();
         let api = new Api();
@@ -36,9 +38,15 @@ const FormulaireInscription = () => {
         });
     }
 
+    /*var handleChangeCollege = (selectedOptionStatut) => {
+        this.setState({ selectedOptionStatut }, () =>
+          console.log(`Option selected:`, this.state.selectedOptionStatut)
+        );
+    };*/
+
     //(le token retourne rôle + mail)
     const mapFormToAssociation = () => {
-        let association = new Association("maizleeddeyenduucdydayuseea@nauetzrçcdeieazpz.ccoem", mdp, "ccsyrdçitd", acronyme, college, nomComplet, ville)
+        let association = new Association("test@nauetzrçcdeieazpzc.ccoyem", mdp, "testUsecr", acronyme, college, nomComplet, ville)
         console.log(association);
         return association;
     }
@@ -49,7 +57,7 @@ const FormulaireInscription = () => {
         setNomComplet('');
         setHasUnfilled({});
         setVille('');
-        setCollege('');
+        setCollege([]);
         setMdp1('');
         setMdp2('');
     }
@@ -169,14 +177,13 @@ const clic = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="college" className="mt-2">Indiquez le college dont dépend votre association</label>
-                            <input
-                                type="text"
-                                name="college"
-                                value={college}
-                                onChange={event => setCollege(event.target.value)}
-                                className="form-control mt-2"
-                                placeholder="Ex : B"
-                                id="email"/>
+                            <select class="form-select" aria-label="Default select example" onChange={(e) => setCollege(e.target.value)}>
+                            <option selected>Sélectionner un collège</option>
+                            <option value="A">Collège A</option>
+                            <option value="B">Collège B</option>
+                            <option value="C">Collège C</option>
+                            <option value="D">Collège D</option>
+                            </select>
                             <div className="text-danger">{hasUnfilled.college}</div>
                         </div>
                         <div className="form-group">
@@ -230,3 +237,18 @@ const clic = () => {
 
 
 export default withCookies(FormulaireInscription);
+
+
+const SelectCollege = ({ colleges, options, handleChange }) => {
+
+    return (
+        <Select
+            isClearable
+            isSearchable={false}
+            value={options}
+            placeholder="Veuillez selectionner au moins un collège."
+            onChange={handleChange}
+            options={colleges}
+        />
+    );
+}
