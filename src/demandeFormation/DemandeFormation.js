@@ -3,7 +3,6 @@ import Domaine from "../api/model/Domaine";
 import Demande from "../api/model/Demande";
 import Association from "../api/model/Association";
 import { useState } from 'react';
-import toast from 'react-hot-toast';
 import Api from '../api/Api';
 import Select from 'react-select';
 import { withCookies, Cookies } from 'react-cookie';
