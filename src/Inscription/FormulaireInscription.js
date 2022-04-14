@@ -13,6 +13,7 @@ const FormulaireInscription = () => {
     const [acronyme, setAcronyme] = useState('');
     const [nomComplet, setNomComplet] = useState('');
     const [ville, setVille] = useState('');
+    const [college, setCollege] = useState('');
     const [mdp1, setMdp1] = useState('');
     const [mdp2, setMdp2] = useState('');
     const [mdp, setMdp] = useState('');
@@ -35,9 +36,9 @@ const FormulaireInscription = () => {
         });
     }
 
-    //IL FAUT REPRENDRE LES CHAMPS EMAIL + NOMUTILISATEUR, AINSI QUE COLLEGE A VOIR (le token retourne juste rôle + mail)
+    //(le token retourne rôle + mail)
     const mapFormToAssociation = () => {
-        let association = new Association("maizleeddeyenduucdydayuseea@nauetzrçcdeieazpz.ccoem", mdp, "ccsyrdçitd", acronyme, "A", nomComplet, ville)
+        let association = new Association("maizleeddeyenduucdydayuseea@nauetzrçcdeieazpz.ccoem", mdp, "ccsyrdçitd", acronyme, college, nomComplet, ville)
         console.log(association);
         return association;
     }
@@ -48,6 +49,7 @@ const FormulaireInscription = () => {
         setNomComplet('');
         setHasUnfilled({});
         setVille('');
+        setCollege('');
         setMdp1('');
         setMdp2('');
     }
@@ -68,6 +70,10 @@ const FormulaireInscription = () => {
         if (!ville) {
             isValid = false;
             hasUnfilled["ville"] = "Renseigner la ville.";
+        }
+        if (!college) {
+            isValid = false;
+            hasUnfilled["college"] = "Renseigner le collège.";
         }
         if (!mdp1) {
             isValid = false;
@@ -160,6 +166,18 @@ const clic = () => {
                                 placeholder="Ex : Junior MIAGE Concept Bordeaux"
                                 id="email"/>
                             <div className="text-danger">{hasUnfilled.nomComplet}</div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="college" className="mt-2">Indiquez le college dont dépend votre association</label>
+                            <input
+                                type="text"
+                                name="college"
+                                value={college}
+                                onChange={event => setCollege(event.target.value)}
+                                className="form-control mt-2"
+                                placeholder="Ex : B"
+                                id="email"/>
+                            <div className="text-danger">{hasUnfilled.college}</div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="ville" className="mt-2">Indiquez la ville de votre association</label>
