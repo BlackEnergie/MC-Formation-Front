@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {Cookies, withCookies} from 'react-cookie';
-import Filtres from './Filtres'
+import Filtres from './Filtres';
 import {instanceOf} from 'prop-types';
 import DemandeFormation from '../demandeFormation/DemandeFormation';
 import TableAccueil from './TableAccueil/TableAccueil';
 import './Accueil.css';
-import ModificationFormation from '../VueDetailleeFormation/VueDetailleeFormation';
+import VueDetailleeFormation from '../VueDetailleeFormation/VueDetailleeFormation';
 
 const cookies = new Cookies();
 
@@ -21,16 +21,23 @@ class Accueil extends Component {
         this.state = {
             token: cookies.get('token') || '',
             showFormDemande: false,
-            showDetail : false
+            showDetail : 0,
+            showModif:0
 
         }
         this.handleClick = this.handleClick.bind(this)
         this.afficherDetail=this.afficherDetail.bind(this)
+        this.modifDetail= this.modifDetail.bind(this)
     };
 
-    afficherDetail(){
-        this.setState({showDetail : true});
-        console.log("test ici")
+    afficherDetail(val){
+        this.setState({showDetail : val});
+        console.log(this.state.showDetail);
+    };
+
+    modifDetail(val){
+        this.setState({showModif : val});
+        console.log(this.state.showModif);
     };
 
     handleClick() {
@@ -43,12 +50,12 @@ class Accueil extends Component {
                 {
                     cookies.get("token") && cookies.get("token").roles[0] === "ROLE_ASSO" ? (
                         <>
-                            <div className="demandeFormation">
+                            <div className="demandeFormation col-2">
                                 <button type="button" className="btn btn-primary mb-2"
                                         onClick={this.handleClick}>Demander une formation
                                 </button>
                             </div>
-                            <div className="demandes">
+                            <div className="demandes col-2">
                                 <button type="button" className="btn btn-primary">Voir toutes les demandes</button>
                             </div>
                         </>
@@ -61,10 +68,10 @@ class Accueil extends Component {
     render() {
         return (
             <>
-                {   this.state.showDetail ?(
-                    (<ModificationFormation/>)
-                    ):this.state.showFormDemande === false ? (
-                            <div className="container-fluid" id="accueil">
+                {   this.state.showDetail>=1 ?(
+                    (<VueDetailleeFormation text={this.state.showDetail} updateState={this.afficherDetail}/>)
+                ):this.state.showFormDemande === false ? (
+                    <div className="container-fluid" id="accueil">
                         <div className="row">
                             <div className="col-2">
                             <span className="">
@@ -73,45 +80,23 @@ class Accueil extends Component {
                             </div>
                             <div className="col">
                                 <div className="row">
-                                    <div className="col-2">
-                                        {this.renderButtonAsso()}
-                                    </div>
-                                    <div className="col-5">
-                                        <div className="d-flex justify-content-center">
-                                            <h2><u>Formations à venir</u></h2>
-                                        </div>
-                                    </div>
+
                                     <div className="col">
-                                        <table className="table table-bordered table-sm">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col">Formations demandées</th>
-                                                <th scope="col">Formations à attribuer</th>
-                                                <th scope="col">Formations à venir</th>
-                                                <th scope="col">Formations passées</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>0</td>
-                                                <td>0</td>
-                                                <td>1</td>
-                                                <td>1</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                        <div className="row">
+                                            {this.renderButtonAsso()}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <TableAccueil afficherDetail={this.afficherDetail}/>
+                                <TableAccueil  updateVue={this.afficherDetail} updateModif={this.modifDetail}/>
 
                                 <div className="d-flex justify-content-center mb-2">
-                                    <button type="button" className="btn btn-primary mt-5" onClick={() => this.afficherDetail()}>Afficher plus...</button>
+                                    <button type="button" className="btn btn-primary mt-5">Afficher plus...</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                        ) : (<DemandeFormation/>)
+                ) : (<DemandeFormation/>)
 
                 }
             </>

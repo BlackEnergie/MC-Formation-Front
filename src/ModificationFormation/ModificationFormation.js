@@ -1,8 +1,5 @@
 import './VueDetailleeFormation.css';
 import React, {Component} from 'react';
-import InformationsGeneralesFormation from './InformationsGeneralesFormation';
-import InformationsFicheDeFormation from './InformationsFicheDeFormation';
-import FilConducteurFormation from './FilConducteurFormation';
 
 import {instanceOf} from 'prop-types';
 import {withCookies, Cookies} from 'react-cookie';

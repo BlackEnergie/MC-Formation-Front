@@ -8,9 +8,9 @@ const statuts = [
     { value: 'passee', label: 'Passée' },
 ];
 const domaines=[
-  { value: 'tresorerie', label: 'Trésorerie' },
-  { value: 'administration', label: 'Administration' },
-  { value: 'ressourceshumaines', label: 'Ressources Humaines' },
+    { value: 'tresorerie', label: 'Trésorerie' },
+    { value: 'administration', label: 'Administration' },
+    { value: 'ressourceshumaines', label: 'Ressources Humaines' },
     { value: 'communication', label: 'Communication' },
     { value: 'partenariat', label: 'Partenariat' },
 ];
@@ -24,15 +24,15 @@ const cadres=[
 ];
 
 class Filtres extends React.Component {
-  state = {
-    selectedOptionStatut: null,
-    selectedOptionDomaine: null,
-    selectedOptionCadre: null,
-    selectedOptionFormateur: null,
-  };
+    state = {
+        selectedOptionStatut: null,
+        selectedOptionDomaine: null,
+        selectedOptionCadre: null,
+        selectedOptionFormateur: null,
+    };
     handleChangeStatut = (selectedOptionStatut) => {
         this.setState({ selectedOptionStatut }, () =>
-          console.log(`Option selected:`, this.state.selectedOptionStatut)
+            console.log(`Option selected:`, this.state.selectedOptionStatut)
         );
     };
     handleChangeDomaine = (selectedOptionDomaine) => {
@@ -50,66 +50,66 @@ class Filtres extends React.Component {
             console.log(`Option selected:`, this.state.selectedOptionFormateur)
         );
     };
-  
-  render() {
-    const { selectedOptionStatut,selectedOptionDomaine,selectedOptionCadre,selectedOptionFormateur } = this.state;
-    return (
-        <>
-            <label><u>Statut</u></label>
-            <Select
-                value={selectedOptionStatut}
-                onChange={this.handleChangeStatut}
-                options={statuts}
-                placeholder="Ex : Passée "
-                isMulti
-            />
-            <label><u>Domaine</u></label>
-            <Select
-                value={selectedOptionDomaine}
-                onChange={this.handleChangeDomaine}
-                options={domaines}
-                placeholder="Ex : Audit-Qualité "
-                isMulti
-                isSearchable
-            />
-            <label><u>Formateur</u></label>
-            {/*<input type="search" id="form1" className="form-control"/>*/}
-            <Select
-                value={selectedOptionFormateur}
-                onChange={this.handleChangeFormateur}
-                //options={cadres}
-                placeholder=""
-                isMulti
-                isSearchable
 
-            />
-            <label><u>Cadre</u></label>
-            <Select
-                value={selectedOptionCadre}
-                onChange={this.handleChangeCadre}
-                options={cadres}
-                placeholder="Ex : Winter "
-                isMulti
-            />
-            <div>
-                <label><u>Début Période</u></label>
+    render() {
+        const { selectedOptionStatut,selectedOptionDomaine,selectedOptionCadre,selectedOptionFormateur } = this.state;
+        return (
+            <>
+                <label><b>Statut</b></label>
+                <Select
+                    value={selectedOptionStatut}
+                    onChange={this.handleChangeStatut}
+                    options={statuts}
+                    placeholder="Ex : Passée "
+                    isMulti
+                />
+                <label><b>Domaine</b></label>
+                <Select
+                    value={selectedOptionDomaine}
+                    onChange={this.handleChangeDomaine}
+                    options={domaines}
+                    placeholder="Ex : Audit-Qualité "
+                    isMulti
+                    isSearchable
+                />
+                <label><b>Formateur</b></label>
+                {/*<input type="search" id="form1" className="form-control"/>*/}
+                <Select
+                    value={selectedOptionFormateur}
+                    onChange={this.handleChangeFormateur}
+                    //options={cadres}
+                    placeholder=""
+                    isMulti
+                    isSearchable
+
+                />
+                <label><b>Cadre</b></label>
+                <Select
+                    value={selectedOptionCadre}
+                    onChange={this.handleChangeCadre}
+                    options={cadres}
+                    placeholder="Ex : Winter "
+                    isMulti
+                />
                 <div>
-                <input type="date" className="form-control"></input>
+                    <label><b>Début Période</b></label>
+                    <div>
+                        <input type="date" className="form-control"></input>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <label><u>Fin Période</u></label>
                 <div>
-                <input type="date" className="form-control"></input>
+                    <label><b>Fin Période</b></label>
+                    <div>
+                        <input type="date" className="form-control"></input>
+                    </div>
                 </div>
-            </div>
-            <div className="mt-2">
-                <button type="button" className="btn btn-primary m-2">Effacer</button>
-                <button type="button" className="btn btn-primary m-2">Valider</button>
-            </div>
-      </>
-    );
-  }
+                <div className="mt-2 d-flex justify-content-center">
+                    <button type="button" className="btn btn-primary m-2">Effacer</button>
+                    <button type="button" className="btn btn-primary m-2">Valider</button>
+                </div>
+            </>
+        );
+    }
 }
 
 export default Filtres;
