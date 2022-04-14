@@ -38,12 +38,6 @@ const FormulaireInscription = () => {
         });
     }
 
-    /*var handleChangeCollege = (selectedOptionStatut) => {
-        this.setState({ selectedOptionStatut }, () =>
-          console.log(`Option selected:`, this.state.selectedOptionStatut)
-        );
-    };*/
-
     //(le token retourne rôle + mail)
     const mapFormToAssociation = () => {
         let association = new Association("test@nauetzrçcdeieazpzc.ccoyem", mdp, "testUsecr", acronyme, college, nomComplet, ville)
@@ -178,11 +172,10 @@ const clic = () => {
                         <div className="form-group">
                             <label htmlFor="college" className="mt-2">Indiquez le college dont dépend votre association</label>
                             <select class="form-select" aria-label="Default select example" onChange={(e) => setCollege(e.target.value)}>
-                            <option selected>Sélectionner un collège</option>
-                            <option value="A">Collège A</option>
-                            <option value="B">Collège B</option>
-                            <option value="C">Collège C</option>
-                            <option value="D">Collège D</option>
+                                <option value="A">Collège A</option>
+                                <option value="B">Collège B</option>
+                                <option value="C">Collège C</option>
+                                <option value="D">Collège D</option>
                             </select>
                             <div className="text-danger">{hasUnfilled.college}</div>
                         </div>
@@ -237,18 +230,3 @@ const clic = () => {
 
 
 export default withCookies(FormulaireInscription);
-
-
-const SelectCollege = ({ colleges, options, handleChange }) => {
-
-    return (
-        <Select
-            isClearable
-            isSearchable={false}
-            value={options}
-            placeholder="Veuillez selectionner au moins un collège."
-            onChange={handleChange}
-            options={colleges}
-        />
-    );
-}
