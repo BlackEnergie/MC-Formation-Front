@@ -100,8 +100,8 @@ function InformationsFicheDeFormation (){
                         </h3>
                     </div>
                         <div className="container">
-                            <div className="table-wrapper">
-                                <table className="table table-striped mt-2">
+                        <div className="table-wrapper tableFixHead" >
+                                <table className="table table-striped mt-2" >
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -125,6 +125,12 @@ function InformationsFicheDeFormation (){
                         <div className="container">
                             <div className="table-wrapper tableFixHead" >
                                 <table className="table table-striped mt-2" >
+                                <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            
+                                        </tr>
+                                    </thead>
                                     <tbody >
                                     {AfficherBesoinsMaterielsFormation}
                                     </tbody>
@@ -132,7 +138,7 @@ function InformationsFicheDeFormation (){
                                 </table>
                             </div>
                         </div>
-                </div>
+                    </div>
                 </div>
             </div>
             </div>
