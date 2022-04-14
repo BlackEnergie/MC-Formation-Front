@@ -60,16 +60,15 @@ function InformationsFicheDeFormation (){
                 <div>
                     <div className="row  mb-3">
                         <div className="col-2">
-                           
-                           <h4 style={{marginLeft: '15px' }}>{AfficherType}</h4>
+                           <h4>{AfficherType}</h4>
                         </div>
                     </div>
                 </div>
          
                 <div className="row  mb-3" >
-                <h3 className="mt-2">
-                   Objectifs pédagogiques
-                </h3>
+                    <h3 className="mt-2">
+                        Objectifs pédagogiques
+                    </h3>
                    
                     <div className="col-6">
                         <div className="container">
@@ -88,20 +87,18 @@ function InformationsFicheDeFormation (){
                                 </table>
                             </div>
                         </div>
-                    </div>
-            
-                    
+                    </div>       
                 </div>
             </div>
         </div>
         <div className="container shadow p-4 mb-3 bg-white rounded">
             <div className="row">
                 <div className="col-6">
-                    <h3 className="mt-2">
-                        Domaines
-                    </h3>
-                
-                    <div className="col-6" style={{width: 600}}>
+                    <div className="row d-flex justify-content-between">
+                        <h3 className="mt-2">
+                            Domaines
+                        </h3>
+                    </div>
                         <div className="container">
                             <div className="table-wrapper">
                                 <table className="table table-striped mt-2">
@@ -118,9 +115,6 @@ function InformationsFicheDeFormation (){
                                 </table>
                             </div>
                         </div>
-                    </div>
-            
-                    
                 </div>
                 <div className="col-6">
                     <h3 className="mt-2">
