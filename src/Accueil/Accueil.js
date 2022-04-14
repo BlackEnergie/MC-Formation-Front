@@ -21,16 +21,23 @@ class Accueil extends Component {
         this.state = {
             token: cookies.get('token') || '',
             showFormDemande: false,
-            showDetail : 0
+            showDetail : 0,
+            showModif:0
 
         }
         this.handleClick = this.handleClick.bind(this)
         this.afficherDetail=this.afficherDetail.bind(this)
+        this.modifDetail= this.modifDetail.bind(this)
     };
 
     afficherDetail(val){
         this.setState({showDetail : val});
         console.log(this.state.showDetail);
+    };
+
+    modifDetail(val){
+        this.setState({showModif : val});
+        console.log(this.state.showModif);
     };
 
     handleClick() {
@@ -43,12 +50,12 @@ class Accueil extends Component {
                 {
                     cookies.get("token") && cookies.get("token").roles[0] === "ROLE_ASSO" ? (
                         <>
-                            <div className="demandeFormation">
+                            <div className="demandeFormation col-2">
                                 <button type="button" className="btn btn-primary mb-2"
                                         onClick={this.handleClick}>Demander une formation
                                 </button>
                             </div>
-                            <div className="demandes">
+                            <div className="demandes col-2">
                                 <button type="button" className="btn btn-primary">Voir toutes les demandes</button>
                             </div>
                         </>
@@ -75,13 +82,13 @@ class Accueil extends Component {
                                 <div className="row">
 
                                     <div className="col">
-                                        <div className="col-2">
+                                        <div className="row">
                                             {this.renderButtonAsso()}
                                         </div>
                                     </div>
                                 </div>
 
-                                <TableAccueil text={this.state.showDetail} updateState={this.afficherDetail}/>
+                                <TableAccueil  updateVue={this.afficherDetail} updateModif={this.modifDetail}/>
 
                                 <div className="d-flex justify-content-center mb-2">
                                     <button type="button" className="btn btn-primary mt-5">Afficher plus...</button>

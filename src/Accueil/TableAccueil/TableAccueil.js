@@ -1,9 +1,7 @@
 import React, { useEffect,} from "react";
 import tableSort from "table-sort-js/table-sort.js";
 import Donnee from '../json/data.json';
-import {AiOutlineZoomIn} from "react-icons/ai";
-import {IconContext} from "react-icons";
-import {AiOutlineFileText, AiOutlineFolder, AiOutlineHome} from "react-icons/ai";
+import {AiOutlineZoomIn, AiOutlineEdit} from "react-icons/ai";
 
 const TableAccueil = (props) =>{
 
@@ -24,8 +22,11 @@ const TableAccueil = (props) =>{
                     <td>{info.formateur}</td>
                     <td>{info.date}</td>
                     <td key={info.id}>
-                        <button className="btn" onClick={() => props.updateState(info.id)}>
+                        <button className="btn" onClick={() => props.updateVue(info.id)}>
                             <AiOutlineZoomIn className="Icones me-2"/>
+                        </button>
+                        <button className="btn" onClick={() => props.updateModif(info.id)}>
+                            <AiOutlineEdit className="Icones me-2"/>
                         </button>
                     </td>
                 </tr>
