@@ -23,11 +23,27 @@ const DemandeFormation = () => {
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const location = useLocation();
-    
-    const handleSubmit = () => {
+    const handleSubmit = async ()  => {
         let demande = mapFormToDemande();
-        let api = new Api();
-        console.log("Handle submit");
+        try {
+            const response = await axiosPrivate.post('/demande/creer',JSON.stringify(demande), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+                }
+            });
+            if(response.code==201){
+                toast.success(response.message);
+                resetForm()
+            }
+            else{
+                toast.error('Une erreur est survenu');
+            }
+        }
+        catch (err) {
+            toast.error('Une erreur est survenu');
+            console.error(err);
+        }
     }
 
     const mapFormToDemande = () => {
@@ -36,7 +52,7 @@ const DemandeFormation = () => {
         demande.sujet = sujet;
         demande.detail = detail;
         let association = new Association();
-        association.email = 'AMB@yopmail.fr'
+        association.email = 'AMB@yopmail.com'
         demande.association = association;
         domaines.forEach(element => {
             let domaine = new Domaine();

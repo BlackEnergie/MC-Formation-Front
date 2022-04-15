@@ -1,14 +1,53 @@
 import Filtres from './Filtres'
 import DemandeFormation from '../demandeFormation/DemandeFormation';
-import { useState } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import {useNavigate, useLocation } from 'react-router-dom';
+import { render } from '@testing-library/react';
 
 const Accueil = () => {
+    const [options, setOptions] = useState([]);
+    const [loading, setLoading] =  useState(false);
 
-    const [showFormDemande, setShowFormDemande] = useState(false);
-
+    const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
+    const location = useLocation();
+    useEffect(() => {
+        
+        let isMounted = true;
+        let optionsArray = [];
+        const controller = new AbortController();
+        setLoading(true)
+        const getFormationsAccueil = async () => {
+        try {
+            const response = await axiosPrivate.get('/formations', {
+                params: {offset:0,limit:6,statut:"DEMANDE",domaines:2,datedebut:"2022-04-13",datefin:"2022-04-14",cadre:"fdsfsdf"},
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+                }
+            });
+            console.log(response.data);
+            for (const element of response.data) {
+                optionsArray.push(element);
+                }
+            isMounted && setOptions(optionsArray);
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            console.error(err);
+            navigate('/', { state: { from: location }, replace: true });
+        }
+    }
+        getFormationsAccueil();
+        return () => {
+            isMounted = false;
+            controller.abort();
+        }
+    }, [])
+   
 
     const handleClick = () => {
-        setShowFormDemande(true)
+        navigate('/demande'); 
       }
 
     const renderButtonAsso = () => {
@@ -27,7 +66,16 @@ const Accueil = () => {
          </>
         )
     }
-
+    const listItems = options.map((formation) =>
+    <tr>
+        <td>{formation.statut}</td>
+        <td>{formation.cadre}</td>
+        <td>{formation.domaines.map((domaine)=>domaine.libelle)}</td>
+        <td>{formation.nom}</td>
+        <td>{formation.association.acronyme}</td>
+        <td>{formation.formateurs.map((formateur)=>formateur.nomComplet)}</td>
+        <td>{formation.date}</td>
+        </tr>);
     return(
         <>
             <div className="container-fluid">
@@ -83,34 +131,7 @@ const Accueil = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                <td>Passée</td>
-                                <td>Winter</td>
-                                <td>Audit - Qualité</td>
-                                <td>Audit de sa structure</td>
-                                <td>JMC Bordeaux</td>
-                                <td>Théo Perrin</td>
-                                <td>13/03/2021</td>
-                                <td>
-                                        <a href="#editEmployeeModal" className="edit" data-toggle="modal">
-                                            <img src={require('../Img/delete.png')} className="Icones"/>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                <td>Passée</td>
-                                <td>Winter</td>
-                                <td>Audit - Qualité</td>
-                                <td>Audit de sa structure</td>
-                                <td>JMC Bordeaux</td>
-                                <td>Théo Perrin</td>
-                                <td>13/03/2021</td>
-                                <td>
-                                        <a href="#editEmployeeModal" className="edit" data-toggle="modal">
-                                            <img src={require('../Img/delete.png')} className="Icones"/>
-                                        </a>
-                                    </td>
-                                </tr>
+                                {listItems}
                             </tbody>
                         </table>
                         <div className="d-flex justify-content-center">
@@ -120,6 +141,6 @@ const Accueil = () => {
                 </div>
             </div>
         </>
-    )
+    );
 }
 export default Accueil;

@@ -63,7 +63,7 @@ const Connexion = () => {
             setNomUtilisateur('');
             setPwd('');
             //navigate(from, {replace: true});
-            navigate('demande');
+            navigate('accueil');
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('no server response');
