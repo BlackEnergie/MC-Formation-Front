@@ -17,16 +17,11 @@ const DemandeFormation = () => {
     const [hasUnfilled, setHasUnfilled] = useState({});
     const [options, setOptions] = useState([]);
 
-    {/* state api */}
-    const [loading, setLoading] =  useState(false);
-
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const location = useLocation();
     
     const handleSubmit = () => {
-        let demande = mapFormToDemande();
-        let api = new Api();
         console.log("Handle submit");
     }
 
@@ -84,9 +79,9 @@ const DemandeFormation = () => {
         let isMounted = true;
         let optionsArray = []
         const controller = new AbortController();
-        setLoading(true)
 
         const getDomaines = async () => {
+            console.log(`accesstoken : `,localStorage.getItem('accessToken')) ;
             try {
                 const response = await axiosPrivate.get('/data/domaines', {
                     signal: controller.signal,
@@ -94,16 +89,14 @@ const DemandeFormation = () => {
                         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
                     }
                 });
-                console.log(response.data);
                 for (const element of response.data) {
                     optionsArray.push({value: element.code, label:element.libelle});
                     }
+                console.log(response.data);
                 isMounted && setOptions(optionsArray);
-                setLoading(false);
             } catch (err) {
-                setLoading(false);
                 console.error(err);
-                navigate('/', { state: { from: location }, replace: true });
+                navigate('/connexion', { state: { from: location }, replace: true });
             }
         }
 
@@ -116,7 +109,6 @@ const DemandeFormation = () => {
     }, [])
 
     return (
-        loading ? <div>Loading...</div> :
         <div className="DemandeFormation">
             <div className="row justify-content-md-center  mt-3">
                 <div className="col col-lg-5 border border-dark">

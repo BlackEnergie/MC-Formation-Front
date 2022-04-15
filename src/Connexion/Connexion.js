@@ -1,18 +1,15 @@
 import './Connexion.css';
 import React, {useState, useRef, useEffect} from 'react';
 import Utilisateur from "../api/model/Utilisateur";
-import Api from "../api/Api";
 import axios from '../api/axios';
 import useAuth from '../hooks/useAuth';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const LOGIN_URL = '/api/auth/signin';
 
 const Connexion = () => {
 
-    let api = new Api();
-
-    const { setAuth } = useAuth();
+    const { setAuth} = useAuth();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -58,12 +55,12 @@ const Connexion = () => {
             console.log(JSON.stringify(response?.data));
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
+            setAuth({ nomUtilisateur, roles, accessToken });
             localStorage.setItem("accessToken", accessToken);
-            setAuth({ accessToken });
             setNomUtilisateur('');
             setPwd('');
-            //navigate(from, {replace: true});
-            navigate('demande');
+            console.log('Authenticated');
+            navigate(from, { replace: true });
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('no server response');

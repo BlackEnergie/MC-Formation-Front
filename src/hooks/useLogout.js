@@ -4,12 +4,10 @@ import useAuth from "./useAuth";
 const useLogout = () => {
     const { setAuth } = useAuth();
 
-    const logout = async () => {
+    const logout = () => {
         setAuth({});
         try {
-            const response = await axios('/logout', {
-                withCredentials: true
-            });
+            localStorage.clear();
         } catch (err) {
             console.error(err);
         }
