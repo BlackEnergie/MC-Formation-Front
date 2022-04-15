@@ -13,15 +13,17 @@ const Admin = () =>{
     const [hasUnfilled, setHasUnfilled] = useState({});
 
     const handleSubmit = () => {
+        console.log(mail)
         console.log(role)
+        resetForm()
     }
 
-    //(le token retourne rôle + mail)
-    /*const mapFormToAssociation = () => {
-        let association = new Association("test@nauetzrçcdeieazpzc.ccoyem", mdp, "testUsecr", acronyme, college, nomComplet, ville)
-        console.log(association);
-        return association;
-    }*/
+    const resetForm = () => {
+        setMail('');
+        setHasUnfilled({});
+        setRole('');
+    }
+
 
     const validate = () => {
         
@@ -74,11 +76,13 @@ const Admin = () =>{
                                     <div className="text-danger">{hasUnfilled.mail}</div>
                                 </td>
                                 <td>
-                                    <select class="form-select" aria-label="Default select example" onChange={(e) => setRole(e.target.value)}>
+                                    <select className="form-select" aria-label="Default select example" onChange={(e) => setRole(e.target.value)}>
+                                        <option value="" disabled selected hidden>Rôle</option>
                                         <option value="FORMATEUR">Formateur</option>
                                         <option value="ASSO">Association</option>
                                         <option value="BN">Membre du Bureau National</option>
                                     </select>
+                                    <div className="text-danger">{hasUnfilled.role}</div>
                                 </td>
                             </tr>
                             </tbody>
