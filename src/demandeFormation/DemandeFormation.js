@@ -4,7 +4,6 @@ import Demande from "../api/model/Demande";
 import Association from "../api/model/Association";
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import Api from '../api/Api';
 import Select from 'react-select';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -20,11 +19,28 @@ const DemandeFormation = () => {
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const location = useLocation();
-    
-    const handleSubmit = () => {
-        console.log("Handle submit");
-        let demande = mapFormToDemande();
 
+    const handleSubmit = async ()  => {
+        let demande = mapFormToDemande();
+        try {
+            const response = await axiosPrivate.post('/demande/creer',JSON.stringify(demande), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+                }
+            });
+            if(response.data.code==201){
+                toast.success(response.data.message);
+                resetForm()
+            }
+            else{
+                toast.error(response.data.message);
+            }
+        }
+        catch (err) {
+            toast.error('Une erreur est survenu');
+            console.error(err);
+        }
     }
 
     const mapFormToDemande = () => {
@@ -33,7 +49,7 @@ const DemandeFormation = () => {
         demande.sujet = sujet;
         demande.detail = detail;
         let association = new Association();
-        association.email = 'AMB@yopmail.fr'
+        association.email = 'AMB@yopmail.com'
         demande.association = association;
         domaines.forEach(element => {
             let domaine = new Domaine();

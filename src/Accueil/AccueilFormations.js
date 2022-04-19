@@ -1,15 +1,82 @@
-import Filtres from './Filtres'
-import { useState } from 'react';
 import { Link } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import {useNavigate} from 'react-router-dom';
+import Select from 'react-select';
 
-const Accueil = () => {
+const Accueil = (filtreStatut) => {
+    const [options, setOptions] = useState([]);
+    const [loading, setLoading] =  useState(false);
+    const [offsetParam,setOffsetParam] = useState(0);
+    const [selectedOptionStatut, setSelectedOptionStatut] = useState(null);
+    const [statutFiltre, setStatutFiltre] = useState("");
+    const limitParam=2;
+    const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
+    let statut = null;
+    let offset = null;
+    const optionsStatut = [
+        { value: 'DEMANDE', label: 'Demandé' },
+        { value: 'A_ATTRIBUER', label: 'A attribuer' },
+        { value: 'A_VENIR', label: 'A venir' },
+        { value: 'PASSE', label: 'Passée' }
+      ];
+    var optionsArray = [];
+      
+    useEffect(() => {
+        setLoading(true)
+        getFormationsAccueil();
+    }, [])
 
-    const [showFormDemande, setShowFormDemande] = useState(false);
-
-
+   
+    const getFormationsAccueil = async () => {
+        if(offset==null){
+            for(const element of options){
+                optionsArray.push(element);
+            }
+        }
+        try {
+            const response = await axiosPrivate.get('/formations', {
+                params: {offset:(offset!=null?0:offsetParam),limit:limitParam,statut :(statut!=null?statut:statutFiltre)},
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+                }
+            });
+            console.log(response.data);
+            for (const element of response.data) {
+                optionsArray.push(element);
+                }
+            setOffsetParam((offset!=null?0:offsetParam)+limitParam);
+            setOptions(optionsArray);
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            console.error(err);
+        }
+    }
     const handleClick = () => {
-        setShowFormDemande(true)
-      }
+        navigate('/demande'); 
+    }
+    const handleClickValidate = () => {
+        setOffsetParam(0);
+        if(selectedOptionStatut[0]){
+                offset=0;
+                statut=selectedOptionStatut[0].value;
+                setStatutFiltre(selectedOptionStatut[0].value);
+                getFormationsAccueil();
+                renderTabFormation();
+        }
+        else{
+            offset=0;
+            statut="";
+            setStatutFiltre("");
+            getFormationsAccueil();
+            renderTabFormation();
+        }
+      
+        setOffsetParam(offsetParam+limitParam);
+        
+    }
 
     const renderButtonAsso = () => {
         return(
@@ -19,21 +86,54 @@ const Accueil = () => {
                     <button type="button" className="btn btn-primary mb-2" onClick={handleClick}>Demander une formation</button>
                 </Link>
             </div>
-            <div className="demandes">
-                <button type="button" className="btn btn-primary">Voir toutes les demandes</button>
-            </div>
             </>
         )
     }
+    
+    const renderMoreFormation=() =>{
+        getFormationsAccueil();
+        renderTabFormation();
+        setOffsetParam(offsetParam+limitParam);
+    }
+    const renderTabFormation = () => {
+        const listItems = options.map((formation) =>
+        <tr>
+            <td>{formation.statut}</td>
+            <td>{formation.cadre}</td>
+            <td>{formation.domaines.map((domaine)=>domaine.libelle)}</td>
+            <td>{formation.nom}</td>
+            <td>{formation.association.acronyme}</td>
+            <td>{formation.formateurs ? formation.formateurs.map((formateur)=>formateur.nomComplet):""}</td>
+            <td>{formation.date}</td>
+        </tr>);
 
-    return(
+        return(
+            <>
+            { 
+             listItems
+            }   
+        </>
+        )
+        }
+        return(
         <>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-2">
                         <span className="">
-                            <Filtres/>
+                        <label><u>Statut</u></label>
+                        <Select
+                            isClearable 
+                            value={selectedOptionStatut}
+                            placeholder=""
+                            onChange={setSelectedOptionStatut}
+                            options={optionsStatut}
+                            />
                         </span>
+                        <div className="mt-2">
+                            <button type="button" className="btn btn-primary m-2">Reset</button>
+                            <button type="button" className="btn btn-primary" onClick={handleClickValidate}>Valider</button>
+                        </div>
                     </div>
                     <div className="col">
                         <div className="row">
@@ -44,26 +144,6 @@ const Accueil = () => {
                                 <div className="d-flex justify-content-center">
                                     <h2><u>Formations à venir</u></h2>
                                 </div>
-                            </div>
-                            <div className="col">
-                                <table className="table table-bordered table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">formation demandées</th>
-                                            <th scope="col">formations attribuer</th>
-                                            <th scope="col">formation à venir</th>
-                                            <th scope="col">formations passées</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                         <div className="hint-text mt-2">1 à 2 sur <b>2</b> résultats</div>
@@ -81,43 +161,16 @@ const Accueil = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                <td>Passée</td>
-                                <td>Winter</td>
-                                <td>Audit - Qualité</td>
-                                <td>Audit de sa structure</td>
-                                <td>JMC Bordeaux</td>
-                                <td>Théo Perrin</td>
-                                <td>13/03/2021</td>
-                                <td>
-                                        <a href="#editEmployeeModal" className="edit" data-toggle="modal">
-                                            <img src={require('../Img/delete.png')} className="Icones"/>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                <td>Passée</td>
-                                <td>Winter</td>
-                                <td>Audit - Qualité</td>
-                                <td>Audit de sa structure</td>
-                                <td>JMC Bordeaux</td>
-                                <td>Théo Perrin</td>
-                                <td>13/03/2021</td>
-                                <td>
-                                        <a href="#editEmployeeModal" className="edit" data-toggle="modal">
-                                            <img src={require('../Img/delete.png')} className="Icones"/>
-                                        </a>
-                                    </td>
-                                </tr>
+                                {renderTabFormation()}
                             </tbody>
                         </table>
                         <div className="d-flex justify-content-center">
-                            <button type="button" className="btn btn-primary mt-5">Afficher plus...</button>
+                            <button type="button" className="btn btn-primary mt-5" onClick={renderMoreFormation}>Afficher plus...</button>
                         </div>
                     </div>
                 </div>
             </div>
         </>
-    )
+    );
 }
 export default Accueil;
