@@ -13,9 +13,9 @@ const TableAccueil = ({Donnee}) => {
         const display = Donnee.map((info) =>
             <tr key={info.id}>
                 <td>{info.statut}</td>
-                <td>{info.cadre ? info.cadre:"N/A"}</td>
+                <td>{info.cadre ? info.cadre : "N/A"}</td>
                 <td>{info.domaines.map((domaine) => domaine.libelle + ", ")}</td>
-                <td>{info.titre? info.titre : "Provisoire : " + info.sujet}</td>
+                <td>{info.titre ? info.titre : "Provisoire : " + info.sujet}</td>
                 <td>{info.association.nomComplet}</td>
                 <td>{info.formateurs.length > 0 ? info.formateurs.map((formateur) => formateur.nomComplet) : "Aucun"}</td>
                 <td>{info.date ? info.date : "N/A"}</td>
@@ -28,10 +28,12 @@ const TableAccueil = ({Donnee}) => {
                     </Link>
                 </td>
             </tr>
-    )
+        )
         return (
             <>
-                {display}
+                {
+                    Donnee.length > 0 ? display : "No data"
+                }
             </>
         )
     }
@@ -56,7 +58,7 @@ const TableAccueil = ({Donnee}) => {
                     </tr>
                     </thead>
                     <tbody>
-                        {DisplayData()}
+                    {DisplayData()}
                     </tbody>
                 </table>
             </div>
