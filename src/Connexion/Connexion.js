@@ -3,13 +3,14 @@ import React, {useState, useRef, useEffect} from 'react';
 import Utilisateur from "../api/model/Utilisateur";
 import axios from '../api/axios';
 import useAuth from '../hooks/useAuth';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useOutletContext } from 'react-router-dom';
 
 const LOGIN_URL = '/api/auth/signin';
 
 const Connexion = () => {
 
     const { setAuth} = useAuth();
+    const [login, setLogin] = useOutletContext();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -55,10 +56,11 @@ const Connexion = () => {
             console.log(JSON.stringify(response?.data));
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
-            setAuth({ nomUtilisateur, roles, accessToken });
             localStorage.setItem("accessToken", accessToken);
+            setAuth({ nomUtilisateur, roles, accessToken });
             setNomUtilisateur('');
             setPwd('');
+            setLogin(true)
             console.log('Authenticated');
             navigate(from, { replace: true });
         } catch (err) {
@@ -78,43 +80,43 @@ const Connexion = () => {
         }
     }
 
-    return (
+    return (login !== null) ? (
         <>
-        <div className="div-Connexion">
-            <img src={require("../Img/logoblue_bgwht.png")} id="logo_connexion" alt="logo-mc"/>
-            <h1 id="titreConnexion">Connectez-vous à l'espace <br/> Formation de MIAGE Connection</h1>
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-            <form id="Form-Connexion" onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <input
-                        id="nomUtilisateur"
-                        type="text"
-                        ref={userRef}
-                        className="form-control"
-                        placeholder="Nom d'utilisateur"
-                        onChange={(e) => setNomUtilisateur(e.target.value)}
-                        name="nomUtilisateur"/>
-                    
+            <div className="div-Connexion">
+                <img src={require("../Img/logoblue_bgwht.png")} id="logo_connexion" alt="logo-mc"/>
+                <h1 id="titreConnexion">Connectez-vous à l'espace <br/> Formation de MIAGE Connection</h1>
+                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                <form id="Form-Connexion" onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <input
+                            id="nomUtilisateur"
+                            type="text"
+                            ref={userRef}
+                            className="form-control"
+                            placeholder="Nom d'utilisateur"
+                            onChange={(e) => setNomUtilisateur(e.target.value)}
+                            name="nomUtilisateur"/>
+                        
+                    </div>
+                    <div className="form-group mt-3 mb-3">
+                        <input
+                            id="mdp"
+                            type="password"
+                            className="form-control"
+                            placeholder="Mot de passe"
+                            onChange={(e) => setPwd(e.target.value)}
+                            name="mdp"
+                        />
+                    </div>
+                    <input type="submit" className="form-group btn btn-primary" value="Se Connecter" alt="buttonConnexion"/>
+                </form>
+                <div id="contactVP">
+                    <a href="/">Entrer en contact avec VP Formation</a>
                 </div>
-                <div className="form-group mt-3 mb-3">
-                    <input
-                        id="mdp"
-                        type="password"
-                        className="form-control"
-                        placeholder="Mot de passe"
-                        onChange={(e) => setPwd(e.target.value)}
-                        name="mdp"
-                    />
                 </div>
-                <div>{errMsg}</div>
-                <input type="submit" className="form-group btn btn-primary" value="Se Connecter" alt="buttonConnexion"/>
-            </form>
-            <div id="contactVP">
-                <a href="/">Entrer en contact avec VP Formation</a>
-            </div>
-            </div>
         </>
-    );
+    )
+    : navigate('/');
 }
 
 export default Connexion;

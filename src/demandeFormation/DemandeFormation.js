@@ -23,6 +23,8 @@ const DemandeFormation = () => {
     
     const handleSubmit = () => {
         console.log("Handle submit");
+        let demande = mapFormToDemande();
+
     }
 
     const mapFormToDemande = () => {
@@ -81,7 +83,6 @@ const DemandeFormation = () => {
         const controller = new AbortController();
 
         const getDomaines = async () => {
-            console.log(`accesstoken : `,localStorage.getItem('accessToken')) ;
             try {
                 const response = await axiosPrivate.get('/data/domaines', {
                     signal: controller.signal,

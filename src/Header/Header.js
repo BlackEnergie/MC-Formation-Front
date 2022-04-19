@@ -1,25 +1,30 @@
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import './Header.css';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
-const Header = () => {
+const Header = (props) => {
 
-    const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken') || '');
     const navigate = useNavigate();
 
     const deconnect = () => {
         localStorage.clear();
+        props.setLogin(false);
         navigate('/connexion');
+    }
+
+    const connect = () => {
+        navigate('/connexion')
     }
 
     return(
         <header>
             <Navbar id="header-connexion"  expand="lg">
                 <Nav className="ml-auto">
-                    <img src={require('../Img/logoblue_bgwht.png')} id='imageNavBar' alt='logoMCBlanc'/>
-                    <Navbar.Brand id="navbarBrand" href="#home">MC Formation</Navbar.Brand>
+                    <Link to="/">
+                        <img src={require('../Img/logoblue_bgwht.png')} id='imageNavBar' alt='logoMCBlanc'/>
+                        <Navbar.Brand id="navbarBrand" href="#home">MC Formation</Navbar.Brand>
+                    </Link>
                 </Nav>
 
                 <Nav className="mr-auto">
@@ -28,7 +33,7 @@ const Header = () => {
                         <Nav className="me-auto">
                             {/*Partie Bouton Espace Admin*/}
                             { 
-                                accessToken ? (
+                                props.login ? (
                                     <div id="right-side-navbar">
                                         <button href="" className="boutonNavbar">
                                             <img src={require('../Img/parametres-des-engrenages.png')} alt="" className="Icones" />
@@ -40,7 +45,7 @@ const Header = () => {
 
                             {/*Partie Bouton Connexion / Déconnexion*/}
                             {
-                                accessToken ? (
+                                props.login ? (
                                     <div id="right-side-navbar">
                                         <button onClick={deconnect} className="boutonNavbar">
                                             <img src={require('../Img/logout.png')} alt="" className="Icones" />
@@ -50,7 +55,7 @@ const Header = () => {
 
                                 ) : (
                                     <div id="right-side-navbar">
-                                        <button href="" className="boutonNavbar">
+                                        <button onClick={connect} className="boutonNavbar">
                                             <img src={require('../Img/login.png')} alt="IconeConnexion" className="Icones" />
                                             <Nav.Link>Connecter</Nav.Link>
                                         </button>

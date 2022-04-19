@@ -1,7 +1,6 @@
 import Filtres from './Filtres'
-import DemandeFormation from '../demandeFormation/DemandeFormation';
 import { useState } from 'react';
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Accueil = () => {
 
@@ -15,19 +14,15 @@ const Accueil = () => {
     const renderButtonAsso = () => {
         return(
             <>
-            { 
-                <>    
-                <div className="demandeFormation">
-                    <Link to="/demandeformation">
-                        <button type="button" className="btn btn-primary mb-2" onClick={handleClick}>Demander une formation</button>
-                    </Link>
-                </div>
-                <div className="demandes">
-                    <button type="button" className="btn btn-primary">Voir toutes les demandes</button>
-                </div>
-               </>
-            }   
-         </>
+            <div className="demandeFormation">
+                <Link to="/demandeformation">
+                    <button type="button" className="btn btn-primary mb-2" onClick={handleClick}>Demander une formation</button>
+                </Link>
+            </div>
+            <div className="demandes">
+                <button type="button" className="btn btn-primary">Voir toutes les demandes</button>
+            </div>
+            </>
         )
     }
 
