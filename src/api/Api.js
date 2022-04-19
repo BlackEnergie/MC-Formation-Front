@@ -11,8 +11,9 @@ export default class Api {
         DONNEES: '/data',
         DOMAINES: '/domaines',
         POST: '/creer',
-        UTILISATEUR: '/api/auth/signin',
-        INSCRIPTION: '/api/auth/signup'
+        UTILISATEUR: '/auth/signin',
+        INSCRIPTION: '/auth/signup',
+        CHECKTOKEN: '/auth/emailToken/checkToken'
     }
 
     CONTENT_TYPE = {
@@ -32,6 +33,9 @@ export default class Api {
         return this.URL.SERVER + this.URL.DONNEES + this.URL.DOMAINES;
     }
 
+    postCheckTokenUrl() {
+        return this.URL.SERVER + this.URL.CHECKTOKEN;
+    }
 
     postAuthentificationURL() {
         return this.URL.SERVER + this.URL.UTILISATEUR
@@ -56,6 +60,19 @@ export default class Api {
             headers: {'Content-Type': contentType},
             body: body
         }
+    }
+
+    async postCheckToken(bearer) {
+        let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json,bearer);
+        fetch(this.postCheckTokenUrl(), request)
+            .then(response => {
+                if (!response.ok) {
+                    notifyError()
+                }
+                else{
+                    notifySucess()
+                }
+            });
     }
 
     async getDonnees() {

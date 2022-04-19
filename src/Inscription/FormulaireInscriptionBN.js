@@ -21,7 +21,8 @@ const FormulaireInscription = () => {
         let MembreBureauNational = mapFormToMembreBureauNational();
         let api = new Api();
         console.log(JSON.stringify(MembreBureauNational))
-        api.postInscription(MembreBureauNational,cookies.get("token").accessToken)
+        api.postInscription(MembreBureauNational, "a4085a87-0c76-4d78-940b-3049309eaa2b")
+        //api.postInscription(MembreBureauNational,cookies.get("token").accessToken)
         .then(() => { 
             resetForm()
         })
@@ -33,7 +34,7 @@ const FormulaireInscription = () => {
 
     //(le token retourne rôle + mail)
     const mapFormToMembreBureauNational = () => {
-        let membreBureauNational = new MembreBureauNational("test@praaendo.ccoyem", mdp, "foraamadaaa", poste)
+        let membreBureauNational = new MembreBureauNational("alexis.peron41@gmail.com", mdp, "alexis.peron41@gmail.com", poste)
         console.log(membreBureauNational);
         return membreBureauNational;
     }

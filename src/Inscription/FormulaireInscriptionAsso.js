@@ -28,6 +28,7 @@ const FormulaireInscription = () => {
         let association = mapFormToAssociation();
         let api = new Api();
         console.log(JSON.stringify(association))
+        //api.postInscription(association, "20237cc2-fd99-4034-9dc1-795225620576")
         api.postInscription(association,cookies.get("token").accessToken)
         .then(() => { 
             resetForm()
@@ -40,7 +41,7 @@ const FormulaireInscription = () => {
 
     //(le token retourne rôle + mail)
     const mapFormToAssociation = () => {
-        let association = new Association("test@nauetzrçcdeieazpzc.ccoyem", mdp, "testUsecr", acronyme, college, nomComplet, ville)
+        let association = new Association("alexis.peron41@gmail.com", mdp, "alexis.peron41@gmail.com", acronyme, college, nomComplet, ville)
         console.log(association);
         return association;
     }
