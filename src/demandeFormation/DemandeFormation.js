@@ -32,12 +32,12 @@ const DemandeFormation = () => {
                     'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
                 }
             });
-            if(response.code==201){
-                toast.success(response.message);
+            if(response.data.code==201){
+                toast.success(response.data.message);
                 resetForm()
             }
             else{
-                toast.error('Une erreur est survenu');
+                toast.error(response.data.message);
             }
         }
         catch (err) {
