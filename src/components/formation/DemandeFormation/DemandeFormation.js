@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import Domaine from "../api/model/Domaine";
-import Demande from "../api/model/Demande";
-import Association from "../api/model/Association";
+import Domaine from "../../../api/model/Domaine";
+import Demande from "../../../api/model/Demande";
+import Association from "../../../api/model/Association";
 import toast from 'react-hot-toast';
 import Select from 'react-select';
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import {useLocation, useNavigate} from 'react-router-dom';
+import decodeToken from "../../../auth/decodeToken";
 
 const DemandeFormation = () => {
     {/* state formulaire */
@@ -46,9 +47,8 @@ const DemandeFormation = () => {
         let domainesArr = []
         demande.sujet = sujet;
         demande.detail = detail;
-        let association = new Association();
-        association.email = 'AMB@yopmail.com'
-        demande.association = association;
+        const token = decodeToken(localStorage.getItem('accessToken'))[1];
+        demande.nomUtilisateur = token.sub
         domaines.forEach(element => {
             let domaine = new Domaine();
             domaine.code = element.value;
@@ -106,7 +106,6 @@ const DemandeFormation = () => {
                 for (const element of response.data) {
                     optionsArray.push({value: element.code, label: element.libelle});
                 }
-                console.log(response.data);
                 isMounted && setOptions(optionsArray);
             } catch (err) {
                 console.error(err);

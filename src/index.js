@@ -5,7 +5,7 @@ import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider } from './context/AuthProvider';
+import { AuthProvider } from './auth/context/AuthProvider';
 import {
   BrowserRouter,
   Route,

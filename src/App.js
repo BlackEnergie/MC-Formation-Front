@@ -4,15 +4,15 @@ import {
   Route,
   Routes,
 } from 'react-router-dom';
-import Connexion from './Connexion/Connexion';
+import Connexion from './components/auth/Connexion/Connexion';
 import Layout from './Layout';
-import DemandeFormation from './demandeFormation/DemandeFormation';
-import Accueil from "./Accueil/AccueilFormations";
-import ModificationFormation from "./ModificationFormation/ModificationFormation";
-import Unauthorized from './components/Unauthorized';
-import Missing from './components/Missing';
-import PageTest from './components/PageTest';
-import RequireAuth from './components/RequireAuth';
+import DemandeFormation from './components/formation/DemandeFormation/DemandeFormation';
+import Accueil from "./components/Accueil/AccueilFormations";
+import ModificationFormation from "./components/formation/ModificationFormation/ModificationFormation";
+import Unauthorized from './components/defaults/Unauthorized';
+import Missing from './components/defaults/Missing';
+import PageTest from './components/defaults/PageTest';
+import RequireAuth from './components/defaults/RequireAuth';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -27,8 +27,8 @@ function App() {
         {/* we want to protect these routes */}
         <Route element={<RequireAuth allowedRoles={'ROLE_ASSO'} />}>
           <Route path="/" element={<Accueil />} />
-          <Route path="demandeformation" element={<DemandeFormation />} />
-          <Route path="modificationformation" element={<ModificationFormation />} />
+          <Route path="demandeFormation" element={<DemandeFormation />} />
+          <Route path="modificationFormation" element={<ModificationFormation />} />
           <Route path="pagetest" element={<PageTest />} />
         </Route>
 

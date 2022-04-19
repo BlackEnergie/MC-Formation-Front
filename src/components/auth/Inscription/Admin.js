@@ -1,31 +1,24 @@
-import { useState } from 'react';
-import Api from '../api/Api';
-import Select from 'react-select';
-import { withCookies, Cookies } from 'react-cookie';
-import React, { useRef } from 'react';
-import axios from '../api/axios'
+import React, {useState} from 'react';
+import axios from '../../../api/axios'
 
 const MAIL_URL = 'http://localhost:8080/auth/signup/invite'
 
-const Admin = () =>{
+const Admin = () => {
 
     const [email, setMail] = useState('');
     const [role, setRole] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({});
 
-    const handleSubmit = async() => {
-        console.log(email)
-        console.log(role)
-        try{
-            const response = await axios.post(MAIL_URL, JSON.stringify({email, role}),
-            {
-                headers:{
-                    "Content-Type":"application/json",
-                    withCredentials:false,
-                }
-            });
-            console.log(`mail envoyé`, response.data)
-        }catch(error){
+    const handleSubmit = async () => {
+        try {
+            await axios.post(MAIL_URL, JSON.stringify({email, role}),
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        withCredentials: false,
+                    }
+                });
+        } catch (error) {
             console.log(error)
         }
         resetForm()
@@ -43,7 +36,7 @@ const Admin = () =>{
 
         let hasUnfilled = {};
         let isValid = true;
-        
+
         if (!email) {
             isValid = false;
             hasUnfilled["email"] = "Renseigner l'adresse mail.";
@@ -54,8 +47,7 @@ const Admin = () =>{
         }
         if (isValid) {
             handleSubmit();
-        }
-        else {
+        } else {
             setHasUnfilled(hasUnfilled);
         }
     }
@@ -70,36 +62,37 @@ const Admin = () =>{
                         </div>
                         <div className="row  mb-6">
                             <table>
-                            <thead>
-                            <tr>
-                                <th scope="col">Adresse mail</th>
-                                <th scope="col">Rôle</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                <input
-                                    type="text"
-                                    name="nomComplet"
-                                    value={email}
-                                    onChange={event => setMail(event.target.value)}
-                                    className="form-control mt-2"
-                                    placeholder="Ex : prenom@gmail.com"
-                                    id="email"/>
-                                    <div className="text-danger">{hasUnfilled.email}</div>
-                                </td>
-                                <td>
-                                    <select className="form-select" aria-label="Default select example" onChange={(e) => setRole(e.target.value)}>
-                                        <option value="" disabled selected hidden>Rôle</option>
-                                        <option value="ROLE_FORMATEUR">Formateur</option>
-                                        <option value="ROLE_ASSO">Association</option>
-                                        <option value="ROLE_BN">Membre du Bureau National</option>
-                                    </select>
-                                    <div className="text-danger">{hasUnfilled.role}</div>
-                                </td>
-                            </tr>
-                            </tbody>
+                                <thead>
+                                <tr>
+                                    <th scope="col">Adresse mail</th>
+                                    <th scope="col">Rôle</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            name="nomComplet"
+                                            value={email}
+                                            onChange={event => setMail(event.target.value)}
+                                            className="form-control mt-2"
+                                            placeholder="Ex : prenom@gmail.com"
+                                            id="email"/>
+                                        <div className="text-danger">{hasUnfilled.email}</div>
+                                    </td>
+                                    <td>
+                                        <select className="form-select" aria-label="Default select example"
+                                                onChange={(e) => setRole(e.target.value)}>
+                                            <option value="" disabled selected hidden>Rôle</option>
+                                            <option value="ROLE_FORMATEUR">Formateur</option>
+                                            <option value="ROLE_ASSO">Association</option>
+                                            <option value="ROLE_BN">Membre du Bureau National</option>
+                                        </select>
+                                        <div className="text-danger">{hasUnfilled.role}</div>
+                                    </td>
+                                </tr>
+                                </tbody>
                             </table>
                         </div>
                         <div>
@@ -112,7 +105,7 @@ const Admin = () =>{
             </div>
         </div>
     )
-    
+
 }
 
 

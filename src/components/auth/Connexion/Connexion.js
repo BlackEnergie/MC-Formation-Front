@@ -1,8 +1,8 @@
 import './Connexion.css';
 import React, {useEffect, useRef, useState} from 'react';
-import Utilisateur from "../api/model/Utilisateur";
-import axios from '../api/axios';
-import useAuth from '../hooks/useAuth';
+import Utilisateur from "../../../api/model/Utilisateur";
+import axios from '../../../api/axios';
+import useAuth from '../../../auth/hooks/useAuth';
 import {useLocation, useNavigate, useOutletContext} from 'react-router-dom';
 
 const LOGIN_URL = '/api/auth/signin';
@@ -43,8 +43,6 @@ const Connexion = () => {
 
         e.preventDefault();
         const utilisateur = mapFormToUtilisateur();
-        console.log(utilisateur);
-
         try {
             const response = await axios.post(LOGIN_URL,
                 JSON.stringify(utilisateur),
@@ -78,7 +76,7 @@ const Connexion = () => {
     return (
         <>
             <div className="div-Connexion">
-                <img src={require("../Img/logoblue_bgwht.png")} id="logo_connexion" alt="logo-mc"/>
+                <img src={require("../../../assets/img/logoblue_bgwht.png")} id="logo_connexion" alt="logo-mc"/>
                 <h1 id="titreConnexion">Connectez-vous à l'espace <br/> Formation de MIAGE Connection</h1>
                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                 <form id="Form-Connexion" onSubmit={handleSubmit}>

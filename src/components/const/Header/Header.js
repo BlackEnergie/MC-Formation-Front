@@ -5,7 +5,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {AiFillSetting} from 'react-icons/ai';
 import {GiExitDoor} from 'react-icons/gi';
 import {BsFillPersonFill} from 'react-icons/bs';
-import jwtUtils from "../jwtUtils/jwtUtils";
+import jwtUtils from "../../../auth/decodeToken";
 
 const Header = (props) => {
 
@@ -34,9 +34,9 @@ const Header = (props) => {
         <header>
             <Navbar id="header-connexion" expand="lg">
                 <Nav className="ml-auto">
-                    <Link to="/">
-                        <img src={require('../Img/logoblue_bgwht.png')} id='imageNavBar' alt='logoMCBlanc'/>
-                        <Navbar.Brand id="navbarBrand" href="#home">MC Formation</Navbar.Brand>
+                    <Link className="text-decoration-none d-flex" to="/">
+                        <img src={require("../../../assets/img/logoblue_bgwht.png")} id='imageNavBar' alt='logoMCBlanc'/>
+                        <Navbar.Brand id="navbarBrand">MC Formation</Navbar.Brand>
                     </Link>
                 </Nav>
                 <Nav className="mr-auto">
@@ -59,7 +59,7 @@ const Header = (props) => {
                             {
                                 props.login ? (
                                     <div id="right-side-navbar">
-                                        <button onClick={this.removeCookie} className="boutonNavbar">
+                                        <button onClick={deconnect} className="boutonNavbar">
                                             <GiExitDoor className="Icones"/>
                                             <Nav.Link>Se Déconnecter</Nav.Link>
                                         </button>

@@ -1,6 +1,5 @@
 import React, {} from 'react';
-import Donnee from '../VueDetailleeFormation/json/InformationFicheDeFormation.json';
-
+import Donnee from './json/InformationFicheDeFormation.json';
 
 
 const AfficherType = Donnee.data.map(

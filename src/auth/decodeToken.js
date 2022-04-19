@@ -12,7 +12,6 @@ const decodeToken = ( jwt ) => {
     try {
         let decoded = jwt_decode(jwt);
         let date = new Date();
-        console.log(decoded);
 
         if (((decoded.exp * 1000) > (date.getTime()))) {
             resultat = [true, decoded];

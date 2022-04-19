@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {Cookies, withCookies} from 'react-cookie';
 import Filtres from './Filtres';
 import {instanceOf} from 'prop-types';
-import DemandeFormation from '../demandeFormation/DemandeFormation';
+import DemandeFormation from '../formation/DemandeFormation/DemandeFormation';
 import TableAccueil from './TableAccueil/TableAccueil';
 import './Accueil.css';
-import VueDetailleeFormation from '../VueDetailleeFormation/VueDetailleeFormation';
+import VueDetailleeFormation from '../formation/VueDetailleeFormation/VueDetailleeFormation';
 
 const cookies = new Cookies();
 
@@ -21,23 +21,21 @@ class Accueil extends Component {
         this.state = {
             token: cookies.get('token') || '',
             showFormDemande: false,
-            showDetail : 0,
-            showModif:0
+            showDetail: 0,
+            showModif: 0
 
         }
         this.handleClick = this.handleClick.bind(this)
-        this.afficherDetail=this.afficherDetail.bind(this)
-        this.modifDetail= this.modifDetail.bind(this)
+        this.afficherDetail = this.afficherDetail.bind(this)
+        this.modifDetail = this.modifDetail.bind(this)
     };
 
-    afficherDetail(val){
-        this.setState({showDetail : val});
-        console.log(this.state.showDetail);
+    afficherDetail(val) {
+        this.setState({showDetail: val});
     };
 
-    modifDetail(val){
-        this.setState({showModif : val});
-        console.log(this.state.showModif);
+    modifDetail(val) {
+        this.setState({showModif: val});
     };
 
     handleClick() {
@@ -68,9 +66,9 @@ class Accueil extends Component {
     render() {
         return (
             <>
-                {   this.state.showDetail>=1 ?(
+                {this.state.showDetail >= 1 ? (
                     (<VueDetailleeFormation text={this.state.showDetail} updateState={this.afficherDetail}/>)
-                ):this.state.showFormDemande === false ? (
+                ) : this.state.showFormDemande === false ? (
                     <div className="container-fluid" id="accueil">
                         <div className="row">
                             <div className="col-2">
@@ -88,7 +86,7 @@ class Accueil extends Component {
                                     </div>
                                 </div>
 
-                                <TableAccueil  updateVue={this.afficherDetail} updateModif={this.modifDetail}/>
+                                <TableAccueil updateVue={this.afficherDetail} updateModif={this.modifDetail}/>
 
                                 <div className="d-flex justify-content-center mb-2">
                                     <button type="button" className="btn btn-primary mt-5">Afficher plus...</button>

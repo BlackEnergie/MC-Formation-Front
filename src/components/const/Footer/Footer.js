@@ -10,7 +10,7 @@ function Footer (){
             </div>
 
             <div className="footer_div" id="footer-img">
-                <img src={require("../Img/profilblue.png")} alt="logo-mc" id="logo-footer"/>
+                <img src={require("../../../assets/img/logoblue_bgwht.png")} alt="logo-mc" id="logo-footer"/>
             </div>
 
             <div className="footer_div"></div>
