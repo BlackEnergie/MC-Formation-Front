@@ -124,7 +124,7 @@ const DemandeFormation = () => {
     return (
         <div className="DemandeFormation">
             <div className="row justify-content-md-center  mt-3">
-                <div className="col col-lg-5 border border-dark">
+                <div className="col col-lg-5">
                     <h1 className="justify-content-center align-items-center">
                         <u>DEMANDE DE FORMATION</u>
                     </h1>

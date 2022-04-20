@@ -1,10 +1,11 @@
-import './ModificationFormation.css';
+import './VueDetailleeFormation.css';
 import React, {useState} from 'react';
 import {AiOutlineFileText, AiOutlineFolder, AiOutlineRollback} from "react-icons/ai";
 import {FaChevronDown, FaChevronUp} from "react-icons/fa";
 import InformationsGeneralesFormation from "../VueDetailleeFormation/InformationsGeneralesFormation";
 import InformationsFicheDeFormation from "../VueDetailleeFormation/InformationsFicheDeFormation";
 import FilConducteurFormation from "../VueDetailleeFormation/FilConducteurFormation";
+import {Link} from "react-router-dom";
 
 const VueDetailleeFormation = (props) => {
 
@@ -20,12 +21,13 @@ const VueDetailleeFormation = (props) => {
             <div className="row">
                 <div className="col-md-3" id="arborescence">
                     <div className="d-flex justify-content-left">
-                        <button type="button" id="buttonArriere"
-                                className="btn btn-primary d-flex align-items-center"
-                                onClick={() => props.updateState(0)}>
-                            <AiOutlineRollback className="Icones me-2"/>
-                            Revenir à l'accueil
-                        </button>
+                        <Link to="/" id="linkAccueil">
+                            <button type="button" id="buttonArriere"
+                                    className="btn btn-primary d-flex align-items-center">
+                                <AiOutlineRollback className="Icones me-2"/>
+                                Revenir à l'accueil
+                            </button>
+                        </Link>
                     </div>
 
                     <div className="row">
