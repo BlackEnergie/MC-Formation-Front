@@ -14,6 +14,7 @@ const Admin = () => {
             await axios.post(MAIL_URL, JSON.stringify({email, role}),
                 {
                     headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
                         "Content-Type": "application/json",
                         withCredentials: false,
                     }

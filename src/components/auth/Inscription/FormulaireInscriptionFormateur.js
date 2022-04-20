@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
 import Formateur from "../../../api/model/Formateur";
 import Api from '../../../api/Api';
-import {Cookies, withCookies} from 'react-cookie';
 
 // MANQUE DOMAINES
-const cookies = new Cookies();
-const FormulaireInscription = () => {
+
+const FormulaireInscriptionFormateur = () => {
     const [nom, setNom] = useState('');
     const [prenom, setPrenom] = useState('');
     const [mdp1, setMdp1] = useState('');
@@ -20,7 +19,7 @@ const FormulaireInscription = () => {
     const handleSubmit = () => {
         let formateur = mapFormToFormateur();
         let api = new Api();
-        api.postInscription(formateur, cookies.get("token").accessToken)
+        api.postInscription(formateur, "")
             .then(() => {
                 resetForm()
             })
@@ -183,4 +182,4 @@ const FormulaireInscription = () => {
 }
 
 
-export default withCookies(FormulaireInscription);
+export default FormulaireInscriptionFormateur;

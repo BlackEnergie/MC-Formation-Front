@@ -14,6 +14,8 @@ const Header = (props) => {
     const checkAdminRole = () => {
         let res = false;
         const token = jwtUtils(localStorage.getItem("accessToken"));
+        console.log(token);
+        console.log(props.login);
         if (token !== null && token[0] && token[1].role === "ROLE_BN") {
             res = true;
         }
@@ -26,15 +28,12 @@ const Header = (props) => {
         navigate('/connexion');
     }
 
-    const connect = () => {
-        navigate('/connexion')
-    }
 
     return (
         <header>
             <Navbar id="header-connexion" expand="lg">
                 <Nav className="ml-auto">
-                    <Link className="text-decoration-none d-flex" to="/">
+                    <Link className="text-decoration-none d-flex" to="accueil">
                         <img src={require("../../../assets/img/logoblue_bgwht.png")} id='imageNavBar' alt='logoMCBlanc'/>
                         <Navbar.Brand id="navbarBrand">MC Formation</Navbar.Brand>
                     </Link>
@@ -47,10 +46,12 @@ const Header = (props) => {
                             {
                                 props.login && checkAdminRole() ? (
                                     <div id="right-side-navbar">
-                                        <button href="" className="boutonNavbar">
-                                            <AiFillSetting className="Icones"/>
-                                            <Nav.Link href="#home">Espace Admin</Nav.Link>
-                                        </button>
+                                        <Link to="/admin">
+                                            <button className="boutonNavbar">
+                                                <AiFillSetting className="Icones"/>
+                                                Espace Admin
+                                            </button>
+                                        </Link>
                                     </div>
                                 ) : (<div></div>)
                             }
