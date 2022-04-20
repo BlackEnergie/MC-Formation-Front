@@ -4,8 +4,8 @@ import Api from '../../../api/Api';
 import {Cookies, withCookies} from 'react-cookie';
 
 
-const cookies = new Cookies();
 const FormulaireInscription = () => {
+    const [nomUtilisateur, setNomUtilisateur] = useState('');
     const [acronyme, setAcronyme] = useState('');
     const [nomComplet, setNomComplet] = useState('');
     const [ville, setVille] = useState('');
@@ -22,7 +22,8 @@ const FormulaireInscription = () => {
     const handleSubmit = () => {
         let association = mapFormToAssociation();
         let api = new Api();
-        api.postInscription(association, cookies.get("token").accessToken)
+        api.postInscription(association, "")
+        //api.postInscription(association, cookies.get("token").accessToken)
             .then(() => {
                 resetForm()
             })
@@ -34,12 +35,13 @@ const FormulaireInscription = () => {
 
     //(le token retourne rôle + mail)
     const mapFormToAssociation = () => {
-        let association = new Association("alexis.peron41@gmail.com", mdp, "alexis.peron41@gmail.com", acronyme, college, nomComplet, ville)
+        let association = new Association(mdp, nomUtilisateur, acronyme, college, nomComplet, ville)
         return association;
     }
 
 
     const resetForm = () => {
+        setNomUtilisateur('');
         setAcronyme('');
         setNomComplet('');
         setHasUnfilled({});
@@ -54,6 +56,10 @@ const FormulaireInscription = () => {
         let hasUnfilled = {};
         let isValid = true;
 
+        if (!nomUtilisateur) {
+            isValid = false;
+            hasUnfilled["nomUtilisateur"] = "Renseigner un nom d'utilisateur.";
+        }
         if (!acronyme) {
             isValid = false;
             hasUnfilled["acronyme"] = "Renseigner l'acronyme.";
@@ -83,31 +89,6 @@ const FormulaireInscription = () => {
             setHasUnfilled(hasUnfilled);
         }
     }
-    /*
-        useEffect(() => {
-            async function someOtherFunc() {
-                let optionsArray = []
-
-            setLoading(true)
-            let api = new Api();
-            api.getDomaines(cookies.get("token").accessToken)
-                .then((res) => {
-                    for (const element of res) {
-                        optionsArray.push({value: element.code, label:element.libelle});
-                    }
-                    setOptions(optionsArray);
-                    setLoading(false);
-                })
-                .catch(function(err) {
-                    setHasErrorAPI(true);
-                    setLoading(false);
-                    console.log(err);
-                });
-            }
-
-            someOtherFunc();
-        }, []);
-    */
 
     const clic = () => {
         if (mdp1 !== mdp2) {
@@ -132,6 +113,17 @@ const FormulaireInscription = () => {
                 <div className="row justify-content-md-center mt-3">
                     <div className="col col-lg-5 ">
                         <form>
+                            <div className="form-group">
+                                <label htmlFor="nomUtilisateur" className="mt-2 mb-2">Choisissez un nom d'utilisateur</label>
+                                <input
+                                    type="text"
+                                    name="nomUtilisateur"
+                                    value={nomUtilisateur}
+                                    onChange={event => setNomUtilisateur(event.target.value)}
+                                    className="form-control mt-2"
+                                    id="email"/>
+                                <div className="text-danger">{hasUnfilled.nomUtilisateur}</div>
+                            </div>
                             <div className="form-group">
                                 <label htmlFor="acronyme" className="mt-2 mb-2">Indiquez l'acronyme de votre
                                     association</label>
@@ -226,4 +218,4 @@ const FormulaireInscription = () => {
 }
 
 
-export default withCookies(FormulaireInscription);
+export default (FormulaireInscription);
