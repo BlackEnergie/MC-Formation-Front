@@ -1,5 +1,6 @@
 import './VueDetailleeFormation.css';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import {AiOutlineFileText, AiOutlineFolder, AiOutlineRollback} from "react-icons/ai";
 import {FaChevronDown, FaChevronUp} from "react-icons/fa";
 import InformationsGeneralesFormation from "../VueDetailleeFormation/InformationsGeneralesFormation";
@@ -8,12 +9,27 @@ import FilConducteurFormation from "../VueDetailleeFormation/FilConducteurFormat
 import {Link} from "react-router-dom";
 
 const VueDetailleeFormation = (props) => {
-
+    const [formation, setFormation] = useState(null);
     const [showComponent, setShowComponent] = useState(1);
     const [afficherTout, setAfficherTout] = useState(false);
-
+    const axiosPrivate = useAxiosPrivate();
     const majAfficherTout = () => {
         setAfficherTout(!afficherTout);
+    } 
+    useEffect(() => {
+        getFormationDetails();
+    }, [])
+    const getFormationDetails = async () => {
+        try {
+            const response = await axiosPrivate.get('/formation/1', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+                }
+            }); console.log(response.data);
+            setFormation(response.data)
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     return (
