@@ -22,10 +22,10 @@ const Admin = () => {
                     }
                 });
                 toast.success(response.data.message);
+                resetForm();
         } catch (err) {
             toast.error(err.response.data.message);
         }
-        resetForm()
     }
 
     const resetForm = () => {

@@ -14,8 +14,6 @@ const Header = (props) => {
     const checkAdminRole = () => {
         let res = false;
         const token = jwtUtils(localStorage.getItem("accessToken"));
-        console.log(token);
-        console.log(props.login);
         if (token !== null && token[0] && token[1].role === "ROLE_BN") {
             res = true;
         }
