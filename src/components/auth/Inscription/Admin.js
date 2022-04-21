@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import axios from '../../../api/axios'
+import toast from 'react-hot-toast';
+
 
 const MAIL_URL = 'http://localhost:8080/auth/signup/invite'
 
@@ -11,17 +13,19 @@ const Admin = () => {
 
     const handleSubmit = async () => {
         try {
-            await axios.post(MAIL_URL, JSON.stringify({email, role}),
+            const response = await axios.post(MAIL_URL, JSON.stringify({email, role}),
                 {
                     headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
                         "Content-Type": "application/json",
                         withCredentials: false,
                     }
                 });
-        } catch (error) {
-            console.log(error)
+                toast.success(response.data.message);
+                resetForm();
+        } catch (err) {
+            toast.error(err.response.data.message);
         }
-        resetForm()
     }
 
     const resetForm = () => {
@@ -72,7 +76,7 @@ const Admin = () => {
                                 <tr>
                                     <td>
                                         <input
-                                            type="text"
+                                            type="email"
                                             name="nomComplet"
                                             value={email}
                                             onChange={event => setMail(event.target.value)}

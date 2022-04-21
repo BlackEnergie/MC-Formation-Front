@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Domaine from "../../../api/model/Domaine";
 import Demande from "../../../api/model/Demande";
-import Association from "../../../api/model/Association";
 import toast from 'react-hot-toast';
 import Select from 'react-select';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';

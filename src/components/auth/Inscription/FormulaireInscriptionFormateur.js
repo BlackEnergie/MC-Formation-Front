@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import Formateur from "../../../api/model/Formateur";
 import Api from '../../../api/Api';
-import {Cookies, withCookies} from 'react-cookie';
 
 // MANQUE DOMAINES
-const cookies = new Cookies();
-const FormulaireInscription = () => {
+
+const FormulaireInscriptionFormateur = () => {
+    const [nomUtilisateur, setNomUtilisateur] = useState('');
     const [nom, setNom] = useState('');
     const [prenom, setPrenom] = useState('');
     const [mdp1, setMdp1] = useState('');
@@ -20,7 +20,7 @@ const FormulaireInscription = () => {
     const handleSubmit = () => {
         let formateur = mapFormToFormateur();
         let api = new Api();
-        api.postInscription(formateur, cookies.get("token").accessToken)
+        api.postInscription(formateur, "")
             .then(() => {
                 resetForm()
             })
@@ -32,12 +32,13 @@ const FormulaireInscription = () => {
 
     //(le token retourne rôle + mail)
     const mapFormToFormateur = () => {
-        let formateur = new Formateur("test@prendo.ccoyem", mdp, "formadaaa", nom, prenom)
+        let formateur = new Formateur(mdp, nomUtilisateur, nom, prenom)
         return formateur;
     }
 
 
     const resetForm = () => {
+        setNomUtilisateur('');
         setNom('');
         setPrenom('');
         setHasUnfilled({});
@@ -50,6 +51,10 @@ const FormulaireInscription = () => {
         let hasUnfilled = {};
         let isValid = true;
 
+        if (!nomUtilisateur) {
+            isValid = false;
+            hasUnfilled["nomUtilisateur"] = "Renseigner un nom d'utilisateur.";
+        }
         if (!nom) {
             isValid = false;
             hasUnfilled["nom"] = "Renseigner votre nom.";
@@ -71,31 +76,6 @@ const FormulaireInscription = () => {
             setHasUnfilled(hasUnfilled);
         }
     }
-    /*
-        useEffect(() => {
-            async function someOtherFunc() {
-                let optionsArray = []
-
-            setLoading(true)
-            let api = new Api();
-            api.getDomaines(cookies.get("token").accessToken)
-                .then((res) => {
-                    for (const element of res) {
-                        optionsArray.push({value: element.code, label:element.libelle});
-                    }
-                    setOptions(optionsArray);
-                    setLoading(false);
-                })
-                .catch(function(err) {
-                    setHasErrorAPI(true);
-                    setLoading(false);
-                    console.log(err);
-                });
-            }
-
-            someOtherFunc();
-        }, []);
-    */
 
     const clic = () => {
         if (mdp1 !== mdp2) {
@@ -120,6 +100,17 @@ const FormulaireInscription = () => {
                 <div className="row justify-content-md-center mt-3">
                     <div className="col col-lg-5 ">
                         <form>
+                            <div className="form-group">
+                                <label htmlFor="nomUtilisateur" className="mt-2 mb-2">Choisissez un nom d'utilisateur</label>
+                                <input
+                                    type="text"
+                                    name="nomUtilisateur"
+                                    value={nomUtilisateur}
+                                    onChange={event => setNomUtilisateur(event.target.value)}
+                                    className="form-control mt-2"
+                                    id="email"/>
+                                <div className="text-danger">{hasUnfilled.nomUtilisateur}</div>
+                            </div>
                             <div className="form-group">
                                 <label htmlFor="nom" className="mt-2 mb-2">Indiquez votre nom</label>
                                 <input
@@ -183,4 +174,4 @@ const FormulaireInscription = () => {
 }
 
 
-export default withCookies(FormulaireInscription);
+export default FormulaireInscriptionFormateur;

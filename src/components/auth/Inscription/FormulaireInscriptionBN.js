@@ -1,10 +1,14 @@
 import React, {useState} from 'react';
 import MembreBureauNational from "../../../api/model/MembreBureauNational";
-import Api from '../../../api/Api';
-import {Cookies, withCookies} from 'react-cookie';
+import SignupRequest from "../../../api/model/SignupRequest";
+import axios from '../../../api/axios';
+import toast from 'react-hot-toast';
+import {useNavigate,useParams} from 'react-router-dom';
 
-const cookies = new Cookies();
-const FormulaireInscription = () => {
+
+
+const FormulaireInscriptionBN = () => {
+    const [nomUtilisateur, setNomUtilisateur] = useState('');
     const [poste, setPoste] = useState('');
     const [mdp1, setMdp1] = useState('');
     const [mdp2, setMdp2] = useState('');
@@ -14,29 +18,40 @@ const FormulaireInscription = () => {
     const [hasErrorAPI, setHasErrorAPI] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const {token} =useParams();
+    const navigate = useNavigate();
 
-    const handleSubmit = () => {
-        let MembreBureauNational = mapFormToMembreBureauNational();
-        let api = new Api();
-        api.postInscription(MembreBureauNational, "a4085a87-0c76-4d78-940b-3049309eaa2b")
-            //api.postInscription(MembreBureauNational,cookies.get("token").accessToken)
-            .then(() => {
-                resetForm()
-            })
-            .catch(function (err) {
-                setHasErrorAPI(true);
-                console.log(err);
-            });
+    const INSCRIPTION_URL = '/auth/signup/create?token='
+
+    const handleSubmit = async () => {
+        let membreBureauNational = mapFormToMembreBureauNational();
+        try {
+            const response = await axios.post(INSCRIPTION_URL + token,
+                JSON.stringify(membreBureauNational),
+                {
+                    headers: {'Content-Type': 'application/json'}
+                }
+            );
+            toast.success(response.data.message);
+            navigate('/')
+        } catch (err) {
+            toast.error(err.response.data.message);
+        }
     }
 
-    //(le token retourne rôle + mail)
     const mapFormToMembreBureauNational = () => {
-        let membreBureauNational = new MembreBureauNational("alexis.peron41@gmail.com", mdp, "alexis.peron41@gmail.com", poste)
-        return membreBureauNational;
+        let membreBureauNational = new MembreBureauNational()
+        membreBureauNational.poste = poste;
+        let signup = new SignupRequest()
+        signup.nomUtilisateur = nomUtilisateur;
+        signup.password = mdp;
+        signup.membreBureauNational = membreBureauNational;
+        return signup;
     }
 
 
     const resetForm = () => {
+        setNomUtilisateur('');
         setPoste('');
         setHasUnfilled({});
         setMdp1('');
@@ -48,6 +63,10 @@ const FormulaireInscription = () => {
         let hasUnfilled = {};
         let isValid = true;
 
+        if (!nomUtilisateur) {
+            isValid = false;
+            hasUnfilled["nomUtilisateur"] = "Renseigner un nom d'utilisateur.";
+        }
         if (!poste) {
             isValid = false;
             hasUnfilled["nom"] = "Renseigner votre nom.";
@@ -65,31 +84,6 @@ const FormulaireInscription = () => {
             setHasUnfilled(hasUnfilled);
         }
     }
-    /*
-        useEffect(() => {
-            async function someOtherFunc() {
-                let optionsArray = []
-
-            setLoading(true)
-            let api = new Api();
-            api.getDomaines(cookies.get("token").accessToken)
-                .then((res) => {
-                    for (const element of res) {
-                        optionsArray.push({value: element.code, label:element.libelle});
-                    }
-                    setOptions(optionsArray);
-                    setLoading(false);
-                })
-                .catch(function(err) {
-                    setHasErrorAPI(true);
-                    setLoading(false);
-                    console.log(err);
-                });
-            }
-
-            someOtherFunc();
-        }, []);
-    */
 
     const clic = () => {
         if (mdp1 !== mdp2) {
@@ -114,6 +108,17 @@ const FormulaireInscription = () => {
                 <div className="row justify-content-md-center mt-3">
                     <div className="col col-lg-5 ">
                         <form>
+                            <div className="form-group">
+                                <label htmlFor="nomUtilisateur" className="mt-2 mb-2">Choisissez un nom d'utilisateur</label>
+                                <input
+                                    type="text"
+                                    name="nomUtilisateur"
+                                    value={nomUtilisateur}
+                                    onChange={event => setNomUtilisateur(event.target.value)}
+                                    className="form-control mt-2"
+                                    id="email"/>
+                                <div className="text-danger">{hasUnfilled.nomUtilisateur}</div>
+                            </div>
                             <div className="form-group">
                                 <label htmlFor="poste" className="mt-2 mb-2">Indiquez votre poste</label>
                                 <input
@@ -166,4 +171,4 @@ const FormulaireInscription = () => {
 }
 
 
-export default withCookies(FormulaireInscription);
+export default FormulaireInscriptionBN;
