@@ -20,10 +20,10 @@ const TableAccueil = ({Donnee}) => {
                 <td>{info.formateurs.length > 0 ? info.formateurs.map((formateur) => formateur.nomComplet) : "Aucun"}</td>
                 <td>{info.date ? info.date : "N/A"}</td>
                 <td key={info.id}>
-                    <Link to={`formation/` + info.id}>
+                    <Link to={'/formation/' + info.id}>
                         <AiOutlineZoomIn className="Icones me-2"/>
                     </Link>
-                    <Link to={`formation/edit/` + info.id}>
+                    <Link to={'/formation/edit/' + info.id}>
                         <AiOutlineEdit className="Icones me-2"/>
                     </Link>
                 </td>

@@ -1,32 +1,31 @@
 import './VueDetailleeFormation.css';
 import React, {useEffect, useState} from 'react';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
-import {AiOutlineFileText, AiOutlineFolder, AiOutlineRollback} from "react-icons/ai";
-import {FaChevronDown, FaChevronUp} from "react-icons/fa";
 import InformationsGeneralesFormation from "../VueDetailleeFormation/InformationsGeneralesFormation";
 import InformationsFicheDeFormation from "../VueDetailleeFormation/InformationsFicheDeFormation";
 import FilConducteurFormation from "../VueDetailleeFormation/FilConducteurFormation";
 import NavFormation from '../NavigationFormation/NavFormation';
+import {useParams} from "react-router-dom";
 
-const VueDetailleeFormation = (props) => {
+const VueDetailleeFormation = () =>  {
     const [formation, setFormation] = useState(null);
-    const [showComponent, setShowComponent] = useState(1);
-    const [afficherTout, setAfficherTout] = useState(false);
+    const [showComponent, setShowComponent] = useState(0);
     const axiosPrivate = useAxiosPrivate();
-    const majAfficherTout = () => {
-        setAfficherTout(!afficherTout);
-    } 
+    let { id } = useParams();
+
     useEffect(() => {
         getFormationDetails();
     }, [])
     const getFormationDetails = async () => {
         try {
-            const response = await axiosPrivate.get('/formation/1', {
+            const response = await axiosPrivate.get('/formation/'+id, {
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
                 }
-            }); console.log(response.data);
-            setFormation(response.data)
+            }); 
+            setFormation(response?.data);
+            console.log(formation);
+            setShowComponent(1);
         } catch (err) {
             console.error(err);
         }
@@ -45,17 +44,17 @@ const VueDetailleeFormation = (props) => {
                 <div className="col">
                     {
                         (showComponent === 1) ? (
-                            <InformationsGeneralesFormation/>
+                            <InformationsGeneralesFormation formation={formation}/>
                         ) : (<></>)
                     }
                     {
                         (showComponent === 2) ? (
-                            <InformationsFicheDeFormation/>
+                            <InformationsFicheDeFormation formation={formation}/>
                         ) : (<></>)
                     }
                     {
                         (showComponent === 3) ? (
-                            <FilConducteurFormation/>
+                            <FilConducteurFormation formation={formation}/>
                         ) : (<></>)
                     }
                 </div>

@@ -80,7 +80,7 @@ const Admin = () => {
                                             name="nomComplet"
                                             value={email}
                                             onChange={event => setMail(event.target.value)}
-                                            className="form-control mt-2"
+                                            className="form-control"
                                             placeholder="Ex : prenom@gmail.com"
                                             id="email"/>
                                         <div className="text-danger">{hasUnfilled.email}</div>
