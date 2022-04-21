@@ -1,12 +1,28 @@
 import React, {} from 'react';
-import Donnees from './json/InformationFicheDeFormation.json';
 
 const InformationsFicheDeFormation = (formation) => {
+
     let Donnee = formation.formation;
-    console.log(Donnee);
-    const AfficherType = () => {
+    const AfficherFormationDetails = () => {
         return (
-            <>{Donnee.type}</>
+            <>
+            <tr>
+                <th>Type</th>
+                <td>{Donnee.type}</td>
+            </tr>
+            <tr>
+                <th>Audience</th>
+                <td>{Donnee.audience}</td>
+            </tr>
+            <tr>
+                <th>Durée</th>
+                <td>{Donnee.duree}</td>
+            </tr>
+            <tr>
+                <th>Prérequis</th>
+                <td>{Donnee.prerequis}</td>
+            </tr>
+            </>
         )
     }
 
@@ -20,17 +36,17 @@ const InformationsFicheDeFormation = (formation) => {
             )
         }
     )
-    const AfficherObjetsPedagogiques = Donnees.data[0].objetsPedagogiques.map(
+    const AfficherObjetsPedagogiques = () => Donnee.objectifs?.map(
         (info) => {
             return (
-                <tr key={info.id} title={info.BesoinMater}>
-                    <td>{info.id}</td>
-                    <td>{info.objet}</td>
+                <tr>
+                    <td></td>
+                    <td>{info}</td>
                 </tr>
             )
         }
     )
-    const AfficherDataDomaine = () => Donnee.domaines.map(
+    const AfficherDataDomaine = () => Donnee.domaines?.map(
         (info) => {
             return (
                 <tr key={info.code} title={info.description}>
@@ -44,31 +60,33 @@ const InformationsFicheDeFormation = (formation) => {
         <div className="container-fluid">
             <div className="container shadow p-4 mb-3 bg-white rounded">
                 <div className="row">
-                    <div className="d-flex  mb-3">
-                        <div className="d-flex align-items-center ">
-                            <h3 className="align-middle m-0">Type</h3>
-                        </div>
-
-                        <div className="d-flex align-items-center ms-3">
-                            <h4 className="align-middle">{AfficherType()}</h4>
+                    <div className="col-6">
+                        <div className="row d-flex justify-content-between">
+                            <h3 className="align-middle me-4">Informations</h3>
+                        </div>  
+                        <div className="container">
+                            <table className="table table-striped mt-2">
+                                <tbody>
+                                {AfficherFormationDetails()}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
                     <div className="col-6">
-                        <h3 className="mt-2">
-                            Objectifs pédagogiques
+                        <h3>
+                            Objectif(s) Pédagogique(s)
                         </h3>
                         <div className="container">
-                            <div className="table-wrapper tableFixHead">
+                            <div className="table-wrapper">
                                 <table className="table table-striped mt-2">
                                     <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Objectifs</th>
-                                    </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    {AfficherObjetsPedagogiques}
+                                        {AfficherObjetsPedagogiques()}
                                     </tbody>
                                 </table>
                             </div>
@@ -79,8 +97,8 @@ const InformationsFicheDeFormation = (formation) => {
             <div className="container shadow p-4 mb-3 bg-white rounded">
                 <div className="row">
                     <div className="col-6">
-                        <h3 className="mt-2">
-                            Domaines
+                        <h3>
+                            Domaine(s)
                         </h3>
                         <div className="container">
                             <div className="table-wrapper tableFixHead">
@@ -102,7 +120,7 @@ const InformationsFicheDeFormation = (formation) => {
                     <div className="col-6">
                         <div className="row d-flex justify-content-between">
                             <h3>
-                                Besoins matériel
+                                Besoin(s) matériel(s)
                             </h3>
                         </div>
                         <div className="container">
