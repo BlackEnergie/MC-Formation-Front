@@ -39,6 +39,8 @@ function ModificationFicheDeFormation() {
     const [itemsObjPedagogique, setItemsObjPedagogique] = useState(Donnee.data[0].objetsPedagogiques);
     const [messageDomaine, setMessageDomaine] = useState("");
     const [itemsDomaine, setItemsDomaine] = useState(Donnee.data[0].domaines);
+    const [messageMateriel, setMessageMateriel] = useState("");
+    const [itemsMateriel, setItemsMateriel] = useState(Donnee.data[0].BesoinsMaterielsFormation);
 
 
     function getMax(list){
@@ -114,7 +116,7 @@ function ModificationFicheDeFormation() {
     const afficherListeDomaines = itemsDomaine.map(
         (item,i) => {
             return (
-                <tr key={item.id}>
+                <tr>
                     <td>
                         {item.id}
                     </td>
@@ -137,12 +139,49 @@ function ModificationFicheDeFormation() {
             setItemsDomaine(
                 itemsDomaine => [...itemsDomaine,
                     {id:getMax(itemsDomaine)
-                        ,libelle:messageDomaine}
+                        ,libelle:messageDomaine.label}
                 ]
             );
-        setMessageDomaine("");
+        //setMessageDomaine("");
     }
+
     /*  FIN PARTIE DOMAINES */
+
+
+    /*  PARTIE BESOINS MATERIELS */
+    const handleItemDeletedMateriels = (i) => {
+        setItemsMateriel(itemsMateriel.filter((item, index) => index !== i));
+    }
+
+    const afficherListeMateriels = itemsMateriel.map(
+        (item,i) => {
+            return (
+                <tr key={item.id}>
+                    <td></td>
+                    <td>
+                        <p>{item.nom}</p>
+                    </td>
+                    <td className="d-flex justify-content-center">
+                        <a onClick={() => handleItemDeletedMateriels(i)}>
+                            <AiFillDelete className="Icones"/>
+                        </a>
+                    </td>
+                </tr>
+            );
+        }
+    )
+    const handleAjoutMateriel = () =>{
+        if (messageMateriel !=="")
+            setItemsMateriel(
+                itemsMateriel => [...itemsMateriel,
+                    {id:getMax(itemsMateriel)
+                        ,nom:messageMateriel}
+                ]
+            );
+        setMessageMateriel("");
+    }
+
+    /*  FIN PARTIE BESOINS MATERIELS */
 
 
 
@@ -160,48 +199,45 @@ function ModificationFicheDeFormation() {
 
                     <div className="col-6">
                         <h3 className="mt-2">
-                            Objectifs pédagogiques
+                            Objectifs Pédagogiques
                         </h3>
 
                         <div className="container">
                             <div className="table-wrapper">
                                 <table className="table table-striped mt-2">
                                     <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Objectif</th>
-                                        <th className="d-flex justify-content-center">Action</th>
-                                    </tr>
+                                        <tr key={1204}>
+                                            <th>#</th>
+                                            <th>Objectif</th>
+                                            <th className="d-flex justify-content-center">Action</th>
+                                        </tr>
                                     </thead>
+
                                     <tbody>
                                     {afficherListePedagogique}
                                         <tr>
-
-                                                <td>#</td>
-                                                <td>
-                                                    <input
-                                                        onKeyPress={e => e.key === 'Enter' && handleAjoutObjPedagogique() }
-                                                        type="text"
-                                                        value={messageObjPedagogique}
-                                                        onChange={(e) => setMessageObjPedagogique(e.target.value) }
-                                                    />
-
-                                                </td>
-                                                <td className="d-flex justify-content-center">
-                                                    <button
-                                                        type="submit" className="btn btn-sm  btn-outline-mc"
-                                                        onClick = {() => handleAjoutObjPedagogique()}>
-                                                        <AiOutlinePlus className="Icones"/>
-                                                    </button>
-                                                </td>
+                                            <td>#</td>
+                                            <td>
+                                                <input
+                                                    onKeyPress={e => e.key === 'Enter' && handleAjoutObjPedagogique() }
+                                                    type="text"
+                                                    value={messageObjPedagogique}
+                                                    onChange={(e) => setMessageObjPedagogique(e.target.value) }
+                                                />
+                                            </td>
+                                            <td className="d-flex justify-content-center">
+                                                <button
+                                                    type="submit" className="btn  btn-outline-mc"
+                                                    onClick = {() => handleAjoutObjPedagogique()}>
+                                                    <AiOutlinePlus className="Icones"/>
+                                                </button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -237,7 +273,7 @@ function ModificationFicheDeFormation() {
                                                 </td>
                                                 <td className="d-flex justify-content-center">
                                                     <button
-                                                        type="submit" className="btn btn-sm  btn-outline-mc"
+                                                        type="submit" className="btn btn-outline-mc"
                                                         onClick = {() => handleAjoutDomaines()}>
                                                         <AiOutlinePlus className="Icones"/>
                                                     </button>
@@ -249,23 +285,41 @@ function ModificationFicheDeFormation() {
                         </div>
                     </div>
                     <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3>
-                                Besoins matériel
-                            </h3>
-                        </div>
+                        <h3 className="mt-2">
+                            Besoins Matériel
+                        </h3>
+
                         <div className="container">
-                            <div className="table-wrapper tableFixHead">
+                            <div className="table-wrapper">
                                 <table className="table table-striped mt-2">
                                     <thead>
-                                    <tr>
+                                    <tr key={1203}>
                                         <th></th>
-                                        <th></th>
+                                        <th>Libellé</th>
+                                        <th className="d-flex justify-content-center">Action</th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
-                                    {AfficherBesoinsMaterielsFormation}
+                                        {afficherListeMateriels}
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <input
+                                                    onKeyPress={e => e.key === 'Enter' && handleAjoutMateriel() }
+                                                    type="text"
+                                                    value={messageMateriel}
+                                                    onChange={(e) => setMessageMateriel(e.target.value) }
+                                                />
+                                            </td>
+                                            <td className="d-flex justify-content-center">
+                                                <button
+                                                    type="submit" className="btn btn-outline-mc"
+                                                    onClick = {() => handleAjoutMateriel()}>
+                                                    <AiOutlinePlus className="Icones"/>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
 
                                 </table>

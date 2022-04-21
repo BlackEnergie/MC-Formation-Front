@@ -23,7 +23,7 @@ const ModificationFormation = (props) => {
             <div className="row">
                 <NavFormation updateState={majShowComponent}/>
 
-                <div className="col">
+                <div className="col" id="modificaitionFormation">
 
                     {
                         (showComponent === 1) ? (

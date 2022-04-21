@@ -35,3 +35,8 @@ code {
   background-color: #fff !important;
   border-color: #2B309B !important;
 }
+
+#modificaitionFormation table tr td:last-child, #modificaitionFormation table tr th:last-child{ /* last-child returns the last instance of the td */
+  max-width:100px;
+  /* additional styles as required */
+}
