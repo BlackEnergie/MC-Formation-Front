@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-import {AiOutlineFileText, AiOutlineFolder, AiOutlineRollback} from "react-icons/ai";
-import {FaChevronDown, FaChevronUp} from "react-icons/fa";
 import InformationsGeneralesFormation from "../VueDetailleeFormation/InformationsGeneralesFormation";
 import ModificationFicheDeFormation from "./ModificationFicheDeFormation";
 import FilConducteurFormation from "../VueDetailleeFormation/FilConducteurFormation";
@@ -10,7 +8,7 @@ const ModificationFormation = (props) => {
 
     const [showComponent, setShowComponent] = useState(1);
 
-    const majShowComponent = (val) =>{
+    const majShowComponent = (val) => {
         setShowComponent(val);
     }
 

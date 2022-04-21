@@ -1,8 +1,8 @@
 import React from 'react';
 import Donnee from './json/dataInformationsGenerales.json';
 
-const InformationsGeneralesFormation = () =>{
-    const AfficherDataDomaine = Donnee.data[0].domaines.map(
+const ModificationInformationsGenerales = () =>{
+    const AfficherDataDomaine = Donnee?.data[0].domaines.map(
         (info) => {
             return (
                 <tr key={info.code} title={info.description}>
@@ -13,7 +13,7 @@ const InformationsGeneralesFormation = () =>{
         }
     )
 
-    const AfficherDataFormateur = Donnee.data[0].formateurs.map(
+    const AfficherDataFormateur = Donnee?.data[0].formateurs.map(
         (info) => {
             return (
                 <tr key={info.id}>
@@ -24,7 +24,7 @@ const InformationsGeneralesFormation = () =>{
         }
     )
 
-    const AfficherDataAssociation = Donnee.data[0].association.map(
+    const AfficherDataAssociation = Donnee?.data[0].association.map(
         (info) => {
             return (
                 <tr key={info.id} title={info.nomComplet}>
@@ -35,7 +35,7 @@ const InformationsGeneralesFormation = () =>{
         }
     )
 
-    const AfficherDataInfoGenerales = Donnee.data.map(
+    const AfficherDataInfoGenerales = Donnee?.data.map(
         (info) => {
             return (
                 <>
@@ -171,4 +171,4 @@ const InformationsGeneralesFormation = () =>{
 }
 
 
-export default InformationsGeneralesFormation;
+export default ModificationInformationsGenerales;

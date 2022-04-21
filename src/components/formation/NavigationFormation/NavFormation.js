@@ -49,13 +49,14 @@ const NavFormation = (props) => {
                             </a>
                         </td>
                         <td>
-                            {afficherTout ? (
-                                <FaChevronUp className="Icones"/>
-                            ) : (
-                                <FaChevronDown className="Icones"/>
-                            )
-                            }
-
+                            <a onClick={() => majAfficherTout()}>
+                                {afficherTout ? (
+                                    <FaChevronUp className="Icones"/>
+                                ) : (
+                                    <FaChevronDown className="Icones"/>
+                                )
+                                }
+                            </a>
                         </td>
                     </tr>
 
