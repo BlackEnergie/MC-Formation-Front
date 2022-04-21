@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import Association from "../../../api/model/Association";
-import Api from '../../../api/Api';
-import {Cookies, withCookies} from 'react-cookie';
+import axios from "../../../api/axios";
+import toast from "react-hot-toast";
+import SignupRequest from "../../../api/model/SignupRequest";
+import {useNavigate, useParams} from 'react-router-dom';
 
 
-const FormulaireInscription = () => {
+const FormulaireInscriptionAsso = () => {
     const [nomUtilisateur, setNomUtilisateur] = useState('');
     const [acronyme, setAcronyme] = useState('');
     const [nomComplet, setNomComplet] = useState('');
@@ -18,25 +20,38 @@ const FormulaireInscription = () => {
     const [hasErrorAPI, setHasErrorAPI] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const INSCRIPTION_URL = '/auth/signup/create?token='
+    const {token} = useParams();
+    const navigate = useNavigate();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         let association = mapFormToAssociation();
-        let api = new Api();
-        api.postInscription(association, "")
-        //api.postInscription(association, cookies.get("token").accessToken)
-            .then(() => {
-                resetForm()
-            })
-            .catch(function (err) {
-                setHasErrorAPI(true);
-                console.log(err);
-            });
+        try {
+            const response = await axios.post(INSCRIPTION_URL + token,
+                JSON.stringify(association),
+                {
+                    headers: {'Content-Type': 'application/json'}
+                }
+            );
+            toast.success(response.data.message);
+            navigate('/')
+        } catch (err) {
+            toast.error(err.response.data.message);
+        }
     }
 
     //(le token retourne rôle + mail)
     const mapFormToAssociation = () => {
-        let association = new Association(mdp, nomUtilisateur, acronyme, college, nomComplet, ville)
-        return association;
+        let association = new Association()
+        let signup = new SignupRequest()
+        signup.nomUtilisateur = nomUtilisateur;
+        signup.password = mdp;
+        association.acronyme = acronyme;
+        association.college = college;
+        association.nomComplet = nomComplet;
+        association.ville = ville;
+        signup.association = association;
+        return signup;
     }
 
 
@@ -114,7 +129,8 @@ const FormulaireInscription = () => {
                     <div className="col col-lg-5 ">
                         <form>
                             <div className="form-group">
-                                <label htmlFor="nomUtilisateur" className="mt-2 mb-2">Choisissez un nom d'utilisateur</label>
+                                <label htmlFor="nomUtilisateur" className="mt-2 mb-2">Choisissez un nom
+                                    d'utilisateur</label>
                                 <input
                                     type="text"
                                     name="nomUtilisateur"
@@ -218,4 +234,4 @@ const FormulaireInscription = () => {
 }
 
 
-export default (FormulaireInscription);
+export default FormulaireInscriptionAsso;

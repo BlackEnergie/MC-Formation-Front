@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import Formateur from "../../../api/model/Formateur";
-import Api from '../../../api/Api';
+import {useNavigate, useParams} from "react-router-dom";
+import axios from "../../../api/axios";
+import toast from "react-hot-toast";
+import SignupRequest from "../../../api/model/SignupRequest";
 
 // MANQUE DOMAINES
 
@@ -16,26 +19,37 @@ const FormulaireInscriptionFormateur = () => {
     const [hasErrorAPI, setHasErrorAPI] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const INSCRIPTION_URL = '/auth/signup/create?token='
+    const {token} = useParams();
+    const navigate = useNavigate();
 
-    const handleSubmit = () => {
-        let formateur = mapFormToFormateur();
-        let api = new Api();
-        api.postInscription(formateur, "")
-            .then(() => {
-                resetForm()
-            })
-            .catch(function (err) {
-                setHasErrorAPI(true);
-                console.log(err);
-            });
+    const handleSubmit = async () => {
+        let association = mapFormToFormateur();
+        try {
+            const response = await axios.post(INSCRIPTION_URL + token,
+                JSON.stringify(association),
+                {
+                    headers: {'Content-Type': 'application/json'}
+                }
+            );
+            toast.success(response.data.message);
+            navigate('/')
+        } catch (err) {
+            toast.error(err.response.data.message);
+        }
     }
 
     //(le token retourne rôle + mail)
     const mapFormToFormateur = () => {
-        let formateur = new Formateur(mdp, nomUtilisateur, nom, prenom)
-        return formateur;
+        let formateur = new Formateur()
+        let signup = new SignupRequest()
+        signup.nomUtilisateur = nomUtilisateur;
+        signup.password = mdp;
+        formateur.nom = nom;
+        formateur.prenom = prenom;
+        signup.formateur = formateur;
+        return signup;
     }
-
 
     const resetForm = () => {
         setNomUtilisateur('');
@@ -101,7 +115,8 @@ const FormulaireInscriptionFormateur = () => {
                     <div className="col col-lg-5 ">
                         <form>
                             <div className="form-group">
-                                <label htmlFor="nomUtilisateur" className="mt-2 mb-2">Choisissez un nom d'utilisateur</label>
+                                <label htmlFor="nomUtilisateur" className="mt-2 mb-2">Choisissez un nom
+                                    d'utilisateur</label>
                                 <input
                                     type="text"
                                     name="nomUtilisateur"
