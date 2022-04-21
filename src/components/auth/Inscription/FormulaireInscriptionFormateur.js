@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Formateur from "../../../api/model/Formateur";
+import {hashPassword} from "../../../utils/PasswordUtils";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "../../../api/axios";
 import toast from "react-hot-toast";
@@ -44,7 +45,7 @@ const FormulaireInscriptionFormateur = () => {
         let formateur = new Formateur()
         let signup = new SignupRequest()
         signup.nomUtilisateur = nomUtilisateur;
-        signup.password = mdp;
+        signup.password = hashPassword(mdp);
         formateur.nom = nom;
         formateur.prenom = prenom;
         signup.formateur = formateur;

@@ -4,6 +4,7 @@ import Utilisateur from "../../../api/model/Utilisateur";
 import axios from '../../../api/axios';
 import useAuth from '../../../auth/hooks/useAuth';
 import {useLocation, useNavigate, useOutletContext} from 'react-router-dom';
+import {hashPassword} from "../../../utils/PasswordUtils";
 
 const LOGIN_URL = '/auth/signin';
 
@@ -35,7 +36,7 @@ const Connexion = () => {
     const mapFormToUtilisateur = () => {
         let utilisateur = new Utilisateur();
         utilisateur.nomUtilisateur = nomUtilisateur;
-        utilisateur.password = pwd;
+        utilisateur.password = hashPassword(pwd);
         return utilisateur;
     }
 

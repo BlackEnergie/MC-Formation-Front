@@ -4,6 +4,7 @@ import SignupRequest from "../../../api/model/SignupRequest";
 import axios from '../../../api/axios';
 import toast from 'react-hot-toast';
 import {useNavigate,useParams} from 'react-router-dom';
+import {hashPassword} from "../../../utils/PasswordUtils";
 
 
 
@@ -44,7 +45,7 @@ const FormulaireInscriptionBN = () => {
         membreBureauNational.poste = poste;
         let signup = new SignupRequest()
         signup.nomUtilisateur = nomUtilisateur;
-        signup.password = mdp;
+        signup.password = hashPassword(mdp);
         signup.membreBureauNational = membreBureauNational;
         return signup;
     }

@@ -2,6 +2,7 @@ import React, {useEffect,} from "react";
 import tableSort from "table-sort-js/table-sort.js";
 import {AiOutlineEdit, AiOutlineZoomIn} from "react-icons/ai";
 import {Link} from "react-router-dom";
+import {statutToString, statutToStyle} from "../../../utils/StatutUtils";
 
 const TableAccueil = ({Donnee}) => {
 
@@ -12,7 +13,7 @@ const TableAccueil = ({Donnee}) => {
     const DisplayData = () => {
         const display = Donnee.map((info) =>
             <tr key={info.id}>
-                <td>{info.statut}</td>
+                <td className={statutToStyle(info.statut)}>{ statutToString(info.statut)}</td>
                 <td>{info.cadre ? info.cadre : "N/A"}</td>
                 <td>{info.domaines.map((domaine) => domaine.libelle + ", ")}</td>
                 <td>{info.titre ? info.titre : "Provisoire : " + info.sujet}</td>

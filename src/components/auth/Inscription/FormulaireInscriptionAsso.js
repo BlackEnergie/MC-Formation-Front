@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Association from "../../../api/model/Association";
+import {hashPassword} from "../../../utils/PasswordUtils";
 import axios from "../../../api/axios";
 import toast from "react-hot-toast";
 import SignupRequest from "../../../api/model/SignupRequest";
@@ -45,7 +46,7 @@ const FormulaireInscriptionAsso = () => {
         let association = new Association()
         let signup = new SignupRequest()
         signup.nomUtilisateur = nomUtilisateur;
-        signup.password = mdp;
+        signup.password = hashPassword(mdp);
         association.acronyme = acronyme;
         association.college = college;
         association.nomComplet = nomComplet;
