@@ -5,8 +5,9 @@ import Association from "../../../api/model/Association";
 import toast from 'react-hot-toast';
 import Select from 'react-select';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import decodeToken from "../../../auth/decodeToken";
+import {AiOutlineRollback} from "react-icons/ai";
 
 const DemandeFormation = () => {
     {/* state formulaire */
@@ -125,8 +126,8 @@ const DemandeFormation = () => {
         <div className="DemandeFormation">
             <div className="row justify-content-md-center  mt-3">
                 <div className="col col-lg-5">
-                    <h1 className="justify-content-center align-items-center">
-                        <u>DEMANDE DE FORMATION</u>
+                    <h1 className="d-flex justify-content-center">
+                        DEMANDE DE FORMATION
                     </h1>
                 </div>
             </div>
@@ -172,6 +173,17 @@ const DemandeFormation = () => {
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+            <div className="row mt-5">
+                <div className="d-flex justify-content-center">
+                    <Link to="/" id="linkAccueil">
+                        <button type="button" id="buttonArriere"
+                                className="btn btn-primary d-flex align-items-center">
+                            <AiOutlineRollback className="Icones me-2"/>
+                            Revenir à l'accueil
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>

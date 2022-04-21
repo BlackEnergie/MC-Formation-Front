@@ -5,9 +5,7 @@ import Donnee from './json/InformationFicheDeFormation.json';
 const AfficherType = Donnee.data.map(
     (info) => {
         return (
-            <p key={info.id}>
-                <td>{info.type}</td>
-            </p>
+            <>{info.type}</>
         )
     }
 )
@@ -48,54 +46,51 @@ const AfficherDataDomaine = Donnee.data[0].domaines.map(
 function InformationsFicheDeFormation (){
   
     return(
-        <>
+        <div className="container-fluid">
         <div className="container shadow p-4 mb-3 bg-white rounded">
             <div className="row">
-                <h3 className="mt-2">
-                   Type
-                </h3>
-                <br/>
-                <div>
-                    <div className="row  mb-3">
-                        <div className="col-2">
-                           <h4>{AfficherType}</h4>
-                        </div>
+
+                <div className="d-flex  mb-3">
+                    <div className="d-flex align-items-center ">
+                        <h3 className="align-middle m-0" >Type</h3>
+                    </div>
+
+                    <div className="d-flex align-items-center ms-3">
+                       <h4 className="align-middle" >{AfficherType}</h4>
                     </div>
                 </div>
-         
-                <div className="row  mb-3" >
+
+                <div className="col-6">
                     <h3 className="mt-2">
                         Objectifs pédagogiques
                     </h3>
-                    <div className="col-6">
-                        <div className="container">
-                            <div className="table-wrapper">
-                                <table className="table table-striped mt-2">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Objectifs</th>
-                                        </tr>
-                                    </thead>
+                    <div className="container">
+                        <div className="table-wrapper tableFixHead" >
+                            <table className="table table-striped mt-2" >
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Objectifs</th>
+                                </tr>
+                                </thead>
 
-                                    <tbody>
-                                        {AfficherobjetsPedagogiques}
-                                    </tbody>
-                                </table>
-                            </div>
+                                <tbody>
+                                {AfficherobjetsPedagogiques}
+                                </tbody>
+                            </table>
                         </div>
-                    </div>       
+                    </div>
                 </div>
+
             </div>
         </div>
+
         <div className="container shadow p-4 mb-3 bg-white rounded">
             <div className="row">
                 <div className="col-6">
-                    <div className="row d-flex justify-content-between">
                         <h3 className="mt-2">
                             Domaines
                         </h3>
-                    </div>
                         <div className="container">
                             <div className="table-wrapper tableFixHead" >
                                 <table className="table table-striped mt-2" >
@@ -144,7 +139,7 @@ function InformationsFicheDeFormation (){
 
              
           
-        </>
+        </div>
     );
 }
 export default InformationsFicheDeFormation ;

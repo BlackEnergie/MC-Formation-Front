@@ -59,7 +59,7 @@ a, a label {
 .tableFixHead th, .tableFixHead  td {
   width: 100%;
 }
-table.table tr th:first-child,table.table tr td:first-child {
+table.table tr th:first-child,table.table tr td:first-child  {
   width: 40px;
 }
 

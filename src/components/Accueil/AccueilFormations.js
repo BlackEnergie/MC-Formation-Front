@@ -10,7 +10,7 @@ const Accueil = () => {
     const [offsetParam, setOffsetParam] = useState(0);
     const [selectedOptionStatut, setSelectedOptionStatut] = useState(null);
     const [statutFiltre, setStatutFiltre] = useState("");
-    const limitParam = 1;
+    const limitParam = 10;
     const axiosPrivate = useAxiosPrivate();
     let statut = null;
     let offset = null;

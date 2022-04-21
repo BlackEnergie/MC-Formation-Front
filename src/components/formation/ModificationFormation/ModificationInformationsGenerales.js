@@ -62,7 +62,7 @@ const InformationsGeneralesFormation = () =>{
 
 
     return (
-        <div className="container-fluid">
+        <div className="col">
 
             {/* Conteneur Info Domaines */}
             <div className="container shadow p-4 mb-3 bg-white rounded">

@@ -10,7 +10,9 @@ const Layout = () => {
     return (
         <>
             <Header login={login} setLogin={setLogin}/>
-            <Outlet context={[login, setLogin]}/>
+            <div id="main" className="container-fluid flex-fill mt-3">
+                <Outlet context={[login, setLogin]}/>
+            </div>
             <Footer />
         </>
     )
