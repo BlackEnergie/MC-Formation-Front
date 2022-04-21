@@ -12,8 +12,8 @@ const Accueil = () => {
     const [statutFiltre, setStatutFiltre] = useState("");
     const limitParam = 10;
     const axiosPrivate = useAxiosPrivate();
-    let statut = null;
     let offset = null;
+    let statutParam =null;
     const optionsStatut = [
         {value: 'DEMANDE', label: 'Demandé'},
         {value: 'A_ATTRIBUER', label: 'A attribuer'},
@@ -38,7 +38,7 @@ const Accueil = () => {
                 params: {
                     offset: (offset != null ? 0 : offsetParam),
                     limit: limitParam,
-                    statut: (statut != null ? statut : statutFiltre)
+                    statut: (statutParam != null ? statutParam : statutFiltre)
                 },
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
@@ -56,14 +56,14 @@ const Accueil = () => {
 
     const handleApplyFilters = () => {
         setOffsetParam(0);
-        if (selectedOptionStatut && selectedOptionStatut[0]) {
+        if (selectedOptionStatut) {
             offset = 0;
-            statut = selectedOptionStatut[0].value;
-            setStatutFiltre(selectedOptionStatut[0].value);
+            statutParam = selectedOptionStatut.value;
+            setStatutFiltre(selectedOptionStatut.value);
             getFormationsAccueil();
         } else {
             offset = 0;
-            statut = "";
+            statutParam = "";
             setStatutFiltre("");
             getFormationsAccueil();
         }

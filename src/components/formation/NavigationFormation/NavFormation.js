@@ -11,7 +11,7 @@ const NavFormation = (props) => {
     return (
         <div className="col-md-3" id="arborescence">
             <div className="d-flex justify-content-left">
-                <Link to="/" id="linkAccueil">
+                <Link to="/accueil" id="linkAccueil">
                     <button type="button" id="buttonArriere"
                             className="btn btn-primary d-flex align-items-center">
                         <AiOutlineRollback className="Icones me-2"/>
