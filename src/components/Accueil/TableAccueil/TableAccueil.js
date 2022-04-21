@@ -3,6 +3,7 @@ import tableSort from "table-sort-js/table-sort.js";
 import {AiOutlineEdit, AiOutlineZoomIn} from "react-icons/ai";
 import {Link} from "react-router-dom";
 import {statutToString, statutToStyle} from "../../../utils/StatutUtils";
+import decodeToken from "../../../auth/decodeToken";
 
 const TableAccueil = ({Donnee}) => {
 
@@ -10,10 +11,17 @@ const TableAccueil = ({Donnee}) => {
         tableSort()
     }, []);
 
+
+    const checkRoleAsso = () => {
+        const token = decodeToken(localStorage.getItem("accessToken"))[1];
+        return token.role === "ROLE_ASSO"
+    }
+
+
     const DisplayData = () => {
         const display = Donnee.map((info) =>
             <tr key={info.id}>
-                <td className={statutToStyle(info.statut)}>{ statutToString(info.statut)}</td>
+                <td className={statutToStyle(info.statut)}>{statutToString(info.statut)}</td>
                 <td>{info.cadre ? info.cadre : "N/A"}</td>
                 <td>{info.domaines.map((domaine) => domaine.libelle + ", ")}</td>
                 <td>{info.titre ? info.titre : "Provisoire : " + info.sujet}</td>
@@ -23,10 +31,13 @@ const TableAccueil = ({Donnee}) => {
                 <td key={info.id}>
                     <Link to={'/formation/' + info.id}>
                         <AiOutlineZoomIn className="Icones me-2"/>
+
                     </Link>
-                    <Link to={'/formation/edit/' + info.id}>
-                        <AiOutlineEdit className="Icones me-2"/>
-                    </Link>
+                    {checkRoleAsso() ?
+                        (<></>) :
+                        (<Link to={'/formation/edit/' + info.id}>
+                            <AiOutlineEdit className="Icones me-2"/>
+                        </Link>)}
                 </td>
             </tr>
         )

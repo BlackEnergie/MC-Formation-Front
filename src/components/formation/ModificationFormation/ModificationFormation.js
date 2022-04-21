@@ -1,13 +1,39 @@
-import React, {useState} from 'react';
-import InformationsGeneralesFormation from "../VueDetailleeFormation/InformationsGeneralesFormation";
+import React, {useEffect, useState} from 'react';
+import ModificationFormationInformationGenerales from "./ModificationInformationsGenerales";
 import ModificationFicheDeFormation from "./ModificationFicheDeFormation";
 import FilConducteurFormation from "../VueDetailleeFormation/FilConducteurFormation";
 import NavFormation from "../NavigationFormation/NavFormation";
+import useAxiosPrivate from "../../../auth/hooks/useAxiosPrivate";
+import {useParams} from "react-router-dom";
+import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
 
 const ModificationFormation = (props) => {
 
-    const [showComponent, setShowComponent] = useState(1);
+    const [formation, setFormation] = useState(null);
+    const [showComponent, setShowComponent] = useState(0);
+    const axiosPrivate = useAxiosPrivate();
+    let { id } = useParams();
 
+    useEffect(() => {
+        getFormationDetails();
+    }, [])
+
+
+    const getFormationDetails = async () => {
+        try {
+            const response = await axiosPrivate.get('/formation/'+id, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+                }
+            });
+            setFormation(response?.data);
+            console.log(response.data);
+
+            setShowComponent(1);
+        } catch (err) {
+            console.error(err);
+        }
+    }
     const majShowComponent = (val) => {
         setShowComponent(val);
     }
@@ -25,17 +51,17 @@ const ModificationFormation = (props) => {
 
                     {
                         (showComponent === 1) ? (
-                            <InformationsGeneralesFormation/>
+                            <ModificationFormationInformationGenerales formation={formation}/>
                         ) : (<></>)
                     }
                     {
                         (showComponent === 2) ? (
-                            <ModificationFicheDeFormation/>
+                            <ModificationFicheDeFormation formation={formation}/>
                         ) : (<></>)
                     }
                     {
                         (showComponent === 3) ? (
-                            <FilConducteurFormation/>
+                            <FilConducteurFormation formation={formation}/>
                         ) : (<></>)
                     }
                     <div className="container-fluid">

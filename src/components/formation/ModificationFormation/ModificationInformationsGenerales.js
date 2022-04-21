@@ -1,8 +1,32 @@
 import React from 'react';
-import Donnee from './json/dataInformationsGenerales.json';
 
-const ModificationInformationsGenerales = () =>{
-    const AfficherDataDomaine = Donnee?.data[0].domaines.map(
+const ModificationInformationsGenerales = (formation) => {
+    let Donnee = formation.formation;
+
+    const AfficherDataInfoGenerales = () => {
+        console.log(Donnee);
+        return (
+            <>
+                <tr>
+                    <th>Statut</th>
+                    <td>{Donnee?.statut}</td>
+                </tr>
+                <tr>
+                    <th>Cadre</th>
+                    <td>{Donnee?.cadre}</td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{Donnee?.type}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{Donnee?.date}</td>
+                </tr>
+            </>
+        )
+    }
+    const AfficherDataDomaine = () => Donnee?.domaines?.map(
         (info) => {
             return (
                 <tr key={info.code} title={info.description}>
@@ -12,50 +36,13 @@ const ModificationInformationsGenerales = () =>{
             )
         }
     )
-
-    const AfficherDataFormateur = Donnee?.data[0].formateurs.map(
+    const AfficherDataFormateur = () => Donnee?.formateurs?.map(
         (info) => {
             return (
                 <tr key={info.id}>
-                    <td>{info.id}</td>
-                    <td>{info.nom + " " +info.prenom}</td>
+                    <td>{info.nom}</td>
+                    <td>{info.prenom}</td>
                 </tr>
-            )
-        }
-    )
-
-    const AfficherDataAssociation = Donnee?.data[0].association.map(
-        (info) => {
-            return (
-                <tr key={info.id} title={info.nomComplet}>
-                    <td>{info.acronyme}</td>
-                    <td>{info.ville}</td>
-                </tr>
-            )
-        }
-    )
-
-    const AfficherDataInfoGenerales = Donnee?.data.map(
-        (info) => {
-            return (
-                <>
-                    <tr key={info.statut}>
-                        <th>Statut</th>
-                        <td>{info.statut}</td>
-                    </tr>
-                    <tr key={info.cadre}>
-                        <th>Cadre</th>
-                        <td>{info.cadre}</td>
-                    </tr>
-                    <tr key={info.type}>
-                        <th>Type</th>
-                        <td>{info.type}</td>
-                    </tr>
-                    <tr key={info.date}>
-                        <th>Date</th>
-                        <td>{info.date}</td>
-                    </tr>
-                </>
             )
         }
     )
@@ -75,7 +62,7 @@ const ModificationInformationsGenerales = () =>{
                         <div className="container">
                             <table className="table table-striped mt-2">
                                 <tbody>
-                                {AfficherDataInfoGenerales}
+                                {AfficherDataInfoGenerales()}
                                 </tbody>
                             </table>
                         </div>
@@ -101,7 +88,7 @@ const ModificationInformationsGenerales = () =>{
                                     </thead>
 
                                     <tbody>
-                                    {AfficherDataDomaine}
+                                    {AfficherDataDomaine()}
                                     </tbody>
                                 </table>
                             </div>
@@ -132,7 +119,7 @@ const ModificationInformationsGenerales = () =>{
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {AfficherDataFormateur}
+                                    {AfficherDataFormateur()}
                                     </tbody>
                                 </table>
                             </div>
@@ -147,19 +134,14 @@ const ModificationInformationsGenerales = () =>{
 
                         {/* Table Association */}
                         <div className="container">
-                            <div className="table-wrapper tableFixHead" >
-                                <table className="table table-striped mt-2" >
+                            <div className="table-wrapper tableFixHead">
+                                <table className="table table-striped mt-2">
                                     <thead>
                                     <tr>
                                         <th>Nom</th>
                                         <th>Ville</th>
                                     </tr>
                                     </thead>
-
-                                    <tbody >
-                                    {AfficherDataAssociation}
-                                    </tbody>
-
                                 </table>
                             </div>
                         </div>
