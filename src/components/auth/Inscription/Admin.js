@@ -10,6 +10,7 @@ const Admin = () => {
     const [email, setMail] = useState('');
     const [role, setRole] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({});
+    const [select, setSelect] = useState('er');
 
     const handleSubmit = async () => {
         try {
@@ -31,7 +32,8 @@ const Admin = () => {
     const resetForm = () => {
         setMail('');
         setHasUnfilled({});
-        setRole('');
+        setRole("");
+        setSelect("er")
     }
 
 
@@ -86,9 +88,9 @@ const Admin = () => {
                                         <div className="text-danger">{hasUnfilled.email}</div>
                                     </td>
                                     <td>
-                                        <select className="form-select" aria-label="Default select example"
-                                                onChange={(e) => setRole(e.target.value)}>
-                                            <option value="" disabled selected hidden>Rôle</option>
+                                        <select className="form-select" aria-label="Default select example" value={select}
+                                                onChange={(e) => setRole(e.target.value) &setSelect(e.target.value)}>
+                                            <option value="er" selected="true"  disabled="disabled">Choisissez un role</option>
                                             <option value="ROLE_FORMATEUR">Formateur</option>
                                             <option value="ROLE_ASSO">Association</option>
                                             <option value="ROLE_BN">Membre du Bureau National</option>

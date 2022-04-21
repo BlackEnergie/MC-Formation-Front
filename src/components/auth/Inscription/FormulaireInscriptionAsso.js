@@ -20,6 +20,8 @@ const FormulaireInscriptionAsso = () => {
     const [options, setOptions] = useState([]);
     const [hasErrorAPI, setHasErrorAPI] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [select, setSelect] = useState('er');
+
 
     const INSCRIPTION_URL = '/auth/signup/create?token='
     const {token} = useParams();
@@ -65,6 +67,8 @@ const FormulaireInscriptionAsso = () => {
         setCollege([]);
         setMdp1('');
         setMdp2('');
+        setSelect("er")
+
     }
 
     const validate = () => {
@@ -170,15 +174,12 @@ const FormulaireInscriptionAsso = () => {
                             <div className="form-group">
                                 <label htmlFor="college" className="mt-2">Indiquez le college dont dépend votre
                                     association</label>
-                                <select class="form-select" aria-label="Default select example"
-                                        onChange={(e) => setCollege(e.target.value)}>
-                                    <option value="" disabled selected hidden>Sélectionnez le collège de votre
-                                        association
-                                    </option>
+                                <select class="form-select" aria-label="Default select example" value={select}
+                                        onChange={(e) => setCollege(e.target.value)&setSelect(e.target.value)}>
+                                    <option value="er" selected="true"  disabled="disabled">Selectionnez le collège de votre association</option>
                                     <option value="A">Collège A</option>
                                     <option value="B">Collège B</option>
                                     <option value="C">Collège C</option>
-                                    <option value="D">Collège D</option>
                                 </select>
                                 <div className="text-danger">{hasUnfilled.college}</div>
                             </div>
