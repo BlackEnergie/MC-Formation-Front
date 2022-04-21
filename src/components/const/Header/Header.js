@@ -31,7 +31,7 @@ const Header = (props) => {
         <header>
             <Navbar id="header-connexion" expand="lg">
                 <Nav className="ml-auto">
-                    <Link className="text-decoration-none d-flex" to="accueil">
+                    <Link className="text-decoration-none d-flex" to="/">
                         <img src={require("../../../assets/img/logoblue_bgwht.png")} id='imageNavBar' alt='logoMCBlanc'/>
                         <Navbar.Brand id="navbarBrand">MC Formation</Navbar.Brand>
                     </Link>

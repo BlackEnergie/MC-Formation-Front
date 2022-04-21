@@ -14,7 +14,7 @@ const Connexion = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/accueil";
+    const from = location.state?.from?.pathname || "/";
 
     const userRef = useRef();
     const errRef = useRef();
@@ -101,7 +101,7 @@ const Connexion = () => {
                             name="mdp"
                         />
                     </div>
-                    <input type="submit" className="form-group btn btn-primary" value="Se Connecter"
+                    <input type="submit" className="form-group btn btn-mc" value="Se Connecter"
                            alt="buttonConnexion"/>
                 </form>
                 <div id="contactVP">

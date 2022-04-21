@@ -176,7 +176,7 @@ const DemandeFormation = () => {
             </div>
             <div className="row mt-5">
                 <div className="d-flex justify-content-center">
-                    <Link to="/accueil" id="linkAccueil">
+                    <Link to="/" id="linkAccueil">
                         <button type="button" id="buttonArriere"
                                 className="btn btn-primary d-flex align-items-center">
                             <AiOutlineRollback className="Icones me-2"/>

@@ -11,7 +11,6 @@ import Accueil from "./components/Accueil/AccueilFormations";
 import ModificationFormation from "./components/formation/ModificationFormation/ModificationFormation";
 import Unauthorized from './components/defaults/Unauthorized';
 import Missing from './components/defaults/Missing';
-import PageTest from './components/defaults/PageTest';
 import RequireAuth from './components/defaults/RequireAuth';
 import VueDetailleeFormation from './components/formation/VueDetailleeFormation/VueDetailleeFormation'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,18 +24,20 @@ function App() {
       <Route path="/" element={<Layout />}>
         {/* public routes */}
         <Route path="connexion" element={<Connexion />} />
-      
-        {/* we want to protect these routes */}
         <Route element={<RequireAuth allowedRoles={'ROLE_ASSO'} />}>
-          <Route path="accueil" element={<Accueil />} />
+          <Route path="/" element={<Accueil />} />
           <Route path="demandeFormation" element={<DemandeFormation />}/>
-          <Route path="pagetest" element={<PageTest />} />
           <Route path="formation/:id" element={<VueDetailleeFormation/>} />
           <Route path="formation/edit/:id" element={<ModificationFormation/>}/>
         </Route>
+        {/* we want to protect these routes */}
         <Route element={<RequireAuth allowedRoles={'ROLE_BN'} />}>
+          <Route path="/" element={<Accueil />} />
           <Route path="admin" element ={<Admin/>}/>
+          <Route path="formation/:id" element={<VueDetailleeFormation/>} />
+          <Route path="formation/edit/:id" element={<ModificationFormation/>}/>
         </Route>
+        
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="inscription/:token" element={<FormulaireInscription/>} />
 

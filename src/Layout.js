@@ -13,7 +13,10 @@ const Layout = () => {
             <div id="main" className="container-fluid flex-fill mt-3">
                 <Outlet context={[login, setLogin]}/>
             </div>
-            <Footer />
+            {
+                !login 
+                ?<Footer />:<div className="pb-5"></div>
+            }
         </>
     )
 }

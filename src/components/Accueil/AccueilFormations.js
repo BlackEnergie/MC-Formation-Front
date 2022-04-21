@@ -18,7 +18,7 @@ const Accueil = () => {
         {value: 'DEMANDE', label: 'Demandé'},
         {value: 'A_ATTRIBUER', label: 'A attribuer'},
         {value: 'A_VENIR', label: 'A venir'},
-        {value: 'PASSE', label: 'Passée'}
+        {value: 'PASSEE', label: 'Passée'}
     ];
     var optionsArray = [];
 
