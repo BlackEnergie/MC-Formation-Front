@@ -32,6 +32,11 @@ const VueDetailleeFormation = (props) => {
         }
     }
 
+    const majShowComponent = (val) =>{
+        setShowComponent(val);
+    }
+
+
     return (
         <div className="container-fluid main">
             <div className="row">

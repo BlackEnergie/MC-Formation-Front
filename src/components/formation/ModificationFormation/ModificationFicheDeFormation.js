@@ -8,6 +8,19 @@ const optionsType = [
     {value: 'Atelier', label: 'Atelier'}
 ];
 
+const optionsDomaine = [
+    {value: "1", label: 'Administratif'},
+    {value: "2",label: 'Partenariat'},
+    {value: "3",label: 'Communication'},
+    {value: "4",label: 'Evenementiel'},
+    {value: "5",label: 'Ressources Humaines'},
+    {value: "6",label: 'Trésorerie'},
+    {value: "7",label: 'Archivage'},
+    {value: "8",label: 'Affaires académiques'},
+    {value: "9",label: 'Association d\'alumni'}
+
+];
+
 
 const AfficherBesoinsMaterielsFormation = Donnee.data[0].BesoinsMaterielsFormation.map(
     (info) => {
@@ -15,28 +28,6 @@ const AfficherBesoinsMaterielsFormation = Donnee.data[0].BesoinsMaterielsFormati
             <tr key={info.id}>
                 <td></td>
                 <td>{info.nom}</td>
-            </tr>
-        )
-    }
-)
-
-const AfficherobjetsPedagogiques = Donnee.data[0].objetsPedagogiques.map(
-    (info) => {
-        return (
-            <tr key={info.id} title={info.BesoinMater}>
-                <td>{info.id}</td>
-                <td>{info.objet}</td>
-            </tr>
-        )
-    }
-)
-
-const AfficherDataDomaine = Donnee.data[0].domaines.map(
-    (info) => {
-        return (
-            <tr key={info.code} title={info.description}>
-                <td>{info.code}</td>
-                <td>{info.libelle}</td>
             </tr>
         )
     }
@@ -112,9 +103,46 @@ function ModificationFicheDeFormation() {
             );
             setMessageObjPedagogique("");
     }
-    /* FIN PARTIE OBJECTIFS PEDAGOGIQUES */
+    /*  FIN PARTIE OBJECTIFS PEDAGOGIQUES */
 
 
+    /*  PARTIE DOMAINES */
+    const handleItemDeletedDomaines = (i) => {
+        setItemsDomaine(itemsDomaine.filter((item, index) => index !== i));
+    }
+
+    const afficherListeDomaines = itemsDomaine.map(
+        (item,i) => {
+            return (
+                <tr key={item.id}>
+                    <td>
+                        {item.id}
+                    </td>
+                    <td>
+                        <p>{item.libelle}</p>
+                    </td>
+                    <td className="d-flex justify-content-center">
+                        <a onClick={() => handleItemDeletedDomaines(i)}>
+                            <AiFillDelete className="Icones"/>
+                        </a>
+                    </td>
+                </tr>
+            );
+        }
+    )
+    const handleAjoutDomaines = () =>{
+        console.log(messageDomaine);
+        console.log(itemsDomaine);
+        if (messageDomaine !=="")
+            setItemsDomaine(
+                itemsDomaine => [...itemsDomaine,
+                    {id:getMax(itemsDomaine)
+                        ,libelle:messageDomaine}
+                ]
+            );
+        setMessageDomaine("");
+    }
+    /*  FIN PARTIE DOMAINES */
 
 
 
@@ -142,7 +170,7 @@ function ModificationFicheDeFormation() {
                                     <tr>
                                         <th>#</th>
                                         <th>Objectif</th>
-                                        <th className="d-flex justify-content-center">Actions</th>
+                                        <th className="d-flex justify-content-center">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -190,11 +218,31 @@ function ModificationFicheDeFormation() {
                                     <tr>
                                         <th>#</th>
                                         <th>Nom</th>
+                                        <th className="d-flex justify-content-center">Action</th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
-                                    {AfficherDataDomaine}
+                                        {afficherListeDomaines}
+                                            <tr key="123059">
+                                                <td>#</td>
+                                                <td>
+                                                    <Select
+                                                        isClearable
+                                                        value={messageDomaine}
+                                                        placeholder="Ex: Administratif"
+                                                        onChange={setMessageDomaine }
+                                                        options={optionsDomaine}
+                                                    />
+                                                </td>
+                                                <td className="d-flex justify-content-center">
+                                                    <button
+                                                        type="submit" className="btn btn-sm  btn-outline-mc"
+                                                        onClick = {() => handleAjoutDomaines()}>
+                                                        <AiOutlinePlus className="Icones"/>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                     </tbody>
                                 </table>
                             </div>

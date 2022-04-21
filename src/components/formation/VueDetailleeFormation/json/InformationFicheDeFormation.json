@@ -17,12 +17,12 @@
         "detail": "Wesh 1",
         "domaines": [
           {
-            "code": "1",
+            "id": 1,
             "libelle": "Affaires académiques",
             "description": "Relations entre votre association et son environnement universitaire et fédératif."
           },
           {
-            "code": "2",
+            "id": 2,
             "libelle": "Association d'alumni",
             "description": "Gestion d'une association d'anciens élèves."
           }

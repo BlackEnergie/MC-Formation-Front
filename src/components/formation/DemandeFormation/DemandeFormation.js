@@ -165,10 +165,10 @@ const DemandeFormation = () => {
                         </div>
                         <div className="d-flex justify-content-center">
                             <div className="p-2">
-                                <input type="button" value="Valider" className="btn btn-primary" onClick={validate}/>
+                                <input type="button" value="Valider" className="btn btn-mc" onClick={validate}/>
                             </div>
                             <div className="p-2">
-                                <input type="button" value="Reset" className="btn btn-primary" onClick={resetForm}/>
+                                <input type="button" value="Reset" className="btn btn-mc" onClick={resetForm}/>
                             </div>
                         </div>
                     </form>
@@ -176,7 +176,7 @@ const DemandeFormation = () => {
             </div>
             <div className="row mt-5">
                 <div className="d-flex justify-content-center">
-                    <Link to="/" id="linkAccueil">
+                    <Link to="/accueil" id="linkAccueil">
                         <button type="button" id="buttonArriere"
                                 className="btn btn-primary d-flex align-items-center">
                             <AiOutlineRollback className="Icones me-2"/>

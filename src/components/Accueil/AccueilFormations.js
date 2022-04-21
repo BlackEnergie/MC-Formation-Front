@@ -84,7 +84,7 @@ const Accueil = () => {
                     checkRoleAsso() ? (
                         <div className="demandeFormation col-2">
                             <Link to="/demandeFormation">
-                                <button type="button" className="btn btn-primary mb-2">
+                                <button type="button" className="btn btn-mc mb-2">
                                     Demander une formation
                                 </button>
                             </Link>
@@ -116,8 +116,8 @@ const Accueil = () => {
                         />
                         </span>
                         <div className="mt-2">
-                            <button type="button" className="btn btn-primary m-2">Reset</button>
-                            <button type="button" className="btn btn-primary" onClick={handleApplyFilters}>Valider
+                            <button type="button" className="btn btn-mc m-2">Reset</button>
+                            <button type="button" className="btn btn-mc" onClick={handleApplyFilters}>Valider
                             </button>
                         </div>
                     </div>
@@ -133,7 +133,7 @@ const Accueil = () => {
                         <TableAccueil Donnee={options}/>
 
                         <div className="d-flex justify-content-center">
-                            <button type="button" className="btn btn-primary mt-5"
+                            <button type="button" className="btn btn-mc mt-5"
                                     onClick={renderMoreFormation}>Afficher plus...
                             </button>
                         </div>
