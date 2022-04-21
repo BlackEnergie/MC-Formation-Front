@@ -1,37 +1,19 @@
 import './Connexion.css';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import Utilisateur from "../../../api/model/Utilisateur";
 import axios from '../../../api/axios';
-import useAuth from '../../../auth/hooks/useAuth';
-import {useLocation, useNavigate, useOutletContext} from 'react-router-dom';
+import {useOutletContext} from 'react-router-dom';
 import {hashPassword} from "../../../utils/PasswordUtils";
 
 const LOGIN_URL = '/auth/signin';
 
 const Connexion = () => {
 
-    const {setAuth} = useAuth();
     const [login, setLogin] = useOutletContext();
-
-    const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
-
-    const userRef = useRef();
-    const errRef = useRef();
 
     const [nomUtilisateur, setNomUtilisateur] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    //const [token, setToken] = useCookies(['token']);
-
-    useEffect(() => {
-        userRef.current.focus();
-    }, [])
-
-    useEffect(() => {
-        setErrMsg('');
-    }, [nomUtilisateur, pwd])
 
     const mapFormToUtilisateur = () => {
         let utilisateur = new Utilisateur();
@@ -53,13 +35,9 @@ const Connexion = () => {
                 }
             );
             const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles;
             localStorage.setItem("accessToken", accessToken);
-            setAuth({nomUtilisateur, roles, accessToken});
-            setNomUtilisateur('');
-            setPwd('');
-            setLogin(true)
-            navigate(from, {replace: true});
+            setLogin(true);
+            window.location.href = '/';
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('no server response');
@@ -70,7 +48,8 @@ const Connexion = () => {
             } else {
                 setErrMsg('Login failed.');
             }
-            errRef.current.focus();
+            setNomUtilisateur('');
+            setPwd('');
         }
     }
 
@@ -79,13 +58,13 @@ const Connexion = () => {
             <div className="div-Connexion">
                 <img src={require("../../../assets/img/logoblue_bgwht.png")} id="logo_connexion" alt="logo-mc"/>
                 <h1 id="titreConnexion">Connectez-vous à l'espace <br/> Formation de MIAGE Connection</h1>
-                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                 <form id="Form-Connexion" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <input
                             id="nomUtilisateur"
                             type="text"
-                            ref={userRef}
+                            value={nomUtilisateur}
                             className="form-control"
                             placeholder="Nom d'utilisateur"
                             onChange={(e) => setNomUtilisateur(e.target.value)}
@@ -96,6 +75,7 @@ const Connexion = () => {
                         <input
                             id="mdp"
                             type="password"
+                            value={pwd}
                             className="form-control"
                             placeholder="Mot de passe"
                             onChange={(e) => setPwd(e.target.value)}
