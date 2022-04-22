@@ -17,11 +17,7 @@ const FormulaireInscriptionAsso = () => {
     const [mdp2, setMdp2] = useState('');
     const [mdp, setMdp] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({});
-    const [options, setOptions] = useState([]);
-    const [hasErrorAPI, setHasErrorAPI] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [select, setSelect] = useState('er');
-
 
     const INSCRIPTION_URL = '/auth/signup/create?token='
     const {token} = useParams();
@@ -56,7 +52,6 @@ const FormulaireInscriptionAsso = () => {
         signup.association = association;
         return signup;
     }
-
 
     const resetForm = () => {
         setNomUtilisateur('');
@@ -121,117 +116,125 @@ const FormulaireInscriptionAsso = () => {
 
     }
     return (
-        loading ? <div>Loading...</div> : hasErrorAPI ? <div>Error occured while fetching data.</div> :
-            <div className="FormulaireInscription">
-                <div className="row justify-content-md-center  mt-3">
-                    <div className="col col-lg-5 border border-dark">
-                        <h1 className="justify-content-center align-items-center">
-                            <u>INSCRIPTION A LA PLATEFORME</u>
-                        </h1>
-                    </div>
-                </div>
-                <div className="row justify-content-md-center mt-3">
-                    <div className="col col-lg-5 ">
-                        <form>
-                            <div className="form-group">
-                                <label htmlFor="nomUtilisateur" className="mt-2 mb-2">Choisissez un nom
-                                    d'utilisateur</label>
-                                <input
-                                    type="text"
-                                    name="nomUtilisateur"
-                                    value={nomUtilisateur}
-                                    onChange={event => setNomUtilisateur(event.target.value)}
-                                    className="form-control mt-2"
-                                    id="email"/>
-                                <div className="text-danger">{hasUnfilled.nomUtilisateur}</div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="acronyme" className="mt-2 mb-2">Indiquez l'acronyme de votre
-                                    association</label>
-                                <input
-                                    type="text"
-                                    name="acronyme"
-                                    value={acronyme}
-                                    onChange={event => setAcronyme(event.target.value)}
-                                    className="form-control mt-2"
-                                    placeholder="Ex : JMC"
-                                    id="email"/>
-                                <div className="text-danger">{hasUnfilled.acronyme}</div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="nomComplet" className="mt-2">Indiquez le nom complet de votre
-                                    association</label>
-                                <input
-                                    type="text"
-                                    name="nomComplet"
-                                    value={nomComplet}
-                                    onChange={event => setNomComplet(event.target.value)}
-                                    className="form-control mt-2"
-                                    placeholder="Ex : Junior MIAGE Concept Bordeaux"
-                                    id="email"/>
-                                <div className="text-danger">{hasUnfilled.nomComplet}</div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="college" className="mt-2">Indiquez le college dont dépend votre
-                                    association</label>
-                                <select class="form-select" aria-label="Default select example" value={select}
-                                        onChange={(e) => setCollege(e.target.value)&setSelect(e.target.value)}>
-                                    <option value="er" selected="true"  disabled="disabled">Selectionnez le collège de votre association</option>
-                                    <option value="A">Collège A</option>
-                                    <option value="B">Collège B</option>
-                                    <option value="C">Collège C</option>
-                                </select>
-                                <div className="text-danger">{hasUnfilled.college}</div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="ville" className="mt-2">Indiquez la ville de votre association</label>
-                                <input
-                                    type="text"
-                                    name="ville"
-                                    value={ville}
-                                    onChange={event => setVille(event.target.value)}
-                                    className="form-control mt-2"
-                                    placeholder="Ex : Bordeaux"
-                                    id="email"/>
-                                <div className="text-danger">{hasUnfilled.ville}</div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="mdp1" className="mt-2">Choisissez un mot de passe</label>
-                                <input
-                                    type="password"
-                                    name="mdp1"
-                                    value={mdp1}
-                                    onChange={event => {
-                                        setMdp(event.target.value);
-                                        setMdp1(event.target.value)
-                                    }}
-                                    className="form-control mt-2"
-                                    id="email"/>
-                                <div className="text-danger">{hasUnfilled.mdp1}</div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="mdp2" className="mt-2">Confirmez le mot de passe</label>
-                                <input
-                                    type="password"
-                                    name="mdp2"
-                                    value={mdp2}
-                                    onChange={event => setMdp2(event.target.value)}
-                                    className="form-control mt-2"
-                                    id="email"/>
-                                <div className="text-danger">{hasUnfilled.mdp2}</div>
-                            </div>
-                            <div className="d-flex justify-content-center">
-                                <div className="p-2">
-                                    <input type="button" value="Valider" className="btn btn-primary" onClick={clic}/>
-                                </div>
-                                <div className="p-2">
-                                    <input type="button" value="Reset" className="btn btn-primary" onClick={resetForm}/>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+        <div className="FormulaireInscription">
+            <div className="row justify-content-md-center">
+                <div className="col col-lg-5">
+                    <h3 className="color-mc">
+                        Inscription en tant qu'association
+                    </h3>
+                    <hr/>
                 </div>
             </div>
+            <div className="row justify-content-md-center">
+                <div className="col col-lg-5">
+                    <form>
+                        <div className="form-group mb-3">
+                            <label htmlFor="nomUtilisateur" className="form-label">Nom d'utilisateur</label>
+                            <input
+                                type="text"
+                                name="nomUtilisateur"
+                                value={nomUtilisateur}
+                                onChange={event => setNomUtilisateur(event.target.value)}
+                                className="form-control"
+                                id="email"
+                                required={true}/>
+                            <div className="text-danger">{hasUnfilled.nomUtilisateur}</div>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label htmlFor="acronyme" className="form-label">Indiquez l'acronyme de votre
+                                association</label>
+                            <input
+                                type="text"
+                                name="acronyme"
+                                value={acronyme}
+                                onChange={event => setAcronyme(event.target.value)}
+                                className="form-control"
+                                placeholder="Ex : JMC Bordeaux"
+                                required={true}
+                                id="email"/>
+                            <div className="text-danger">{hasUnfilled.acronyme}</div>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label htmlFor="nomComplet" className="form-label">Indiquez le nom complet de votre
+                                association</label>
+                            <input
+                                type="text"
+                                name="nomComplet"
+                                value={nomComplet}
+                                onChange={event => setNomComplet(event.target.value)}
+                                className="form-control"
+                                placeholder="Ex : Junior MIAGE Concept Bordeaux"
+                                required={true}
+                                id="email"/>
+                            <div className="text-danger">{hasUnfilled.nomComplet}</div>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label htmlFor="college" className="form-label">Indiquez le college dont dépend votre
+                                association</label>
+                            <select class="form-select" aria-label="Default select example" value={select}
+                                    onChange={(e) => setCollege(e.target.value) & setSelect(e.target.value)}>
+                                <option value="A">Collège A</option>
+                                <option value="B">Collège B</option>
+                                <option value="C">Collège C</option>
+                            </select>
+                            <div className="text-danger">{hasUnfilled.college}</div>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label htmlFor="ville" className="form-label">Indiquez la ville de votre association</label>
+                            <input
+                                type="text"
+                                name="ville"
+                                value={ville}
+                                onChange={event => setVille(event.target.value)}
+                                className="form-control"
+                                placeholder="Ex : Bordeaux"
+                                required={true}
+                                id="email"/>
+                            <div className="text-danger">{hasUnfilled.ville}</div>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label htmlFor="mdp1" className="form-label">Choisissez un mot de passe</label>
+                            <input
+                                type="password"
+                                name="mdp1"
+                                value={mdp1}
+                                onChange={event => {
+                                    setMdp(event.target.value);
+                                    setMdp1(event.target.value)
+                                }}
+                                className="form-control"
+                                required={true}
+                                id="email"/>
+                            <div className="text-danger">{hasUnfilled.mdp1}</div>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label htmlFor="mdp2" className="form-label">Confirmez le mot de passe</label>
+                            <input
+                                type="password"
+                                name="mdp2"
+                                value={mdp2}
+                                onChange={event => setMdp2(event.target.value)}
+                                className="form-control"
+                                required={true}
+                                id="email"/>
+                            <div className="text-danger">{hasUnfilled.mdp2}</div>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                            <div className="p-2">
+                                <button type="button" className="btn btn-mc" onClick={clic}>
+                                    Valider
+                                </button>
+                            </div>
+                            <div className="p-2">
+                                <button type="button" className="btn btn-mc" onClick={resetForm}>
+                                    Effacer
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 }
 

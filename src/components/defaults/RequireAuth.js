@@ -10,16 +10,11 @@ const RequireAuth = ({ allowedRoles }) => {
     const roleExist = () => {
 
         if (Object.keys(auth).length !== 0){
-            return (auth?.roles?.includes(allowedRoles) ? true : false);
+            return (!!auth?.roles?.includes(allowedRoles));
         } 
         else if (jwt !== null) {
             const [isValid, decoded] = decodeToken(jwt);
-            if (isValid) {
-                return true
-            }
-            else {
-                return false
-            }
+            return !!isValid;
         }
         else {
             return false

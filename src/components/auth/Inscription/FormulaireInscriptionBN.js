@@ -15,9 +15,6 @@ const FormulaireInscriptionBN = () => {
     const [mdp2, setMdp2] = useState('');
     const [mdp, setMdp] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({});
-    const [options, setOptions] = useState([]);
-    const [hasErrorAPI, setHasErrorAPI] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     const {token} =useParams();
     const navigate = useNavigate();
@@ -97,71 +94,80 @@ const FormulaireInscriptionBN = () => {
 
     }
     return (
-        loading ? <div>Loading...</div> : hasErrorAPI ? <div>Error occured while fetching data.</div> :
             <div className="FormulaireInscription">
-                <div className="row justify-content-md-center  mt-3">
-                    <div className="col col-lg-5 border border-dark">
-                        <h1 className="justify-content-center align-items-center">
-                            <u>INSCRIPTION A LA PLATEFORME</u>
-                        </h1>
+                <div className="row justify-content-md-center">
+                    <div className="col col-lg-5">
+                        <h3 className="color-mc">
+                            Inscription en tant que membre du bureau national
+                        </h3>
+                        <hr/>
                     </div>
                 </div>
-                <div className="row justify-content-md-center mt-3">
+                <div className="row justify-content-md-center">
                     <div className="col col-lg-5 ">
                         <form>
-                            <div className="form-group">
-                                <label htmlFor="nomUtilisateur" className="mt-2 mb-2">Choisissez un nom d'utilisateur</label>
+                            <div className="form-group mb-3">
+                                <label htmlFor="nomUtilisateur" className="form-label">Choisissez un nom d'utilisateur</label>
                                 <input
                                     type="text"
                                     name="nomUtilisateur"
                                     value={nomUtilisateur}
                                     onChange={event => setNomUtilisateur(event.target.value)}
-                                    className="form-control mt-2"
+                                    className="form-control"
+                                    required={true}
                                     id="email"/>
                                 <div className="text-danger">{hasUnfilled.nomUtilisateur}</div>
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="poste" className="mt-2 mb-2">Indiquez votre poste</label>
+                            <div className="form-group mb-3">
+                                <label htmlFor="poste" className="form-label">Indiquez votre poste</label>
                                 <input
                                     type="text"
                                     name="poste"
                                     value={poste}
                                     onChange={event => setPoste(event.target.value)}
-                                    className="form-control mt-2"
+                                    className="form-control"
+                                    placeholder="VP Formations"
+                                    required={true}
                                     id="email"/>
                                 <div className="text-danger">{hasUnfilled.nom}</div>
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="mdp1" className="mt-2">Choisissez un mot de passe</label>
+                            <div className="form-group mb-3">
+                                <label htmlFor="mdp1" className="form-label">Choisissez un mot de passe</label>
                                 <input
                                     type="password"
                                     name="mdp1"
+                                    required={true}
                                     value={mdp1}
                                     onChange={event => {
                                         setMdp(event.target.value);
                                         setMdp1(event.target.value)
                                     }}
-                                    className="form-control mt-2"
+                                    className="form-control "
                                     id="email"/>
                                 <div className="text-danger">{hasUnfilled.mdp1}</div>
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="mdp2" className="mt-2">Confirmez le mot de passe</label>
+                            <div className="form-group mb-3">
+                                <label htmlFor="mdp2" className="form-label">Confirmez le mot de passe</label>
                                 <input
                                     type="password"
                                     name="mdp2"
                                     value={mdp2}
+                                    required={true}
                                     onChange={event => setMdp2(event.target.value)}
-                                    className="form-control mt-2"
+                                    className="form-control "
                                     id="email"/>
                                 <div className="text-danger">{hasUnfilled.mdp2}</div>
                             </div>
                             <div className="d-flex justify-content-center">
                                 <div className="p-2">
-                                    <input type="button" value="Valider" className="btn btn-primary" onClick={clic}/>
+                                    <button type="button" className="btn btn-mc" onClick={clic}>
+                                        Valider
+                                    </button>
                                 </div>
                                 <div className="p-2">
-                                    <input type="button" value="Reset" className="btn btn-primary" onClick={resetForm}/>
+                                    <button type="button" className="btn btn-mc" onClick={resetForm}>
+                                        Effacer
+                                    </button>
                                 </div>
                             </div>
                         </form>

@@ -15,3 +15,7 @@
     overflow: hidden;
     outline: none;
 }
+
+.filter-box {
+    border-right: 1px solid black;
+}

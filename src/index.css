@@ -31,9 +31,9 @@ code {
 }
 
 .btn-outline-mc{
-  color: #2B309B !important;
+  color: #4E53AC !important;
   background-color: #fff !important;
-  border-color: #2B309B !important;
+  border-color: #4E53AC !important;
 }
 
 #modificaitionFormation table tr td:last-child, #modificaitionFormation table tr th:last-child{ /* last-child returns the last instance of the td */

@@ -2,10 +2,14 @@
   text-align: center;
 }
 .Icones{
+  margin-right: 3px;
   width:1.5rem;
   height:1.5rem;
-  margin:0;
-  color:#2B309B;
+  color:#4E53AC;
+}
+
+.color-mc {
+  color: #2B309B;
 }
 
 .IconesBlanc{

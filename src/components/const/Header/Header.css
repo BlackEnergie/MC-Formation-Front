@@ -20,18 +20,18 @@
     padding : 0 3rem 0 3rem;
 }
 
-
 #imageNavBar{
     height: 4rem;
     width: 4rem;
     margin-bottom:0;
 }
 
-#navbarBrand{
+.navbar-brand{
+    margin-left: 10px ;
     display:flex;
     justify-content: center;
     align-items: center;
-    color:white;
+    color: white !important;
 }
 
 .nav-link{

@@ -17,21 +17,28 @@ const TableAccueil = ({Donnee}) => {
         return token.role === "ROLE_ASSO"
     }
 
+    const domaineLibelleList = (domaines) => {
+        let list = [];
+        domaines.map((domaine) => {
+            list.push(domaine.libelle)
+        })
+        return list;
+    }
+
 
     const DisplayData = () => {
         const display = Donnee.map((info) =>
             <tr key={info.id}>
                 <td className={statutToStyle(info.statut)}>{statutToString(info.statut)}</td>
                 <td>{info.cadre ? info.cadre : "N/A"}</td>
-                <td>{info.domaines.map((domaine) => domaine.libelle + ", ")}</td>
+                <td>{domaineLibelleList(info.domaines).join(", ")}</td>
                 <td>{info.titre ? info.titre : "Provisoire : " + info.sujet}</td>
-                <td>{info.association.nomComplet}</td>
+                <td title={info.association.nomComplet}>{info.association.acronyme}</td>
                 <td>{info.formateurs.length > 0 ? info.formateurs.map((formateur) => formateur.nomComplet) : "Aucun"}</td>
                 <td>{info.date ? info.date : "N/A"}</td>
-                <td key={info.id}>
+                <td className="text-center" key={info.id}>
                     <Link to={'/formation/' + info.id}>
                         <AiOutlineZoomIn className="Icones me-2"/>
-
                     </Link>
                     {checkRoleAsso() ?
                         (<></>) :
@@ -44,7 +51,7 @@ const TableAccueil = ({Donnee}) => {
         return (
             <>
                 {
-                    Donnee.length > 0 ? display : "No data"
+                    Donnee.length > 0 ? display : <tr>No data</tr>
                 }
             </>
         )
@@ -54,7 +61,15 @@ const TableAccueil = ({Donnee}) => {
 
     return (
         <>
-            <div className="hint-text mt-2">1 à {nbFormations} sur <b>{nbFormations}</b> résultats</div>
+            <div className="row">
+                <div className="col p-0">
+                    <h3 className="form-label color-mc">Formations</h3>
+                </div>
+                <div className="col text-end">
+                    <div className="hint-text"><b>{nbFormations}</b> résultat{nbFormations>1?"s":""}</div>
+                </div>
+            </div>
+            <hr/>
             <div className="table-wrapper" id="tableAccueil">
                 <table className="table table-striped mt-2 table-sort table-arrows">
                     <thead>
@@ -70,7 +85,7 @@ const TableAccueil = ({Donnee}) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {DisplayData()}
+                        {DisplayData()}
                     </tbody>
                 </table>
             </div>

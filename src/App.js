@@ -15,7 +15,7 @@ import VueDetailleeFormation from './components/formation/VueDetailleeFormation/
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProtectedRoute from './components/defaults/ProtectedRoute';
 import FormulaireInscription from './components/auth/Inscription/FormulaireInscription';
-import Admin from './components/auth/Inscription/Admin';
+import Admin from './components/Admin/Admin';
 import decodeToken from './auth/decodeToken';
 
 function App() {
@@ -29,7 +29,6 @@ function App() {
       const [isValid, decoded] = decodeToken(jwt);
       if (isValid) {
           role = decoded.role;
-          console.log(role);
       }
     }
   }
@@ -42,39 +41,39 @@ function App() {
         <Route path="connexion" element={<Connexion />} />
 
         {/* protected routes */}
-        <Route element={<ProtectedRoute redirectPath='/connexion' isLogedIn={!!jwt} isAllowed={!!jwt} />}>
+        <Route element={<ProtectedRoute redirectPath='/connexion' isLoggedIn={!!jwt} isAllowed={!!jwt} />}>
           <Route path="/" element={<Accueil />} />
         </Route>
         <Route
           path="demandeFormation"
           element={
-            <ProtectedRoute redirectPath="/unauthorized" isLogedIn={!!jwt} isAllowed={['ROLE_ASSO'].includes(role)}>
+            <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_ASSO'].includes(role)}>
               <DemandeFormation />
             </ProtectedRoute>}
         />
         <Route
           path="admin"
           element={
-          <ProtectedRoute redirectPath="/unauthorized" isLogedIn={!!jwt} isAllowed={['ROLE_BN'].includes(role)}>
+          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN'].includes(role)}>
             <Admin />
           </ProtectedRoute>}
         />
         <Route
           path="formation/:id"
           element={
-          <ProtectedRoute redirectPath="/unauthorized" isLogedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO'].includes(role)}>
+          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO'].includes(role)}>
             <VueDetailleeFormation />
           </ProtectedRoute>}
         />
         <Route
           path="formation/edit/:id"
           element={
-          <ProtectedRoute redirectPath="/unauthorized" isLogedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO'].includes(role)}>
+          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO'].includes(role)}>
             <ModificationFormation />
           </ProtectedRoute>}
         />
 
-        <Route path="unauthorized" element={<Unauthorized />} />
+        <Route path="unauthorized" element={<Missing />} />
         <Route path="inscription/:token" element={<FormulaireInscription/>} />
 
         {/* catch all */}

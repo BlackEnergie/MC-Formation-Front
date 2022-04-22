@@ -4,6 +4,7 @@ import Utilisateur from "../../../api/model/Utilisateur";
 import axios from '../../../api/axios';
 import {useOutletContext} from 'react-router-dom';
 import {hashPassword} from "../../../utils/PasswordUtils";
+import {toast} from "react-hot-toast";
 
 const LOGIN_URL = '/auth/signin';
 
@@ -38,17 +39,17 @@ const Connexion = () => {
             localStorage.setItem("accessToken", accessToken);
             setLogin(true);
             window.location.href = '/';
+            toast.success("Connecté en tant que '" + nomUtilisateur + "'");
         } catch (err) {
+            let errMsg = 'La connexion a échoué';
             if (!err?.response) {
-                setErrMsg('no server response');
+                errMsg = 'Pas de réponse du serveur';
             } else if (err.response?.status === 400) {
-                setErrMsg('missing nom utilisateur ou mot de passe');
+                errMsg = "Nom d'utilisateur ou mot de passe manquant";
             } else if (err.response?.status === 401) {
-                setErrMsg('Unauthorized');
-            } else {
-                setErrMsg('Login failed.');
+                errMsg = "Nom d'utilisateur ou mot de passe incorrect";
             }
-            setNomUtilisateur('');
+            toast.error(errMsg);
             setPwd('');
         }
     }
@@ -58,7 +59,6 @@ const Connexion = () => {
             <div className="div-Connexion">
                 <img src={require("../../../assets/img/logoblue_bgwht.png")} id="logo_connexion" alt="logo-mc"/>
                 <h1 id="titreConnexion">Connectez-vous à l'espace <br/> Formation de MIAGE Connection</h1>
-                <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                 <form id="Form-Connexion" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <input

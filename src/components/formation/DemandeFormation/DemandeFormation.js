@@ -123,66 +123,68 @@ const DemandeFormation = () => {
 
     return (
         <div className="DemandeFormation">
-            <div className="row justify-content-md-center  mt-3">
+            <div className="col-2 position-absolute">
+                <Link to="/" id="linkAccueil">
+                    <button type="button" id="buttonArriere"
+                            className="btn btn-primary d-flex align-items-center">
+                        <AiOutlineRollback className="Icones me-2"/>
+                        Revenir à l'accueil
+                    </button>
+                </Link>
+            </div>
+            <div className="row justify-content-md-center mt-1">
                 <div className="col col-lg-5">
-                    <h1 className="d-flex justify-content-center">
-                        DEMANDE DE FORMATION
-                    </h1>
+                    <h3 className="color-mc">
+                        Demande de formation
+                    </h3>
+                    <hr/>
                 </div>
             </div>
-            <div className="row justify-content-md-center mt-3">
+            <div className="row justify-content-md-center">
                 <div className="col col-lg-5 ">
                     <form>
-                        <div className="form-group">
-                            <label htmlFor="name" className="mt-2 mb-2">Indiquez le ou les domaines de formation
-                                ?</label>
+                        <div className="form-group mb-3">
+                            <label htmlFor="name" className="form-label">Indiquez le ou les domaines de formation ?</label>
                             <SelectComp domaines={domaines} options={options} handleChange={setDomaines}/>
                             <div className="text-danger">{hasUnfilled.domaines}</div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="sujet" className="mt-2">Indiquez le sujet de la formation</label>
+                        <div className="form-group mb-3">
+                            <label htmlFor="sujet" className="form-label">Indiquez le sujet de la formation</label>
                             <input
                                 type="text"
                                 name="sujet"
                                 value={sujet}
                                 onChange={event => setSujet(event.target.value)}
-                                className="form-control mt-2"
+                                className="form-control"
                                 placeholder="Ex : Trésorie"
                                 id="email"/>
                             <div className="text-danger">{hasUnfilled.sujet}</div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="detail" className="mt-2">Ajoutez des détails sur votre demande de
+                        <div className="form-group mb-3">
+                            <label htmlFor="detail" className="form-label">Ajoutez des détails sur votre demande de
                                 formation</label>
                             <textarea
                                 name="detail"
                                 value={detail}
                                 onChange={event => setDetail(event.target.value)}
-                                placeholder="Date, déroulement, pré-requis, ..."
-                                className="form-control mt-2"
+                                placeholder="Date souhaité, déroulement, pré-requis, ..."
+                                className="form-control"
                                 rows="7"/>
                             <div className="text-danger">{hasUnfilled.detail}</div>
                         </div>
                         <div className="d-flex justify-content-center">
                             <div className="p-2">
-                                <input type="button" value="Valider" className="btn btn-mc" onClick={validate}/>
+                                <button type="button" className="btn btn-mc" onClick={validate}>
+                                    Valider
+                                </button>
                             </div>
                             <div className="p-2">
-                                <input type="button" value="Reset" className="btn btn-mc" onClick={resetForm}/>
+                                <button type="button" className="btn btn-mc" onClick={resetForm}>
+                                    Effacer
+                                </button>
                             </div>
                         </div>
                     </form>
-                </div>
-            </div>
-            <div className="row mt-5">
-                <div className="d-flex justify-content-center">
-                    <Link to="/" id="linkAccueil">
-                        <button type="button" id="buttonArriere"
-                                className="btn btn-primary d-flex align-items-center">
-                            <AiOutlineRollback className="Icones me-2"/>
-                            Revenir à l'accueil
-                        </button>
-                    </Link>
                 </div>
             </div>
         </div>
@@ -197,7 +199,7 @@ const SelectComp = ({domaines, options, handleChange}) => {
         <Select
             isMulti
             isClearable
-            isSearchable={false}
+            isSearchable
             defaultValue={domaines}
             value={domaines}
             placeholder="Veuillez selectionner au moins un domaine"

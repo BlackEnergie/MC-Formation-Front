@@ -20,7 +20,7 @@ ReactDOM.render(
               <Route path="/*" element={<App />} />
             </Routes>
             <Toaster
-              position="top-right"
+              position="top-center"
               toastOptions={{
                   className: '',
                   duration: 5000,

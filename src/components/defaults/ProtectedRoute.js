@@ -3,10 +3,9 @@ import {
     Outlet,
 } from 'react-router-dom';
 
-const ProtectedRoute = ({isAllowed, isLogedIn, redirectPath = '/unauthorized', children}) => {
-    console.log(`is allowed `, isAllowed);
+const ProtectedRoute = ({isAllowed, isLoggedIn, redirectPath = '/unauthorized', children}) => {
 
-    if (!isLogedIn) {
+    if (!isLoggedIn) {
         return <Navigate to={'/connexion'} replace />;
     }
     else if (!isAllowed) {
