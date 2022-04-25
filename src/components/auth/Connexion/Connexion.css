@@ -1,0 +1,34 @@
+
+
+.div-Connexion {
+    text-align: center;
+    color: black;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+}
+
+#logo_connexion{
+    width : 15%;
+}
+
+#titreConnexion{
+    border-bottom: solid;
+    font-size : 1.5rem;
+    margin-bottom: 1rem;
+}
+
+
+#Form-Connexion{
+    margin-top: 5px;
+    margin-bottom:1rem;
+}
+
+#contactVP{
+    font-size: 1rem;
+    margin-bottom:0.5rem;
+}
+

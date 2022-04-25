@@ -1,0 +1,21 @@
+.AiOutlineZoomIn{
+    color:black;
+}
+
+#accueil tr td a{
+    display:flex;
+    justify-content: center;
+}
+
+#tableAccueil .btn{
+    background-color: transparent !important;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
+
+.filter-box {
+    border-right: 1px solid black;
+}

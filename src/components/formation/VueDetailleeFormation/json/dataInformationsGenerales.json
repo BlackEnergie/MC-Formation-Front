@@ -1,0 +1,89 @@
+{ "data":
+  [
+    {
+      "id": 1,
+      "statut": "A venir",
+      "duree": 75.0,
+      "date": "2022-04-11",
+      "nom": "Comment faire une formation ?",
+      "type": "Formation",
+      "prerequis": "être membre d'une asso",
+      "audience": "Tout le monde",
+      "parties": "{Les parties}",
+      "materiels": "Aucun",
+      "cadre": "WINTER 2021 Nancy",
+      "formateurs": [
+        {
+          "id" : 1,
+          "nom": "Bernard",
+          "prenom":"Chacal"
+        },
+        {
+          "id" : 2,
+          "nom":"Guillaume",
+          "prenom" :"Perdu"
+        }
+      ],
+      "sujet": "Un sujet de formation",
+      "detail": "Wesh 1",
+      "domaines": [
+        {
+          "code": "2",
+          "libelle": "Affaires académiques",
+          "description": "Relations entre votre association et son environnement universitaire et fédératif."
+        },
+        {
+          "code": "3",
+          "libelle": "Association d'alumni",
+          "description": "Gestion d'une association d'anciens élèves."
+        }
+      ],
+      "dateDemande": "2022-04-11",
+      "association": [
+        {
+        "id": "18",
+        "ville": "Bordeaux",
+        "college": "A",
+        "acronyme": "AMB",
+        "nomComplet": "Asso MIAGE Bordeaux"
+        },
+        {
+          "id": "24",
+          "ville": "Bordeaux",
+          "college": "A",
+          "acronyme": "JMC",
+          "nomComplet": "Junior Miage Concept Bordeaux"
+        },
+        {
+          "id": "25",
+          "ville": "Bordeaux",
+          "college": "A",
+          "acronyme": "AMB",
+          "nomComplet": "Asso MIAGE Bordeaux"
+        },
+        {
+          "id": "26",
+          "ville": "Bordeaux",
+          "college": "A",
+          "acronyme": "AMB",
+          "nomComplet": "Asso MIAGE Bordeaux"
+        },
+        {
+          "id": "27",
+          "ville": "Bordeaux",
+          "college": "A",
+          "acronyme": "AMB",
+          "nomComplet": "Asso MIAGE Bordeaux"
+        },
+        {
+          "id": "28",
+          "ville": "Bordeaux",
+          "college": "A",
+          "acronyme": "AMB",
+          "nomComplet": "Asso MIAGE Bordeaux"
+        }
+      ]
+    }
+  ]
+}
+
