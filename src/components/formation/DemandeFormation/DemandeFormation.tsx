@@ -47,7 +47,7 @@ const DemandeFormation = () => {
         let domainesArr = []
         demande.sujet = sujet;
         demande.detail = detail;
-        const token = decodeToken(localStorage.getItem('accessToken'))[1];
+        const token = decodeToken(localStorage.getItem('accessToken')).decoded;
         demande.nomUtilisateur = token.sub
         domaines.forEach(element => {
             let domaine = new Domaine();

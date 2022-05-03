@@ -41,9 +41,7 @@ function App() {
 
         {/* protected routes */}
         <Route element={
-        <ProtectedRoute redirectPath='/connexion' isLoggedIn={!!jwt} isAllowed={!!jwt}>
-          <Connexion/>
-        </ProtectedRoute>}>
+        <ProtectedRoute redirectPath='/connexion' isLoggedIn={!!jwt} isAllowed={!!jwt}/>}>
         <Route path="/" element={<Accueil />} />
         </Route>
         <Route
