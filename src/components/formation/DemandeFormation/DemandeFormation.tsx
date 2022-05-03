@@ -14,7 +14,7 @@ const DemandeFormation = () => {
     const [sujet, setSujet] = useState('');
     const [detail, setDetail] = useState('');
     const [domaines, setDomaines] = useState([]);
-    const [hasUnfilled, setHasUnfilled] = useState({});
+    const [hasUnfilled, setHasUnfilled] = useState({domaines:"",sujet:"",detail:""});
     const [options, setOptions] = useState([]);
 
     const axiosPrivate = useAxiosPrivate();
@@ -61,13 +61,13 @@ const DemandeFormation = () => {
     const resetForm = () => {
         setSujet('');
         setDetail('');
-        setHasUnfilled({});
+        setHasUnfilled({domaines:"",sujet:"",detail:""});
         setDomaines([]);
     }
 
     const validate = () => {
 
-        let hasUnfilled = {};
+        let hasUnfilled = {domaines:"",sujet:"",detail:""};
         let isValid = true;
 
         if (!sujet) {
@@ -169,7 +169,7 @@ const DemandeFormation = () => {
                                 onChange={event => setDetail(event.target.value)}
                                 placeholder="Date souhaité, déroulement, pré-requis, ..."
                                 className="form-control"
-                                rows="7"/>
+                                rows={7} />
                             <div className="text-danger">{hasUnfilled.detail}</div>
                         </div>
                         <div className="d-flex justify-content-center">

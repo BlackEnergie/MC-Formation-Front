@@ -12,7 +12,7 @@ const MAIL_URL = 'http://localhost:8080/auth/signup/invite'
 const Admin = () => {
 
     const [email, setMail] = useState('');
-    const [hasUnfilled, setHasUnfilled] = useState({});
+    const [hasUnfilled, setHasUnfilled] = useState({email: ""});
     const [selectRole, setSelectRole] = useState({value: "ROLE_FORMATEUR", label: "Formateur"});
     const [loading, setLoading] = useState(false)
 
@@ -43,7 +43,7 @@ const Admin = () => {
 
     const validate = (e) => {
         e.preventDefault();
-        let hasUnfilled = {};
+        let hasUnfilled = {email: ""};
         let isValid = true;
         if (!email) {
             isValid = false;

@@ -1,7 +1,8 @@
 import React from 'react';
-import Donnee from './json/dataFilConducteur.json';
 
-const FilConducteurFormation = () =>{
+const FilConducteurFormation = (formation) =>{
+    
+    let Donnee = formation.formation;
     const AfficherDataFilConducteur = Donnee.data.map(
         (info) => {
             return (

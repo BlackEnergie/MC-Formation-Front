@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import useAxiosPrivate from '../../auth/hooks/useAxiosPrivate';
 import Select from 'react-select';
 import TableAccueil from "./TableAccueil/TableAccueil";
 
-const Accueil = () => {
+function Accueil  () {
     const [options, setOptions] = useState([]);
     const [offsetParam, setOffsetParam] = useState(0);
     const [selectedOptionStatut, setSelectedOptionStatut] = useState(null);
@@ -35,7 +35,7 @@ const Accueil = () => {
     }, [])
 
 
-    const getFormationsAccueil = async () => {
+    const getFormationsAccueil = async () : Promise<any> => {
         if (offset == null) {
             for (const element of options) {
                 optionsArray.push(element);
@@ -81,7 +81,7 @@ const Accueil = () => {
             setStatutFiltre("");
             getFormationsAccueil();
         }
-        setOffsetParam(offsetParam + limitParam);
+        setOffsetParam(offsetParam + limitParam.value);
     }
 
     const renderMoreFormation = () => {

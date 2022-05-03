@@ -9,7 +9,6 @@ import Layout from './Layout';
 import DemandeFormation from './components/formation/DemandeFormation/DemandeFormation';
 import Accueil from "./components/Accueil/AccueilFormations";
 import ModificationFormation from "./components/formation/ModificationFormation/ModificationFormation";
-import Unauthorized from './components/defaults/Unauthorized';
 import Missing from './components/defaults/Missing';
 import VueDetailleeFormation from './components/formation/VueDetailleeFormation/VueDetailleeFormation'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,7 +25,7 @@ function App() {
   const setRole = () => {
 
     if (jwt !== null) {
-      const [isValid, decoded] = decodeToken(jwt);
+      const {isValid, decoded} = decodeToken(jwt);
       if (isValid) {
           role = decoded.role;
       }
@@ -41,8 +40,11 @@ function App() {
         <Route path="connexion" element={<Connexion />} />
 
         {/* protected routes */}
-        <Route element={<ProtectedRoute redirectPath='/connexion' isLoggedIn={!!jwt} isAllowed={!!jwt} />}>
-          <Route path="/" element={<Accueil />} />
+        <Route element={
+        <ProtectedRoute redirectPath='/connexion' isLoggedIn={!!jwt} isAllowed={!!jwt}>
+          <Connexion/>
+        </ProtectedRoute>}>
+        <Route path="/" element={<Accueil />} />
         </Route>
         <Route
           path="demandeFormation"

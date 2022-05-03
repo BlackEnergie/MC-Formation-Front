@@ -56,7 +56,7 @@ const ModificationFormation = (props) => {
                     }
                     {
                         (showComponent === 2) ? (
-                            <ModificationFicheDeFormation formation={formation}/>
+                            <ModificationFicheDeFormation/>
                         ) : (<></>)
                     }
                     {

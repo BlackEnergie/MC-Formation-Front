@@ -1,3 +1,4 @@
+import React from 'react';
 const PageTest = () => {
     return (
         <article style={{ padding: "100px" }}>
