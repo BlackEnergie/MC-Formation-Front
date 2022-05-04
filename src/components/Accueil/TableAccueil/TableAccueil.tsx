@@ -13,7 +13,7 @@ const TableAccueil = ({Donnee}) => {
 
 
     const checkRoleAsso = () => {
-        const token = decodeToken(localStorage.getItem("accessToken"))[1];
+        const token = decodeToken(localStorage.getItem("accessToken")).decoded;
         return token.role === "ROLE_ASSO"
     }
 

@@ -16,7 +16,7 @@ const FormulaireInscriptionAsso = () => {
     const [mdp1, setMdp1] = useState('');
     const [mdp2, setMdp2] = useState('');
     const [mdp, setMdp] = useState('');
-    const [hasUnfilled, setHasUnfilled] = useState({});
+    const [hasUnfilled, setHasUnfilled] = useState({nomUtilisateur : "", acronyme: "", nomComplet: "", ville: "", college: "", mdp1: "", mdp2: ""});
     const [select, setSelect] = useState('er');
 
     const INSCRIPTION_URL = '/auth/signup/create?token='
@@ -57,9 +57,9 @@ const FormulaireInscriptionAsso = () => {
         setNomUtilisateur('');
         setAcronyme('');
         setNomComplet('');
-        setHasUnfilled({});
+        setHasUnfilled({nomUtilisateur : "", acronyme: "", nomComplet: "", ville: "", college: "", mdp1: "", mdp2: ""});
         setVille('');
-        setCollege([]);
+        setCollege('');
         setMdp1('');
         setMdp2('');
         setSelect("er")
@@ -68,7 +68,7 @@ const FormulaireInscriptionAsso = () => {
 
     const validate = () => {
 
-        let hasUnfilled = {};
+        let hasUnfilled = {nomUtilisateur : "", acronyme: "", nomComplet: "", ville: "", college: "", mdp1: "", mdp2: ""};
         let isValid = true;
 
         if (!nomUtilisateur) {
@@ -171,8 +171,11 @@ const FormulaireInscriptionAsso = () => {
                         <div className="form-group mb-3">
                             <label htmlFor="college" className="form-label">Indiquez le college dont dépend votre
                                 association</label>
-                            <select class="form-select" aria-label="Default select example" value={select}
-                                    onChange={(e) => setCollege(e.target.value) & setSelect(e.target.value)}>
+                            <select className='form-select' aria-label="Default select example" value={select}
+                                    onChange={(e) => {
+                                        setCollege(e.target.value);
+                                        setSelect(e.target.value);
+                                    }}>
                                 <option value="A">Collège A</option>
                                 <option value="B">Collège B</option>
                                 <option value="C">Collège C</option>

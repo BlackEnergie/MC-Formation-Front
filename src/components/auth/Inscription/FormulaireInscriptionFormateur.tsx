@@ -1,31 +1,31 @@
 import React, {useState} from 'react';
-import MembreBureauNational from "../../../api/model/MembreBureauNational";
-import SignupRequest from "../../../api/model/SignupRequest";
-import axios from '../../../api/axios';
-import toast from 'react-hot-toast';
-import {useNavigate,useParams} from 'react-router-dom';
+import Formateur from "../../../api/model/Formateur";
 import {hashPassword} from "../../../utils/PasswordUtils";
+import {useNavigate, useParams} from "react-router-dom";
+import axios from "../../../api/axios";
+import toast from "react-hot-toast";
+import SignupRequest from "../../../api/model/SignupRequest";
 
+// MANQUE DOMAINES
 
-
-const FormulaireInscriptionBN = () => {
+const FormulaireInscriptionFormateur = () => {
     const [nomUtilisateur, setNomUtilisateur] = useState('');
-    const [poste, setPoste] = useState('');
+    const [nom, setNom] = useState('');
+    const [prenom, setPrenom] = useState('');
     const [mdp1, setMdp1] = useState('');
     const [mdp2, setMdp2] = useState('');
     const [mdp, setMdp] = useState('');
-    const [hasUnfilled, setHasUnfilled] = useState({});
-
-    const {token} =useParams();
-    const navigate = useNavigate();
+    const [hasUnfilled, setHasUnfilled] = useState({nom:"",prenom:"",nomUtilisateur:"",mdp1:"",mdp2:""});
 
     const INSCRIPTION_URL = '/auth/signup/create?token='
+    const {token} = useParams();
+    const navigate = useNavigate();
 
     const handleSubmit = async () => {
-        let membreBureauNational = mapFormToMembreBureauNational();
+        let association = mapFormToFormateur();
         try {
             const response = await axios.post(INSCRIPTION_URL + token,
-                JSON.stringify(membreBureauNational),
+                JSON.stringify(association),
                 {
                     headers: {'Content-Type': 'application/json'}
                 }
@@ -37,37 +37,43 @@ const FormulaireInscriptionBN = () => {
         }
     }
 
-    const mapFormToMembreBureauNational = () => {
-        let membreBureauNational = new MembreBureauNational()
-        membreBureauNational.poste = poste;
+    //(le token retourne rôle + mail)
+    const mapFormToFormateur = () => {
+        let formateur = new Formateur()
         let signup = new SignupRequest()
         signup.nomUtilisateur = nomUtilisateur;
         signup.password = hashPassword(mdp);
-        signup.membreBureauNational = membreBureauNational;
+        formateur.nom = nom;
+        formateur.prenom = prenom;
+        signup.formateur = formateur;
         return signup;
     }
 
-
     const resetForm = () => {
         setNomUtilisateur('');
-        setPoste('');
-        setHasUnfilled({});
+        setNom('');
+        setPrenom('');
+        setHasUnfilled({nom:"",prenom:"",nomUtilisateur:"",mdp1:"",mdp2:""});
         setMdp1('');
         setMdp2('');
     }
 
     const validate = () => {
 
-        let hasUnfilled = {};
+        let hasUnfilled = {nom:"",prenom:"",nomUtilisateur:"",mdp1:"",mdp2:""};
         let isValid = true;
 
         if (!nomUtilisateur) {
             isValid = false;
             hasUnfilled["nomUtilisateur"] = "Renseigner un nom d'utilisateur.";
         }
-        if (!poste) {
+        if (!nom) {
             isValid = false;
             hasUnfilled["nom"] = "Renseigner votre nom.";
+        }
+        if (!prenom) {
+            isValid = false;
+            hasUnfilled["prenom"] = "Renseigner votre prénom.";
         }
         if (!mdp1) {
             isValid = false;
@@ -98,7 +104,7 @@ const FormulaireInscriptionBN = () => {
                 <div className="row justify-content-md-center">
                     <div className="col col-lg-5">
                         <h3 className="color-mc">
-                            Inscription en tant que membre du bureau national
+                            Inscription en tant que formateur
                         </h3>
                         <hr/>
                     </div>
@@ -107,7 +113,8 @@ const FormulaireInscriptionBN = () => {
                     <div className="col col-lg-5 ">
                         <form>
                             <div className="form-group mb-3">
-                                <label htmlFor="nomUtilisateur" className="form-label">Choisissez un nom d'utilisateur</label>
+                                <label htmlFor="nomUtilisateur" className="form-label">Choisissez un nom
+                                    d'utilisateur</label>
                                 <input
                                     type="text"
                                     name="nomUtilisateur"
@@ -119,30 +126,41 @@ const FormulaireInscriptionBN = () => {
                                 <div className="text-danger">{hasUnfilled.nomUtilisateur}</div>
                             </div>
                             <div className="form-group mb-3">
-                                <label htmlFor="poste" className="form-label">Indiquez votre poste</label>
+                                <label htmlFor="nom" className="form-label">Indiquez votre nom</label>
                                 <input
                                     type="text"
-                                    name="poste"
-                                    value={poste}
-                                    onChange={event => setPoste(event.target.value)}
+                                    name="nom"
+                                    value={nom}
+                                    onChange={event => setNom(event.target.value)}
                                     className="form-control"
-                                    placeholder="VP Formations"
                                     required={true}
                                     id="email"/>
                                 <div className="text-danger">{hasUnfilled.nom}</div>
+                            </div>
+                            <div className="form-group mb-3">
+                                <label htmlFor="prenom" className="form-label">Indiquez votre prénom</label>
+                                <input
+                                    type="text"
+                                    name="prenom"
+                                    value={prenom}
+                                    onChange={event => setPrenom(event.target.value)}
+                                    className="form-control"
+                                    required={true}
+                                    id="email"/>
+                                <div className="text-danger">{hasUnfilled.prenom}</div>
                             </div>
                             <div className="form-group mb-3">
                                 <label htmlFor="mdp1" className="form-label">Choisissez un mot de passe</label>
                                 <input
                                     type="password"
                                     name="mdp1"
-                                    required={true}
                                     value={mdp1}
+                                    required={true}
                                     onChange={event => {
                                         setMdp(event.target.value);
                                         setMdp1(event.target.value)
                                     }}
-                                    className="form-control "
+                                    className="form-control"
                                     id="email"/>
                                 <div className="text-danger">{hasUnfilled.mdp1}</div>
                             </div>
@@ -154,7 +172,7 @@ const FormulaireInscriptionBN = () => {
                                     value={mdp2}
                                     required={true}
                                     onChange={event => setMdp2(event.target.value)}
-                                    className="form-control "
+                                    className="form-control"
                                     id="email"/>
                                 <div className="text-danger">{hasUnfilled.mdp2}</div>
                             </div>
@@ -178,4 +196,4 @@ const FormulaireInscriptionBN = () => {
 }
 
 
-export default FormulaireInscriptionBN;
+export default FormulaireInscriptionFormateur;

@@ -1,3 +1,4 @@
+import React from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import './Header.css';
@@ -8,14 +9,15 @@ import jwtUtils from "../../../auth/decodeToken";
 import {FiLogOut} from "react-icons/fi";
 import {IoIosAddCircleOutline} from "react-icons/io";
 
+
 const Header = (props) => {
 
     const navigate = useNavigate();
 
     const checkAdminRole = () => {
         let res = false;
-        const token = jwtUtils(localStorage.getItem("accessToken"));
-        if (token !== null && token[0] && token[1].role === "ROLE_BN") {
+        const token = jwtUtils(localStorage.getItem("accessToken")).decoded;
+        if (token !== null && token.role === "ROLE_BN") {
             res = true;
         }
         return res;
@@ -23,8 +25,9 @@ const Header = (props) => {
 
     const checkAssoRole = () => {
         let res = false;
-        const token = jwtUtils(localStorage.getItem("accessToken"));
-        if (token !== null && token[0] && token[1].role === "ROLE_ASSO") {
+        const token = jwtUtils(localStorage.getItem("accessToken")).decoded;
+        console.log(token);
+        if (token !== null && token.role === "ROLE_ASSO") {
             res = true;
         }
         return res;

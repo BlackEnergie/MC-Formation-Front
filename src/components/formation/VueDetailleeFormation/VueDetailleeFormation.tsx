@@ -1,9 +1,9 @@
 import './VueDetailleeFormation.css';
 import React, {useEffect, useState} from 'react';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
-import InformationsGeneralesFormation from "../VueDetailleeFormation/InformationsGeneralesFormation";
-import InformationsFicheDeFormation from "../VueDetailleeFormation/InformationsFicheDeFormation";
-import FilConducteurFormation from "../VueDetailleeFormation/FilConducteurFormation";
+import InformationsGeneralesFormation from "./InformationsGeneralesFormation";
+import InformationsFicheDeFormation from "./InformationsFicheDeFormation";
+import FilConducteurFormation from "./FilConducteurFormation";
 import NavFormation from '../NavigationFormation/NavFormation';
 import {useParams} from "react-router-dom";
 
