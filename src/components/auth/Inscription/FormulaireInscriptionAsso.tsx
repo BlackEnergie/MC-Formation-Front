@@ -4,7 +4,7 @@ import {hashPassword} from "../../../utils/PasswordUtils";
 import toast from "react-hot-toast";
 import SignupRequest from "../../../api/model/SignupRequest";
 import {useNavigate, useParams} from 'react-router-dom';
-import { postSignUpWithRole } from '../../../serverInteraction/PostSignUp';
+import { PostSignUpWithRole } from '../../../serverInteraction/PostSignUp';
 
 
 const FormulaireInscriptionAsso = () => {
@@ -25,7 +25,7 @@ const FormulaireInscriptionAsso = () => {
     const handleSubmit = async () => {
         let association = mapFormToAssociation();
         try {
-            const response = await postSignUpWithRole(token, association);
+            const response = await PostSignUpWithRole(token, association);
             toast.success(response.data.message);
             navigate('/')
         } catch (err) {

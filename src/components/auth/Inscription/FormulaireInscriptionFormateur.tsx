@@ -4,7 +4,7 @@ import {hashPassword} from "../../../utils/PasswordUtils";
 import {useNavigate, useParams} from "react-router-dom";
 import toast from "react-hot-toast";
 import SignupRequest from "../../../api/model/SignupRequest";
-import { postSignUpWithRole } from '../../../serverInteraction/PostSignUp';
+import { PostSignUpWithRole } from '../../../serverInteraction/PostSignUp';
 
 // MANQUE DOMAINES
 
@@ -24,7 +24,7 @@ const FormulaireInscriptionFormateur = () => {
     const handleSubmit = async () => {
         let formateur = mapFormToFormateur();
         try {
-            const response = await postSignUpWithRole(token, formateur);
+            const response = await PostSignUpWithRole(token, formateur);
             toast.success(response.data.message);
             navigate('/')
         } catch (err) {

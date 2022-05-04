@@ -5,7 +5,7 @@ import InformationsFicheDeFormation from "./InformationsFicheDeFormation";
 import FilConducteurFormation from "./FilConducteurFormation";
 import NavFormation from '../NavigationFormation/NavFormation';
 import {useParams} from "react-router-dom";
-import { fetchFormationById } from '../../../serverInteraction/FetchFormation';
+import { FetchFormationById } from '../../../serverInteraction/FetchFormation';
 
 const VueDetailleeFormation = () =>  {
     const [formation, setFormation] = useState(null);
@@ -17,7 +17,7 @@ const VueDetailleeFormation = () =>  {
     }, [])
     const getFormationDetails = async () => {
         try {
-            const response = await fetchFormationById(id)
+            const response = await FetchFormationById(id)
             setFormation(response?.data);
             console.log(formation);
             setShowComponent(1);

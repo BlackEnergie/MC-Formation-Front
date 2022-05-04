@@ -1,5 +1,3 @@
-import useAxiosPrivate from "../auth/hooks/useAxiosPrivate"
-
 export enum EntryPoint {
     ALL_FORMATION = '/formations',
     FORMATION_BY_ID = '/formation',
@@ -10,5 +8,3 @@ export enum EntryPoint {
 export const headersTemplate = {
     'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
 }
-
-export const axiosPrivate = useAxiosPrivate()

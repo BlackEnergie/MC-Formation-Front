@@ -1,7 +1,8 @@
 import React, { useEffect, useState} from 'react';
 import Select from 'react-select';
 import TableAccueil from "./TableAccueil/TableAccueil";
-import { fetchAllFormation } from '../../serverInteraction/FetchFormation';
+import { FetchAllFormation } from '../../serverInteraction/FetchFormation';
+import useAxiosPrivate from '../../auth/hooks/useAxiosPrivate';
 
 function Accueil  () {
     const [options, setOptions] = useState([]);
@@ -12,6 +13,8 @@ function Accueil  () {
     const limitParam = { value: 5 };
     let offset = null;
     let statutParam = null;
+
+    const axiosPrivate = useAxiosPrivate()
 
     const optionsStatut = [
         {filter: 'statut', value: 'DEMANDE', label: 'Demande'},
@@ -41,7 +44,7 @@ function Accueil  () {
             }
         }
         try {
-            const response = await fetchAllFormation(offset, offsetParam, limitParam, statutParam, statutFiltre);
+            const response = await FetchAllFormation(axiosPrivate, offset, offsetParam, limitParam, statutParam, statutFiltre);
             for (const element of response.data) {
                 optionsArray.push(element);
             }

@@ -5,7 +5,7 @@ import FilConducteurFormation from "../VueDetailleeFormation/FilConducteurFormat
 import NavFormation from "../NavigationFormation/NavFormation";
 import {useParams} from "react-router-dom";
 import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
-import { fetchFormationById } from '../../../serverInteraction/FetchFormation';
+import { FetchFormationById } from '../../../serverInteraction/FetchFormation';
 
 const ModificationFormation = (props) => {
 
@@ -20,7 +20,7 @@ const ModificationFormation = (props) => {
 
     const getFormationDetails = async () => {
         try {
-            const response = await fetchFormationById(id)
+            const response = await FetchFormationById(id)
             setFormation(response?.data);
             console.log(response.data);
 

@@ -1,14 +1,16 @@
 import axios from "../api/axios";
 import SignupRequest from "../api/model/SignupRequest";
-import { axiosPrivate } from "./common";
+import useAxiosPrivate from "../auth/hooks/useAxiosPrivate";
 
 const INSCRIPTION_URL = '/auth/signup/create?token='
 
-export function postSignUp (token: String) {
-    return axiosPrivate.post('/auth/signup/checkToken?token=' + token, {})
+
+
+export function PostSignUp (token: String) {
+    return useAxiosPrivate().post('/auth/signup/checkToken?token=' + token, {})
 }
 
-export function postSignUpWithRole (token: String, role: SignupRequest){
+export function PostSignUpWithRole (token: String, role: SignupRequest){
     return axios.post(INSCRIPTION_URL + token,
         JSON.stringify(role),
         {
