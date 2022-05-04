@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import MembreBureauNational from "../../../api/model/MembreBureauNational";
 import SignupRequest from "../../../api/model/SignupRequest";
-import axios from '../../../api/axios';
 import toast from 'react-hot-toast';
 import {useNavigate,useParams} from 'react-router-dom';
 import {hashPassword} from "../../../utils/PasswordUtils";
+import { postSignUpWithRole } from '../../../serverInteraction/PostSignUp';
 
 
 
@@ -19,17 +19,10 @@ const FormulaireInscriptionBN = () => {
     const {token} =useParams();
     const navigate = useNavigate();
 
-    const INSCRIPTION_URL = '/auth/signup/create?token='
-
     const handleSubmit = async () => {
         let membreBureauNational = mapFormToMembreBureauNational();
         try {
-            const response = await axios.post(INSCRIPTION_URL + token,
-                JSON.stringify(membreBureauNational),
-                {
-                    headers: {'Content-Type': 'application/json'}
-                }
-            );
+            const response = await postSignUpWithRole(token, membreBureauNational);
             toast.success(response.data.message);
             navigate('/')
         } catch (err) {

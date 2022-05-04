@@ -3,15 +3,14 @@ import ModificationFormationInformationGenerales from "./ModificationInformation
 import ModificationFicheDeFormation from "./ModificationFicheDeFormation";
 import FilConducteurFormation from "../VueDetailleeFormation/FilConducteurFormation";
 import NavFormation from "../NavigationFormation/NavFormation";
-import useAxiosPrivate from "../../../auth/hooks/useAxiosPrivate";
 import {useParams} from "react-router-dom";
 import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
+import { fetchFormationById } from '../../../serverInteraction/FetchFormation';
 
 const ModificationFormation = (props) => {
 
     const [formation, setFormation] = useState(null);
     const [showComponent, setShowComponent] = useState(0);
-    const axiosPrivate = useAxiosPrivate();
     let { id } = useParams();
 
     useEffect(() => {
@@ -21,11 +20,7 @@ const ModificationFormation = (props) => {
 
     const getFormationDetails = async () => {
         try {
-            const response = await axiosPrivate.get('/formation/'+id, {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-                }
-            });
+            const response = await fetchFormationById(id)
             setFormation(response?.data);
             console.log(response.data);
 

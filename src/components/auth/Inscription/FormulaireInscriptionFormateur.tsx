@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import Formateur from "../../../api/model/Formateur";
 import {hashPassword} from "../../../utils/PasswordUtils";
 import {useNavigate, useParams} from "react-router-dom";
-import axios from "../../../api/axios";
 import toast from "react-hot-toast";
 import SignupRequest from "../../../api/model/SignupRequest";
+import { postSignUpWithRole } from '../../../serverInteraction/PostSignUp';
 
 // MANQUE DOMAINES
 
@@ -17,19 +17,14 @@ const FormulaireInscriptionFormateur = () => {
     const [mdp, setMdp] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({nom:"",prenom:"",nomUtilisateur:"",mdp1:"",mdp2:""});
 
-    const INSCRIPTION_URL = '/auth/signup/create?token='
+    
     const {token} = useParams();
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
-        let association = mapFormToFormateur();
+        let formateur = mapFormToFormateur();
         try {
-            const response = await axios.post(INSCRIPTION_URL + token,
-                JSON.stringify(association),
-                {
-                    headers: {'Content-Type': 'application/json'}
-                }
-            );
+            const response = await postSignUpWithRole(token, formateur);
             toast.success(response.data.message);
             navigate('/')
         } catch (err) {
