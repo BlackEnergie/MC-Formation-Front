@@ -4,9 +4,43 @@ import TextField from '@mui/material/TextField';
 import React, {useState} from 'react';
 import {AiOutlineRollback} from "react-icons/ai";
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import {PostResetMdp} from "../../../serverInteraction/PostResetMdp";
+import useAxiosPrivate from "../../../auth/hooks/useAxiosPrivate";
 
 const MotDePasseOublie = () => {
 
+    const [email, setMail] = useState('');
+    const [hasUnfilled, setHasUnfilled] = useState({email: ""});
+    const [loading, setLoading] = useState(false);
+
+
+    const axiosPrivate = useAxiosPrivate();
+
+    const handleSubmit = async () => {
+        try {
+            setLoading(true)
+            const response = await PostResetMdp(axiosPrivate, email)
+            toast.success(response.data.message);
+        } catch (err) {
+            toast.error(err.response.data.message);
+        }
+    }
+
+
+    const validate = (e) => {
+        e.preventDefault();
+        let hasUnfilled = {email: ""};
+        let isValid = true;
+        if (!email) {
+            isValid = false;
+        }
+        if (isValid) {
+            handleSubmit();
+        } else {
+            setHasUnfilled(hasUnfilled);
+        }
+    }
 
     return(
         <>
@@ -21,9 +55,12 @@ const MotDePasseOublie = () => {
                     Recevoir un mail pour changer votre mot de passe :
                 </div>
                 <div>
-                    <TextField id="outlined-basic" label="Adresse mail" variant="outlined" margin="normal" sx={{mr:2}} size="small" />
+                    <TextField id="outlined-basic" label="Adresse mail" variant="outlined" margin="normal" sx={{mr:2}} size="small"
+                               onChange={event => setMail(event.target.value)}
+                    />
                 </div>
-                <Button variant="contained" color="secondary">Confirmer</Button>
+                <Button variant="contained" color="secondary"
+                        onClick={validate}>Confirmer</Button>
             </Grid>
             
             </Grid>

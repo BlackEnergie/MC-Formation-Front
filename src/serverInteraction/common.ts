@@ -6,10 +6,12 @@ export enum EntryPoint {
     GENERAL_SIGN_UP = '/auth/signup/checkToken?token=',
     CHECK_TOKEN = '/auth/signup/checkToken?token=',
     INSCRIPTION_URL = '/auth/signup/create?token=',
-    MAIL_URL = '/auth/signup/invite',
+    INVITE_MAIL_URL = '/auth/signup/invite',
     LOGIN_URL = '/auth/signin',
     DOMAINES = '/data/domaines',
-    DEMANDE = '/demande/creer'
+    DEMANDE = '/demande/creer',
+    RESET_PASSWORD_MAIL_URL='/auth/resetPassword/invite'
+
 } 
 
 export const headersTemplate = {
