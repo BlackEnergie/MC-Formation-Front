@@ -14,6 +14,8 @@ const FormulaireInscription = () => {
     const {token} = useParams();
     const navigate = useNavigate();
 
+    const axiosPrivate = useAxiosPrivate()
+
     useEffect(() => {
         checktoken();
     }, [])
@@ -22,7 +24,7 @@ const FormulaireInscription = () => {
     const checktoken = async () => {
         setLoading(true)
         try {
-            const response = await PostSignUp(useAxiosPrivate(), token);
+            const response = await PostSignUp(axiosPrivate, token);
             setShowFormulaire(response?.data?.message);
         } catch (err) {
             toast.error(err.response.data?.message);

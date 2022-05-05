@@ -34,6 +34,7 @@ function Accueil  () {
         getFormationsAccueil();
     }, [])
 
+    const axiosPrivate = useAxiosPrivate()
 
     const getFormationsAccueil = async () : Promise<any> => {
         if (offset == null) {
@@ -42,7 +43,7 @@ function Accueil  () {
             }
         }
         try {
-            const response = await FetchAllFormation(useAxiosPrivate(), offset, offsetParam, limitParam, statutParam, statutFiltre);
+            const response = await FetchAllFormation(axiosPrivate, offset, offsetParam, limitParam, statutParam, statutFiltre);
             for (const element of response.data) {
                 optionsArray.push(element);
             }

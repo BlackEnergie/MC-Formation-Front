@@ -13,12 +13,14 @@ const VueDetailleeFormation = () =>  {
     const [showComponent, setShowComponent] = useState(0);
     let { id } = useParams();       
 
+    const axiosPrivate = useAxiosPrivate()
+
     useEffect(() => {
         getFormationDetails();
     }, [])
     const getFormationDetails = async () => {
         try {
-            const response = await FetchFormationById(useAxiosPrivate(), id)
+            const response = await FetchFormationById(axiosPrivate, id)
             setFormation(response?.data);
             console.log(formation);
             setShowComponent(1);

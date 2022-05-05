@@ -14,6 +14,8 @@ const ModificationFormation = (props) => {
     const [showComponent, setShowComponent] = useState(0);
     let { id } = useParams();
 
+    const axiosPrivate = useAxiosPrivate()
+
     useEffect(() => {
         getFormationDetails();
     }, [])
@@ -21,7 +23,7 @@ const ModificationFormation = (props) => {
 
     const getFormationDetails = async () => {
         try {
-            const response = await FetchFormationById(useAxiosPrivate(), id)
+            const response = await FetchFormationById(axiosPrivate, id)
             setFormation(response?.data);
             console.log(response.data);
 

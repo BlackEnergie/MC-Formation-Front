@@ -20,13 +20,15 @@ const FormulaireInscriptionAsso = () => {
     const [hasUnfilled, setHasUnfilled] = useState({nomUtilisateur : "", acronyme: "", nomComplet: "", ville: "", college: "", mdp1: "", mdp2: ""});
     const [select, setSelect] = useState('er');
 
+    const axiosPrivate = useAxiosPrivate()
+
     const {token} = useParams();
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
         let association = mapFormToAssociation();
         try {
-            const response = await PostSignUpWithRole(useAxiosPrivate(), token, association);
+            const response = await PostSignUpWithRole(axiosPrivate, token, association);
             toast.success(response.data.message);
             navigate('/')
         } catch (err) {

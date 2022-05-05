@@ -18,14 +18,15 @@ const FormulaireInscriptionFormateur = () => {
     const [mdp, setMdp] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({nom:"",prenom:"",nomUtilisateur:"",mdp1:"",mdp2:""});
 
-    
+    const axiosPrivate = useAxiosPrivate()
+
     const {token} = useParams();
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
         let formateur = mapFormToFormateur();
         try {
-            const response = await PostSignUpWithRole(useAxiosPrivate(),token, formateur);
+            const response = await PostSignUpWithRole(axiosPrivate, token, formateur);
             toast.success(response.data.message);
             navigate('/')
         } catch (err) {
