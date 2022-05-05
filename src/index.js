@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {theme} from './Theme.js';
+import { ThemeProvider } from '@mui/material/styles';
 import reportWebVitals from './reportWebVitals';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './auth/context/AuthProvider';
@@ -11,25 +13,26 @@ import {
   Route,
   Routes,
 } from 'react-router-dom';
-
 ReactDOM.render(
     <React.StrictMode>
       <BrowserRouter>
         <AuthProvider>
-            <Routes>
-              <Route path="/*" element={<App />} />
-            </Routes>
-            <Toaster
-              position="top-center"
-              toastOptions={{
-                  className: '',
-                  duration: 5000,
-                  style: {
-                    background: 'white',
-                    color: 'black',
-                  },
-                }} 
-            />
+          <ThemeProvider theme={theme}>
+              <Routes>
+                <Route path="/*" element={<App />} />
+              </Routes>
+              <Toaster
+                position="top-center"
+                toastOptions={{
+                    className: '',
+                    duration: 5000,
+                    style: {
+                      background: 'white',
+                      color: 'black',
+                    },
+                  }} 
+              />
+            </ThemeProvider>
         </AuthProvider>
       </BrowserRouter>
     </React.StrictMode>,
