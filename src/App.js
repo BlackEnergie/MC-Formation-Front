@@ -15,6 +15,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ProtectedRoute from './components/defaults/ProtectedRoute';
 import FormulaireInscription from './components/auth/Inscription/FormulaireInscription';
 import Admin from './components/Admin/Admin';
+import MotDePasseOublie from './components/auth/MotDePasseOublie/MotDePasseOublie';
 import decodeToken from './auth/decodeToken';
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
         <Route path="/" element={<Layout />}>
         {/* public routes */}
         <Route path="connexion" element={<Connexion />} />
-
+        <Route path="motDePasseOublie" element={<MotDePasseOublie/>} />
         {/* protected routes */}
         <Route element={
         <ProtectedRoute redirectPath='/connexion' isLoggedIn={!!jwt} isAllowed={!!jwt}/>}>

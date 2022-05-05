@@ -1,11 +1,12 @@
 import './Connexion.css';
 import React, {useState} from 'react';
 import Utilisateur from "../../../api/model/Utilisateur";
-import {useOutletContext} from 'react-router-dom';
+import {Link, useOutletContext} from 'react-router-dom';
 import {hashPassword} from "../../../utils/PasswordUtils";
 import {toast} from "react-hot-toast";
 import { PostConnexion } from '../../../serverInteraction/PostConnexion';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
+import { Link as LinkMui } from '@mui/material';
 
 const Connexion = () => {
 
@@ -81,7 +82,9 @@ const Connexion = () => {
                            alt="buttonConnexion"/>
                 </form>
                 <div id="contactVP">
-                    <a href="/">Entrer en contact avec VP Formation</a>
+                    <Link to="/motDePasseOublie">
+                        <LinkMui color="primary">Mot de passe oublié ?</LinkMui>
+                    </Link>
                 </div>
             </div>
         </>
