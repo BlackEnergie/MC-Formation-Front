@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import Association from "../../../api/model/Association";
 import {hashPassword} from "../../../utils/PasswordUtils";
-import axios from "../../../api/axios";
 import toast from "react-hot-toast";
 import SignupRequest from "../../../api/model/SignupRequest";
 import {useNavigate, useParams} from 'react-router-dom';
+import { PostSignUpWithRole } from '../../../serverInteraction/PostSignUp';
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
 
 const FormulaireInscriptionAsso = () => {
@@ -19,19 +20,15 @@ const FormulaireInscriptionAsso = () => {
     const [hasUnfilled, setHasUnfilled] = useState({nomUtilisateur : "", acronyme: "", nomComplet: "", ville: "", college: "", mdp1: "", mdp2: ""});
     const [select, setSelect] = useState('er');
 
-    const INSCRIPTION_URL = '/auth/signup/create?token='
+    const axiosPrivate = useAxiosPrivate()
+
     const {token} = useParams();
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
         let association = mapFormToAssociation();
         try {
-            const response = await axios.post(INSCRIPTION_URL + token,
-                JSON.stringify(association),
-                {
-                    headers: {'Content-Type': 'application/json'}
-                }
-            );
+            const response = await PostSignUpWithRole(axiosPrivate, token, association);
             toast.success(response.data.message);
             navigate('/')
         } catch (err) {

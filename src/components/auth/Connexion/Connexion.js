@@ -1,12 +1,11 @@
 import './Connexion.css';
 import React, {useState} from 'react';
 import Utilisateur from "../../../api/model/Utilisateur";
-import axios from '../../../api/axios';
 import {useOutletContext} from 'react-router-dom';
 import {hashPassword} from "../../../utils/PasswordUtils";
 import {toast} from "react-hot-toast";
-
-const LOGIN_URL = '/auth/signin';
+import { PostConnexion } from '../../../serverInteraction/PostConnexion';
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
 const Connexion = () => {
 
@@ -23,18 +22,14 @@ const Connexion = () => {
         return utilisateur;
     }
 
+    const axiosPrivate = useAxiosPrivate()
+    
     const handleSubmit = async (e) => {
 
         e.preventDefault();
         const utilisateur = mapFormToUtilisateur();
         try {
-            const response = await axios.post(LOGIN_URL,
-                JSON.stringify(utilisateur),
-                {
-                    headers: {'Content-Type': 'application/json'},
-                    withCredentials: false,
-                }
-            );
+            const response = await PostConnexion(axiosPrivate, utilisateur)
             const accessToken = response?.data?.accessToken;
             localStorage.setItem("accessToken", accessToken);
             setLogin(true);

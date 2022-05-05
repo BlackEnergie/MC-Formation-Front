@@ -1,7 +1,8 @@
 import React, { useEffect, useState} from 'react';
-import useAxiosPrivate from '../../auth/hooks/useAxiosPrivate';
 import Select from 'react-select';
 import TableAccueil from "./TableAccueil/TableAccueil";
+import { FetchAllFormation } from '../../serverInteraction/FetchFormation';
+import useAxiosPrivate from '../../auth/hooks/useAxiosPrivate';
 
 function Accueil  () {
     const [options, setOptions] = useState([]);
@@ -9,7 +10,6 @@ function Accueil  () {
     const [selectedOptionStatut, setSelectedOptionStatut] = useState(null);
     const [selectedOptionNbElements, setSelectedOptionNbElements] = useState({filter: 'nbElements', value : 5, label: '5'});
     const [statutFiltre, setStatutFiltre] = useState("");
-    const axiosPrivate = useAxiosPrivate();
     const limitParam = { value: 5 };
     let offset = null;
     let statutParam = null;
@@ -34,6 +34,7 @@ function Accueil  () {
         getFormationsAccueil();
     }, [])
 
+    const axiosPrivate = useAxiosPrivate()
 
     const getFormationsAccueil = async () : Promise<any> => {
         if (offset == null) {
@@ -42,16 +43,7 @@ function Accueil  () {
             }
         }
         try {
-            const response = await axiosPrivate.get('/formations', {
-                params: {
-                    offset: (offset != null ? 0 : offsetParam),
-                    limit: limitParam.value,
-                    statut: (statutParam != null ? statutParam : statutFiltre)
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-                }
-            });
+            const response = await FetchAllFormation(axiosPrivate, offset, offsetParam, limitParam, statutParam, statutFiltre);
             for (const element of response.data) {
                 optionsArray.push(element);
             }

@@ -1,28 +1,26 @@
 import './VueDetailleeFormation.css';
 import React, {useEffect, useState} from 'react';
-import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import InformationsGeneralesFormation from "./InformationsGeneralesFormation";
 import InformationsFicheDeFormation from "./InformationsFicheDeFormation";
 import FilConducteurFormation from "./FilConducteurFormation";
 import NavFormation from '../NavigationFormation/NavFormation';
 import {useParams} from "react-router-dom";
+import { FetchFormationById } from '../../../serverInteraction/FetchFormation';
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
 const VueDetailleeFormation = () =>  {
     const [formation, setFormation] = useState(null);
     const [showComponent, setShowComponent] = useState(0);
-    const axiosPrivate = useAxiosPrivate();
-    let { id } = useParams();
+    let { id } = useParams();       
+
+    const axiosPrivate = useAxiosPrivate()
 
     useEffect(() => {
         getFormationDetails();
     }, [])
     const getFormationDetails = async () => {
         try {
-            const response = await axiosPrivate.get('/formation/'+id, {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-                }
-            }); 
+            const response = await FetchFormationById(axiosPrivate, id)
             setFormation(response?.data);
             console.log(formation);
             setShowComponent(1);

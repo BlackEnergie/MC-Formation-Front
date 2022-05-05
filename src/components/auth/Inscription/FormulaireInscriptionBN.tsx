@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import MembreBureauNational from "../../../api/model/MembreBureauNational";
 import SignupRequest from "../../../api/model/SignupRequest";
-import axios from '../../../api/axios';
 import toast from 'react-hot-toast';
 import {useNavigate,useParams} from 'react-router-dom';
 import {hashPassword} from "../../../utils/PasswordUtils";
+import { PostSignUpWithRole } from '../../../serverInteraction/PostSignUp';
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
 
 
@@ -16,20 +17,15 @@ const FormulaireInscriptionBN = () => {
     const [mdp, setMdp] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({nom:"",nomUtilisateur:"",mdp1:"",mdp2:""});
 
+    const axiosPrivate = useAxiosPrivate()
+
     const {token} =useParams();
     const navigate = useNavigate();
-
-    const INSCRIPTION_URL = '/auth/signup/create?token='
 
     const handleSubmit = async () => {
         let membreBureauNational = mapFormToMembreBureauNational();
         try {
-            const response = await axios.post(INSCRIPTION_URL + token,
-                JSON.stringify(membreBureauNational),
-                {
-                    headers: {'Content-Type': 'application/json'}
-                }
-            );
+            const response = await PostSignUpWithRole(axiosPrivate, token, membreBureauNational);
             toast.success(response.data.message);
             navigate('/')
         } catch (err) {

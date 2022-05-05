@@ -7,6 +7,8 @@ import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import decodeToken from "../../../auth/decodeToken";
 import {AiOutlineRollback} from "react-icons/ai";
+import { FetchDomaines } from '../../../serverInteraction/FetchData';
+import { PostDemande } from '../../../serverInteraction/PostDemande';
 
 const DemandeFormation = () => {
     {/* state formulaire */
@@ -24,12 +26,7 @@ const DemandeFormation = () => {
     const handleSubmit = async () => {
         let demande = mapFormToDemande();
         try {
-            const response = await axiosPrivate.post('/demande/creer', JSON.stringify(demande), {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-                }
-            });
+            const response = await PostDemande(axiosPrivate, demande);
             if (response.data.code == 201) {
                 toast.success(response.data.message);
                 resetForm()
@@ -97,12 +94,7 @@ const DemandeFormation = () => {
 
         const getDomaines = async () => {
             try {
-                const response = await axiosPrivate.get('/data/domaines', {
-                    signal: controller.signal,
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-                    }
-                });
+                const response = await FetchDomaines(axiosPrivate, controller);
                 for (const element of response.data) {
                     optionsArray.push({value: element.code, label: element.libelle});
                 }
