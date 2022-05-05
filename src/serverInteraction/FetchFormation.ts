@@ -13,8 +13,8 @@ export function FetchAllFormation ( axios:AxiosInstance, offset: Number, offsetP
     })
 }
 
-export function FetchFormationById(id: String){
-    return useAxiosPrivate().get(EntryPoint.FORMATION_BY_ID + id, {
+export function FetchFormationById(axios:AxiosInstance, id: String){
+    return axios.get(EntryPoint.FORMATION_BY_ID + id, {
         headers: headersTemplate
     }); 
 }

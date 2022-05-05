@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { BASE_URL } from '../serverInteraction/common';
 
-const BASE_URL = "http://" + window.location.hostname + ":8080";
+
 
 export default axios.create({
     baseURL: BASE_URL

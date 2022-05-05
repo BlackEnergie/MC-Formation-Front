@@ -6,18 +6,19 @@ import FilConducteurFormation from "./FilConducteurFormation";
 import NavFormation from '../NavigationFormation/NavFormation';
 import {useParams} from "react-router-dom";
 import { FetchFormationById } from '../../../serverInteraction/FetchFormation';
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
 const VueDetailleeFormation = () =>  {
     const [formation, setFormation] = useState(null);
     const [showComponent, setShowComponent] = useState(0);
     let { id } = useParams();       
-    
+
     useEffect(() => {
         getFormationDetails();
     }, [])
     const getFormationDetails = async () => {
         try {
-            const response = await FetchFormationById(id)
+            const response = await FetchFormationById(useAxiosPrivate(), id)
             setFormation(response?.data);
             console.log(formation);
             setShowComponent(1);

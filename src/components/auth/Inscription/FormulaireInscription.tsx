@@ -6,6 +6,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import toast from 'react-hot-toast';
 import {loader} from "../../../utils/LoaderUtils";
 import { PostSignUp } from '../../../serverInteraction/PostSignUp';
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
 const FormulaireInscription = () => {
     const [showFormulaire, setShowFormulaire] = useState(null);
@@ -21,7 +22,7 @@ const FormulaireInscription = () => {
     const checktoken = async () => {
         setLoading(true)
         try {
-            const response = await PostSignUp(token);
+            const response = await PostSignUp(useAxiosPrivate(), token);
             setShowFormulaire(response?.data?.message);
         } catch (err) {
             toast.error(err.response.data?.message);

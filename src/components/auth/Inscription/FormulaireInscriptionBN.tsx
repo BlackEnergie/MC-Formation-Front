@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import {useNavigate,useParams} from 'react-router-dom';
 import {hashPassword} from "../../../utils/PasswordUtils";
 import { PostSignUpWithRole } from '../../../serverInteraction/PostSignUp';
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
 
 
@@ -16,13 +17,15 @@ const FormulaireInscriptionBN = () => {
     const [mdp, setMdp] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({nom:"",nomUtilisateur:"",mdp1:"",mdp2:""});
 
+    const axiosPrivate = useAxiosPrivate()
+
     const {token} =useParams();
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
         let membreBureauNational = mapFormToMembreBureauNational();
         try {
-            const response = await PostSignUpWithRole(token, membreBureauNational);
+            const response = await PostSignUpWithRole(axiosPrivate, token, membreBureauNational);
             toast.success(response.data.message);
             navigate('/')
         } catch (err) {

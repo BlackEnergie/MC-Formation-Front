@@ -6,6 +6,7 @@ import NavFormation from "../NavigationFormation/NavFormation";
 import {useParams} from "react-router-dom";
 import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
 import { FetchFormationById } from '../../../serverInteraction/FetchFormation';
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
 const ModificationFormation = (props) => {
 
@@ -20,7 +21,7 @@ const ModificationFormation = (props) => {
 
     const getFormationDetails = async () => {
         try {
-            const response = await FetchFormationById(id)
+            const response = await FetchFormationById(useAxiosPrivate(), id)
             setFormation(response?.data);
             console.log(response.data);
 

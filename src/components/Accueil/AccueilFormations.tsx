@@ -14,8 +14,6 @@ function Accueil  () {
     let offset = null;
     let statutParam = null;
 
-    const axiosPrivate = useAxiosPrivate()
-
     const optionsStatut = [
         {filter: 'statut', value: 'DEMANDE', label: 'Demande'},
         {filter: 'statut', value: 'A_ATTRIBUER', label: 'À attribuer'},
@@ -44,7 +42,7 @@ function Accueil  () {
             }
         }
         try {
-            const response = await FetchAllFormation(axiosPrivate, offset, offsetParam, limitParam, statutParam, statutFiltre);
+            const response = await FetchAllFormation(useAxiosPrivate(), offset, offsetParam, limitParam, statutParam, statutFiltre);
             for (const element of response.data) {
                 optionsArray.push(element);
             }

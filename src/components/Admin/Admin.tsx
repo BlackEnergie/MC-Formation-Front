@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import axios from '../../api/axios'
+import axios, { axiosPrivate } from '../../api/axios'
 import toast from 'react-hot-toast';
 import {loader} from "../../utils/LoaderUtils";
 import {FaRegPaperPlane} from "react-icons/fa";
 import Select from "react-select";
 import {Link} from "react-router-dom";
 import {AiOutlineRollback} from "react-icons/ai";
-
-const MAIL_URL = 'http://localhost:8080/auth/signup/invite'
+import { PostMailSingUp } from '../../serverInteraction/PostAdmin';
+import useAxiosPrivate from '../../auth/hooks/useAxiosPrivate';
 
 const Admin = () => {
 
@@ -15,6 +15,8 @@ const Admin = () => {
     const [hasUnfilled, setHasUnfilled] = useState({email: ""});
     const [selectRole, setSelectRole] = useState({value: "ROLE_FORMATEUR", label: "Formateur"});
     const [loading, setLoading] = useState(false)
+
+    const axiosPrivate = useAxiosPrivate()
 
     const optionsRole = [
         {value: "ROLE_FORMATEUR", label: "Formateur"},
@@ -26,14 +28,7 @@ const Admin = () => {
         try {
             setLoading(true)
             const role = selectRole.value;
-            const response = await axios.post(MAIL_URL, JSON.stringify({email, role}),
-                {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
-                        "Content-Type": "application/json",
-                        withCredentials: false,
-                    }
-                });
+            const response = await PostMailSingUp(axiosPrivate, email, role)
             toast.success(response.data.message);
         } catch (err) {
             toast.error(err.response.data.message);
