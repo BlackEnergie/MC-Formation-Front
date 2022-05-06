@@ -5,7 +5,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import toast from "react-hot-toast";
 import SignupRequest from "../../../api/model/SignupRequest";
 import { PostSignUpWithRole } from '../../../serverInteraction/PostSignUp';
-import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
 // MANQUE DOMAINES
 
@@ -18,15 +17,13 @@ const FormulaireInscriptionFormateur = () => {
     const [mdp, setMdp] = useState('');
     const [hasUnfilled, setHasUnfilled] = useState({nom:"",prenom:"",nomUtilisateur:"",mdp1:"",mdp2:""});
 
-    const axiosPrivate = useAxiosPrivate()
-
     const {token} = useParams();
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
         let formateur = mapFormToFormateur();
         try {
-            const response = await PostSignUpWithRole(axiosPrivate, token, formateur);
+            const response = await PostSignUpWithRole( token, formateur);
             toast.success(response.data.message);
             navigate('/')
         } catch (err) {

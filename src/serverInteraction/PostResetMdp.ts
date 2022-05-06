@@ -1,8 +1,11 @@
 import {EntryPoint} from "./common";
-import axios from "../api/axios";
-import {AxiosInstance} from "axios";
+import { axiosPrivate } from "../api/axios";
 
-export function PostResetMdp(axios: AxiosInstance,email: String) {
+export function PostResetMdp(email: String) {
 
-    return axios.post(EntryPoint.RESET_PASSWORD_MAIL_URL+"?email="+email);
+    return axiosPrivate.post(EntryPoint.RESET_PASSWORD_MAIL_URL,"", {
+        params: {
+            email: email
+        }
+    });
 }

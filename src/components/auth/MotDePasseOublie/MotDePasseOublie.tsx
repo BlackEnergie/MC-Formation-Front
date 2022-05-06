@@ -20,7 +20,7 @@ const MotDePasseOublie = () => {
     const handleSubmit = async () => {
         try {
             setLoading(true)
-            const response = await PostResetMdp(axiosPrivate, email)
+            const response = await PostResetMdp(email)
             toast.success(response.data.message);
         } catch (err) {
             toast.error(err.response.data.message);

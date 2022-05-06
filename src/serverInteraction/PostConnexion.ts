@@ -1,7 +1,7 @@
-import { AxiosInstance } from "axios";
+import { axiosPrivate } from "../api/axios";
 import Utilisateur from "../api/model/Utilisateur";
 import { EntryPoint } from "./common";
 
-export function PostConnexion( axios: AxiosInstance, utilisateur: Utilisateur ) {
-    return axios.post(EntryPoint.LOGIN_URL, JSON.stringify(utilisateur));
+export function PostConnexion( utilisateur: Utilisateur ) {
+    return axiosPrivate.post(EntryPoint.LOGIN_URL, JSON.stringify(utilisateur));
 }
