@@ -10,7 +10,9 @@ export enum EntryPoint {
     LOGIN_URL = '/auth/signin',
     DOMAINES = '/data/domaines',
     DEMANDE = '/demande/creer',
-    RESET_PASSWORD_MAIL_URL='/auth/resetPassword/invite'
+    RESET_PASSWORD_MAIL_URL='/auth/resetPassword/invite',
+    RESET_PASSWORD_NEW_PASSWORD = '/auth/resetPassword/save',
+    RESET_PASSWORD_CHECK_TOKEN = '/auth/resetPassword/checkToken'
 
 } 
 

@@ -99,9 +99,6 @@ const MotDePasseOublie = () => {
                             M'envoyer le lien
                         </Button>
                     </Box>
-                    <Link to="/motDePasseOublieToken">
-                        <LinkMui color="primary">Reset Mdp Temporaire</LinkMui>
-                    </Link>
                 </Box>
             </Container>
         </Grid>

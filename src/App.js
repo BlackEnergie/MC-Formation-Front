@@ -16,7 +16,7 @@ import ProtectedRoute from './components/defaults/ProtectedRoute';
 import FormulaireInscription from './components/auth/Inscription/FormulaireInscription';
 import Admin from './components/Admin/Admin';
 import MotDePasseOublie from './components/auth/MotDePasseOublie/MotDePasseOublie';
-import MotDePasseOublieToken from "./components/auth/MotDePasseOublie/MotDePasseOublieToken";
+import ReinitialisationMotDePasse from "./components/auth/MotDePasseOublie/ReinitialisationMotDePasse";
 import decodeToken from './auth/decodeToken';
 
 function App() {
@@ -41,7 +41,7 @@ function App() {
         {/* public routes */}
         <Route path="connexion" element={<Connexion />} />
         <Route path="motDePasseOublie" element={<MotDePasseOublie/>} />
-        <Route path="motDePasseOublieToken" element={<MotDePasseOublieToken/>}/>
+        <Route path="reinitialiserMotDePasse/:token" element={<ReinitialisationMotDePasse/>}/>
         {/* protected routes */}
         <Route element={
         <ProtectedRoute redirectPath='/connexion' isLoggedIn={!!jwt} isAllowed={!!jwt}/>}>
