@@ -64,14 +64,14 @@ function App() {
         <Route
           path="formation/:id"
           element={
-          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO'].includes(role)}>
+          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
             <VueDetailleeFormation />
           </ProtectedRoute>}
         />
         <Route
           path="formation/edit/:id"
           element={
-          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO'].includes(role)}>
+          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
             <ModificationFormation />
           </ProtectedRoute>}
         />
