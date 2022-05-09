@@ -12,31 +12,27 @@ import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
 
 const VueDetailleeFormationV2 = () => {
-    const [formation, setFormation] = useState(null);
+    const [formation, setFormation] = useState({association:{acronyme : "", nomComplet : ""}, dateDemande: "", detail:"", domaines: [], formateurs: [], id: 0, material: [], objectifs: [], statut: "", sujet: ""});
     let {id} = useParams();
     const axiosPrivate = useAxiosPrivate()
 
+
+    useEffect(() => {
+        getFormationDetails();
+    }, [])
 
 
     const getFormationDetails = async () => {
         try {
             const response = await FetchFormationById(axiosPrivate, id)
             setFormation(response?.data);
-            console.log(response.data);
             console.log(formation);
         } catch (err) {
             console.error(err);
         }
     }
 
-    getFormationDetails();
-    console.log("test formation"+formation.statut);
-
-    /*useEffect(() => {
-        console.log("bite");
-        getFormationDetails();
-    }, [getFormationDetails])*/
-
+    
     return (
         <div>
             <Accordion>
