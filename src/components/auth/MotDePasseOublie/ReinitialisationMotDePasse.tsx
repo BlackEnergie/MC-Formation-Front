@@ -127,7 +127,7 @@ const MotDePasseOublie = () => {
 
             <FormControl
               variant="outlined"
-              sx={{ padding: 2, marginTop: 2, width: "75%" }}
+              sx={{ padding: 2, marginTop: 4, width: "75%" }}
             >
               <InputLabel htmlFor="passwordConfirmation">
                 Choisissez votre mot de passe
