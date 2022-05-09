@@ -15,6 +15,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ProtectedRoute from './components/defaults/ProtectedRoute';
 import FormulaireInscription from './components/auth/Inscription/FormulaireInscription';
 import Admin from './components/Admin/Admin';
+import MotDePasseOublie from './components/auth/MotDePasseOublie/MotDePasseOublie';
+import ReinitialisationMotDePasse from "./components/auth/MotDePasseOublie/ReinitialisationMotDePasse";
 import decodeToken from './auth/decodeToken';
 
 function App() {
@@ -38,7 +40,8 @@ function App() {
         <Route path="/" element={<Layout />}>
         {/* public routes */}
         <Route path="connexion" element={<Connexion />} />
-
+        <Route path="motDePasseOublie" element={<MotDePasseOublie/>} />
+        <Route path="reinitialiserMotDePasse/:token" element={<ReinitialisationMotDePasse/>}/>
         {/* protected routes */}
         <Route element={
         <ProtectedRoute redirectPath='/connexion' isLoggedIn={!!jwt} isAllowed={!!jwt}/>}>
@@ -61,14 +64,14 @@ function App() {
         <Route
           path="formation/:id"
           element={
-          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO'].includes(role)}>
+          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
             <VueDetailleeFormation />
           </ProtectedRoute>}
         />
         <Route
           path="formation/edit/:id"
           element={
-          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO'].includes(role)}>
+          <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
             <ModificationFormation />
           </ProtectedRoute>}
         />

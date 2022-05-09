@@ -1,11 +1,11 @@
 import './Connexion.css';
 import React, {useState} from 'react';
 import Utilisateur from "../../../api/model/Utilisateur";
-import {useOutletContext} from 'react-router-dom';
+import {Link, useOutletContext} from 'react-router-dom';
 import {hashPassword} from "../../../utils/PasswordUtils";
 import {toast} from "react-hot-toast";
 import { PostConnexion } from '../../../serverInteraction/PostConnexion';
-import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
+import { Link as LinkMui } from '@mui/material';
 
 const Connexion = () => {
 
@@ -13,7 +13,7 @@ const Connexion = () => {
 
     const [nomUtilisateur, setNomUtilisateur] = useState('');
     const [pwd, setPwd] = useState('');
-    const [errMsg, setErrMsg] = useState('');
+    //const [errMsg, setErrMsg] = useState('');
 
     const mapFormToUtilisateur = () => {
         let utilisateur = new Utilisateur();
@@ -21,15 +21,13 @@ const Connexion = () => {
         utilisateur.password = hashPassword(pwd);
         return utilisateur;
     }
-
-    const axiosPrivate = useAxiosPrivate()
     
     const handleSubmit = async (e) => {
 
         e.preventDefault();
         const utilisateur = mapFormToUtilisateur();
         try {
-            const response = await PostConnexion(axiosPrivate, utilisateur)
+            const response = await PostConnexion(utilisateur)
             const accessToken = response?.data?.accessToken;
             localStorage.setItem("accessToken", accessToken);
             setLogin(true);
@@ -81,7 +79,9 @@ const Connexion = () => {
                            alt="buttonConnexion"/>
                 </form>
                 <div id="contactVP">
-                    <a href="/">Entrer en contact avec VP Formation</a>
+                    <Link to="/motDePasseOublie">
+                        <LinkMui color="primary">Mot de passe oublié ?</LinkMui>
+                    </Link>
                 </div>
             </div>
         </>
