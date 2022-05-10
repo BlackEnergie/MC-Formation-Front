@@ -20,7 +20,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import decodeToken from "../../auth/decodeToken";
 import {AiOutlineEdit, AiOutlineZoomIn} from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { statutToString } from "../../utils/StatutUtils";
+import { statutToString, statutToStyle } from "../../utils/StatutUtils";
 
 
 function Accueil() {
@@ -171,7 +171,7 @@ function Render(data: formation[]) {
             <TableBody>
               {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell align="center" color="pink">{statutToString(row.statut)}</TableCell>
+                  <TableCell align="center" style={{ color : statutToStyle(row.statut)}}>{statutToString(row.statut)}</TableCell>
                   <TableCell align="center">{row.cadre == null ? "N/A" : row.cadre}</TableCell>
                   <TableCell align="center">{domaineLibelleList(row.domaines).join(", ")}</TableCell>
                   <TableCell align="center">{row.titre != null ? row.titre : "Provisoire : " + row.sujet}</TableCell>

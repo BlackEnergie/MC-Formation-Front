@@ -20,16 +20,16 @@ export const statutToStyle = (statut) => {
     let style = "";
     switch (statut) {
         case "DEMANDE" :
-            style = "text-primary"
+            style = "#2B309B"
             break
         case "A_ATTRIBUER":
-            style = "text-danger"
+            style = "red"
             break
         case "A_VENIR":
-            style = "text-success"
+            style = "green"
             break
         case "PASSEE":
-            style = "text-secondary"
+            style = "grey"
     }
     return style;
 }
