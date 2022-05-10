@@ -19,7 +19,7 @@ import {
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
-interface formation {
+export interface formation {
   association: {
     acronyme: string;
     nomComplet: string;
@@ -36,7 +36,7 @@ interface formation {
     prenom: string;
   }[];
   statut: Number;
-  titre?: string;
+  nom?: string;
   sujet: string;
   date?: string;
   id: number;
@@ -88,6 +88,9 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 function TableAccueil(data: formation[]) {
+
+    console.log(data)
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -172,8 +175,8 @@ function TableAccueil(data: formation[]) {
                         : domaineLibelleList(row.domaines).join(", ")}
                     </TableCell>
                     <TableCell align="center">
-                      {row.titre != null
-                        ? row.titre
+                      {row.nom != null
+                        ? row.nom
                         : "Provisoire : " + row.sujet}
                     </TableCell>
                     <TableCell

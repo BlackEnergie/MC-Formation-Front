@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FetchAllFormation } from "../../serverInteraction/FetchFormation";
 import useAxiosPrivate from "../../auth/hooks/useAxiosPrivate";
-import TableAccueil from "./TableAccueil/TableAccueil";
-
+import TableAccueil from "./ComposantAccueil/TableAccueil";
+import { FiltreAccueil } from "./ComposantAccueil/FiltreAccueil";
 
 function Accueil() {
   const [data, setData] = useState([]);
@@ -21,6 +21,8 @@ function Accueil() {
   useEffect(() => {
     getFormationsAccueil();
   }, []);
+
+  FiltreAccueil(data);
 
   return TableAccueil(data);
 }
