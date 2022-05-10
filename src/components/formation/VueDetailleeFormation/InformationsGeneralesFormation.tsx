@@ -49,7 +49,6 @@ const InformationsGeneralesFormation = (formation) =>{
     return (
         <div className="container-fluid">
             {/* Conteneur Info Domaines */}
-            <div className="container shadow p-4 mb-3 bg-white rounded">
                 <div className="row">
                     {/* Conteneur Informations générales */}
                     <div className="col-6">
@@ -92,11 +91,8 @@ const InformationsGeneralesFormation = (formation) =>{
                         </div>
                     </div>
                 </div>
-            </div>
-
 
             {/* Conteneur Formateur Association */}
-            <div className="container shadow p-4 mb-3 bg-white rounded">
                 <div className="row">
 
                     {/* Conteneur Formateur */}
@@ -149,8 +145,6 @@ const InformationsGeneralesFormation = (formation) =>{
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    )
+            </div>)
 }
 export default InformationsGeneralesFormation;

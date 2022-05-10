@@ -58,7 +58,7 @@ const InformationsFicheDeFormation = (formation) => {
     )
     return (
         <div className="container-fluid">
-            <div className="container shadow p-4 mb-3 bg-white rounded">
+
                 <div className="row">
                     <div className="col-6">
                         <div className="row d-flex justify-content-between">
@@ -93,8 +93,6 @@ const InformationsFicheDeFormation = (formation) => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="container shadow p-4 mb-3 bg-white rounded">
                 <div className="row">
                     <div className="col-6">
                         <h3>
@@ -140,7 +138,6 @@ const InformationsFicheDeFormation = (formation) => {
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     );
 }

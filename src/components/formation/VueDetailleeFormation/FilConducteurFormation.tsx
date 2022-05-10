@@ -3,7 +3,7 @@ import React from 'react';
 const FilConducteurFormation = (formation) =>{
     
     let Donnee = formation.formation;
-    const AfficherDataFilConducteur = Donnee.data.map(
+    const AfficherDataFilConducteur = Donnee.data?.map(
         (info) => {
             return (
                 <tr key={info.id}>
@@ -26,7 +26,7 @@ const FilConducteurFormation = (formation) =>{
             </div>
 
 
-            <div className="container-fluid shadow p-3 mb-3 bg-white rounded">
+            <div className="container-fluid  p-3 mb-3 bg-white rounded">
                 <div className="row  mb-3">
 
                     {/* Table filConducteur */}
