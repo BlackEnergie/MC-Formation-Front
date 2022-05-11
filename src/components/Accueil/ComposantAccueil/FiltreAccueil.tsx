@@ -1,16 +1,31 @@
 import { statut } from "../../../utils/StatutUtils";
 import { formation } from "./TableAccueil";
 
+export let filtre = {
+  date_debut: "",
+  date_fin: "",
+  statut: [statut.DEMANDE, statut.A_ATTRIBUER, statut.A_VENIR, statut.PASSEE],
+  domaines: [],
+  cadre: [],
+  sujet: "",
+  asso: [],
+  formateurs: [],
+};
+
+function setFiltre(newFiltre: filtre) {
+  filtre = newFiltre;
+}
+
 export function FiltreAccueil(data: formation[]) {
   const fullFilter: filtre = GetFullFilter(data);
 
-  console.log (fullFilter)
+  console.log(fullFilter);
 }
 
-export interface domaines{
-    code: string;
-    libelle: string;
-    description: string;
+export interface domaines {
+  code: string;
+  libelle: string;
+  description: string;
 }
 
 interface filtre {
@@ -66,28 +81,27 @@ function getListFormateurs(data: formation[]) {
 }
 
 function getCadreList(data: formation[]) {
-    const listCadre: string[] = [];
-  
-    data.map((data) => {
-        listCadre.push(data.cadre);
-    });
-  
-    return listCadre.filter(function (ele, pos) {
-      return listCadre.indexOf(ele) == pos && ele!== undefined;
-    });
-  }
+  const listCadre: string[] = [];
 
+  data.map((data) => {
+    listCadre.push(data.cadre);
+  });
 
-function getDomainesList(data: formation[]){
-    const listDomaines: string[] = [];
-  
-    data.map((data) => {
-        data.domaines.map((domaine) => {
-            listDomaines.push(domaine.libelle);
-        })
+  return listCadre.filter(function (ele, pos) {
+    return listCadre.indexOf(ele) == pos && ele !== undefined;
+  });
+}
+
+function getDomainesList(data: formation[]) {
+  const listDomaines: string[] = [];
+
+  data.map((data) => {
+    data.domaines.map((domaine) => {
+      listDomaines.push(domaine.libelle);
     });
-  
-    return listDomaines.filter(function (ele, pos) {
-      return listDomaines.indexOf(ele) == pos;
-    });
+  });
+
+  return listDomaines.filter(function (ele, pos) {
+    return listDomaines.indexOf(ele) == pos;
+  });
 }
