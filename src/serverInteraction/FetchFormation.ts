@@ -1,14 +1,8 @@
 import { AxiosInstance } from "axios";
-import useAxiosPrivate from "../auth/hooks/useAxiosPrivate";
 import { EntryPoint, headersTemplate } from "./common";
 
-export function FetchAllFormation ( axios:AxiosInstance, offset: Number, offsetParam: Number, limitParam: {value: Number}, statutParam: String, statutFiltre: String) {
+export function FetchAllFormation ( axios:AxiosInstance ) {
     return axios.get(EntryPoint.ALL_FORMATION, {
-        params: {
-            offset: (offset != null ? 0 : offsetParam),
-            limit: limitParam.value,
-            statut: (statutParam != null ? statutParam : statutFiltre)
-        },
         headers: headersTemplate
     })
 }
