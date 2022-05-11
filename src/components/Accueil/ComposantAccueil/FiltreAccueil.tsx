@@ -1,5 +1,7 @@
 import { statut } from "../../../utils/StatutUtils";
 import { formation } from "./TableAccueil";
+import AffichageFiltreAcceuil from "./AffichageFiltreAcceuil";
+import React from "react";
 
 export let filtre = {
   date_debut: "",
@@ -16,10 +18,13 @@ function setFiltre(newFiltre: filtre) {
   filtre = newFiltre;
 }
 
-export function FiltreAccueil(data: formation[]) {
-  const fullFilter: filtre = GetFullFilter(data);
+type Props = { data: formation[] };
 
+export function FiltreAccueil(props:Props) {
+  const data = props.data;
+  const fullFilter: filtre = GetFullFilter(data);
   console.log(fullFilter);
+  return <AffichageFiltreAcceuil filtre={fullFilter} />
   
   
 
@@ -31,7 +36,7 @@ export interface domaines {
   description: string;
 }
 
-interface filtre {
+export interface filtre {
   date_debut: string;
   date_fin: string;
   statut: statut[];
