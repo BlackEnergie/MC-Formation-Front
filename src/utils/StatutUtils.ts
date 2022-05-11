@@ -1,3 +1,10 @@
+export enum statut{
+    DEMANDE = "Demande",
+    A_ATTRIBUER = "À attribuer",
+    A_VENIR = "À venir",
+    PASSEE = "Passée"
+}
+
 export const statutToString = (statut) => {
     let str = statut;
     switch (statut) {

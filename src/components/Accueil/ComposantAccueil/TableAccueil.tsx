@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import { domaines } from "./FiltreAccueil";
 
 export interface formation {
   association: {
@@ -25,11 +26,7 @@ export interface formation {
     nomComplet: string;
   };
   cadre?: string;
-  domaines: {
-    code: string;
-    libelle: string;
-    description: string;
-  }[];
+  domaines: domaines[];
   formateurs: {
     id: number;
     nom: string;
