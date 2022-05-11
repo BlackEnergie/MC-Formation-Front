@@ -1,16 +1,22 @@
-import { Statut } from "../../../utils/StatutUtils";
-import { formation } from "./AccueilAffichage";
+import { statut } from "../../../utils/StatutUtils";
+import { formation } from "./TableAccueil";
 
-export interface domaines {
-  code: string;
-  libelle: string;
-  description: string;
+export function FiltreAccueil(data: formation[]) {
+  const fullFilter: filtre = GetFullFilter(data);
+
+  console.log (fullFilter)
 }
 
-export interface filtre {
+export interface domaines{
+    code: string;
+    libelle: string;
+    description: string;
+}
+
+interface filtre {
   date_debut: string;
   date_fin: string;
-  statut: string[];
+  statut: statut[];
   domaines: string[];
   cadre: string[];
   sujet: string;
@@ -18,17 +24,19 @@ export interface filtre {
   formateurs: string[];
 }
 
-export function GetFullFilter(data: formation[]): filtre {
-  return{
+function GetFullFilter(data: formation[]): filtre {
+  const filtre: filtre = {
     date_debut: "",
     date_fin: "",
-    statut: [Statut.DEMANDE, Statut.A_ATTRIBUER, Statut.A_VENIR, Statut.PASSEE],
+    statut: [statut.DEMANDE, statut.A_ATTRIBUER, statut.A_VENIR, statut.PASSEE],
     domaines: getDomainesList(data),
     cadre: getCadreList(data),
     sujet: "",
     asso: getAssoList(data),
     formateurs: getListFormateurs(data),
   };
+
+  return filtre;
 }
 
 function getAssoList(data: formation[]) {
@@ -58,27 +66,28 @@ function getListFormateurs(data: formation[]) {
 }
 
 function getCadreList(data: formation[]) {
-  const listCadre: string[] = [];
-
-  data.map((data) => {
-    listCadre.push(data.cadre);
-  });
-
-  return listCadre.filter(function (ele, pos) {
-    return listCadre.indexOf(ele) == pos && ele !== undefined;
-  });
-}
-
-function getDomainesList(data: formation[]) {
-  const listDomaines: string[] = [];
-
-  data.map((data) => {
-    data.domaines.map((domaine) => {
-      listDomaines.push(domaine.libelle);
+    const listCadre: string[] = [];
+  
+    data.map((data) => {
+        listCadre.push(data.cadre);
     });
-  });
+  
+    return listCadre.filter(function (ele, pos) {
+      return listCadre.indexOf(ele) == pos && ele!== undefined;
+    });
+  }
 
-  return listDomaines.filter(function (ele, pos) {
-    return listDomaines.indexOf(ele) == pos;
-  });
+
+function getDomainesList(data: formation[]){
+    const listDomaines: string[] = [];
+  
+    data.map((data) => {
+        data.domaines.map((domaine) => {
+            listDomaines.push(domaine.libelle);
+        })
+    });
+  
+    return listDomaines.filter(function (ele, pos) {
+      return listDomaines.indexOf(ele) == pos;
+    });
 }
