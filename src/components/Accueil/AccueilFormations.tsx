@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FetchAllFormation } from "../../serverInteraction/FetchFormation";
 import useAxiosPrivate from "../../auth/hooks/useAxiosPrivate";
-import AccueilAffichage from "./ComposantAccueil/AccueilAffichage";
+import TableAccueil, { formation } from "./ComposantAccueil/TableAccueil";
+import { FiltreAccueil } from "./ComposantAccueil/FiltreAccueil";
+import { Grid, Typography } from "@mui/material";
 
 function Accueil() {
   const [data, setData] = useState([]);
@@ -21,7 +23,20 @@ function Accueil() {
     getFormationsAccueil();
   }, []);
 
-  return AccueilAffichage(data);
+  FiltreAccueil(data);
+
+  return (
+    <>
+      <Grid container spacing={2}>
+        <Grid xs={3}>
+          
+        </Grid>
+        <Grid xs={9}>
+          <TableAccueil data={data} />
+        </Grid>
+      </Grid>
+    </>
+  );
 }
 
 export default Accueil;

@@ -49,6 +49,8 @@ interface TablePaginationActionsProps {
   ) => void;
 }
 
+type Props = { data: formation[] };
+
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const { count, page, rowsPerPage, onPageChange } = props;
 
@@ -84,8 +86,11 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
-function TableAccueil(data: formation[]) {
+function TableAccueil(props: Props) {
 
+  const data = props.data
+
+  console.log(data)
   console.log(filtre);
 
   const [page, setPage] = React.useState(0);
