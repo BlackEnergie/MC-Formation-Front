@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import { domaines } from "./FiltreAccueil";
+import { domaines, filtre } from "./FiltreAccueil";
 
 export interface formation {
   association: {
@@ -86,7 +86,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 
 function TableAccueil(data: formation[]) {
 
-    console.log(data)
+  console.log(filtre);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
