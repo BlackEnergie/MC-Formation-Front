@@ -23,13 +23,13 @@ export const statutToStyle = (statut) => {
             style = "#0D6EFD"
             break
         case "A_ATTRIBUER":
-            style = "red"
+            style = "#DC3545"
             break
         case "A_VENIR":
-            style = "green"
+            style = "#198754"
             break
         case "PASSEE":
-            style = "grey"
+            style = "#6C757D"
     }
     return style;
 }
