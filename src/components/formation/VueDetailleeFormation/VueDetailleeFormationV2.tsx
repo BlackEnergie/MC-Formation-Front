@@ -46,7 +46,7 @@ const VueDetailleeFormationV2 = () => {
     return (
         <Container maxWidth={"xl"}>
             <div>
-                <Accordion>
+                <Accordion defaultExpanded={true}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon/>}
                         aria-controls="panel1a-content"

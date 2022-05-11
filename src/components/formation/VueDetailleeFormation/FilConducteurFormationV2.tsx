@@ -60,8 +60,8 @@ const FilConducteurFormation = (formation) =>{
     return(
 
             <Grid>
-                <TableContainer component={Paper} sx={{maxHeight: 250}}>
-                    <Table sx={{minWidth: 100}} aria-label="customized table">
+                <TableContainer component={Paper} sx={{maxHeight: 400}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow>
                                 <StyledTableCell>#</StyledTableCell>

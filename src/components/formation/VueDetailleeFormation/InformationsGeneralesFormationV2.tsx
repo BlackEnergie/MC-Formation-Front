@@ -14,29 +14,24 @@ import Typography from "@mui/material/Typography";
 const InformationsGeneralesFormationV2 = (formation) => {
 
 
-    let myPaddingStyle = {
-        paddingLeft: 10,
-        paddingBottom: 10,
-    }
     let Donnee = formation.formation;
     const AfficherDataInfoGenerales = () => {
-        console.log(Donnee);
         return (
             <>
-                <StyledTableRow style={myPaddingStyle}>
-                    <StyledTableHead>Statut</StyledTableHead>
+                <StyledTableRow>
+                    <StyledTableCellHead >Statut</StyledTableCellHead>
                     <StyledTableCell>{Donnee.statut}</StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
-                    <StyledTableHead>Cadre</StyledTableHead>
+                    <StyledTableCellHead>Cadre</StyledTableCellHead>
                     <StyledTableCell>{Donnee.cadre}</StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
-                    <StyledTableHead sx={{p:1}}>Type</StyledTableHead>
+                    <StyledTableCellHead>Type</StyledTableCellHead>
                     <StyledTableCell>{Donnee.type}</StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
-                    <StyledTableHead>Date</StyledTableHead>
+                    <StyledTableCellHead>Date</StyledTableCellHead>
                     <StyledTableCell>{Donnee.date}</StyledTableCell>
                 </StyledTableRow>
             </>
@@ -66,9 +61,21 @@ const InformationsGeneralesFormationV2 = (formation) => {
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.common.white,
+            height:55
         },
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
+        },
+    }));
+
+    const StyledTableCellHead = styled(TableCell)(({theme}) => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+            fontWeight:"bold",
         },
     }));
 
@@ -96,32 +103,37 @@ const InformationsGeneralesFormationV2 = (formation) => {
     return (
         <Grid container spacing={2}>
             <Grid item xs={6}>
-            <TableContainer component={Paper}   sx={{maxHeight: 250}}>
                 <Typography
-                    sx={{ flex: '1 1 100%', p:1 }}
+                    sx={{flex: '1 1 100%', p: 1}}
                     variant="h5"
                     color="primary"
                     id="tableTitle"
                     component="div"> Informations Générales
                 </Typography>
-                <Table sx={{minWidth: 100}} aria-label="customized table">
-                    <TableBody>
-                        {AfficherDataInfoGenerales()}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherDataInfoGenerales()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Grid>
             <Grid item xs={6}>
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Domaine(s)
 
-                <TableContainer component={Paper}  sx={{maxHeight: 250}}>
-                    <Typography
-                        sx={{ flex: '1 1 100%', p:1}}
-                        variant="h5"
-                        color="primary"
-                        id="tableTitle"
-                        component="div">Domaine(s)
-
-                    </Typography>
+                </Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
                     <Table stickyHeader aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow>
@@ -136,13 +148,13 @@ const InformationsGeneralesFormationV2 = (formation) => {
                 </TableContainer>
             </Grid>
             <Grid item xs={6}>
-                <TableContainer component={Paper} sx={{maxHeight: 250}}>
-                    <Typography
-                        sx={{ flex: '1 1 100%' , p:1}}
-                        variant="h5"
-                        color="primary"
-                        id="tableTitle"
-                        component="div">Formateur(s)</Typography>
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Formateur(s)</Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
                     <Table sx={{minWidth: 100}} aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow>
@@ -157,14 +169,14 @@ const InformationsGeneralesFormationV2 = (formation) => {
                 </TableContainer>
             </Grid>
             <Grid item xs={6}>
-                <TableContainer component={Paper}   sx={{maxHeight: 250}}>
-                    <Typography
-                        sx={{ flex: '1 1 100%', p:1 }}
-                        variant="h5"
-                        id="tableTitle"
-                        color="primary"
-                        component="div">Association(s) intéréssée(s)</Typography>
-                    <Table sx={{minWidth: 100}} aria-label="customized table">
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    id="tableTitle"
+                    color="primary"
+                    component="div">Association(s) intéréssée(s)</Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader  sx={{minWidth: 100}} aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow>
                                 <StyledTableCell>Nom</StyledTableCell>

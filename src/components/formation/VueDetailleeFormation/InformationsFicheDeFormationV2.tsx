@@ -17,19 +17,19 @@ const InformationsFicheDeFormation = (formation) => {
         return (
             <>
             <StyledTableRow>
-                <StyledTableHead>Type</StyledTableHead>
+                <StyledTableCellHead>Type</StyledTableCellHead>
                 <StyledTableCell>{Donnee.type}</StyledTableCell>
             </StyledTableRow>
             <StyledTableRow>
-                <StyledTableHead>Audience</StyledTableHead>
+                <StyledTableCellHead>Audience</StyledTableCellHead>
                 <StyledTableCell>{Donnee.audience}</StyledTableCell>
             </StyledTableRow>
             <StyledTableRow>
-                <StyledTableHead>Durée</StyledTableHead>
+                <StyledTableCellHead>Durée</StyledTableCellHead>
                 <StyledTableCell>{Donnee.duree}</StyledTableCell>
             </StyledTableRow>
             <StyledTableRow>
-                <StyledTableHead>Prérequis</StyledTableHead>
+                <StyledTableCellHead>Prérequis</StyledTableCellHead>
                 <StyledTableCell>{Donnee.prerequis}</StyledTableCell>
             </StyledTableRow>
             </>
@@ -69,6 +69,7 @@ const InformationsFicheDeFormation = (formation) => {
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.common.white,
+            height:55
         },
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
@@ -96,18 +97,35 @@ const InformationsFicheDeFormation = (formation) => {
         },
     }));
 
+    const StyledTableCellHead = styled(TableCell)(({theme}) => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+            fontWeight:"bold",
+        },
+    }));
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={6}>
-                <TableContainer component={Paper}   sx={{maxHeight: 250}}>
-                    <Typography
-                        sx={{ flex: '1 1 100%', p:1 }}
-                        variant="h5"
-                        color="primary"
-                        id="tableTitle"
-                        component="div"> Informations
-                    </Typography>
-                    <Table sx={{minWidth: 100}} aria-label="customized table">
+                <Typography
+                    sx={{ flex: '1 1 100%', p:1 }}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div"> Informations
+                </Typography>
+                <TableContainer component={Paper}   sx={{maxHeight: 350}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
                         <TableBody>
                             {AfficherFormationDetails()}
                         </TableBody>
@@ -115,15 +133,14 @@ const InformationsFicheDeFormation = (formation) => {
                 </TableContainer>
             </Grid>
             <Grid item xs={6}>
-                <TableContainer component={Paper}  sx={{maxHeight: 250}}>
-                    <Typography
-                        sx={{ flex: '1 1 100%', p:1}}
-                        variant="h5"
-                        color="primary"
-                        id="tableTitle"
-                        component="div">Objectif(s) Pédagogique(s)
-
-                    </Typography>
+                <Typography
+                    sx={{ flex: '1 1 100%', p:1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Objectif(s) Pédagogique(s)
+                </Typography>
+                <TableContainer component={Paper}  sx={{maxHeight: 350}}>
                     <Table stickyHeader aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow>
@@ -137,14 +154,14 @@ const InformationsFicheDeFormation = (formation) => {
                 </TableContainer>
             </Grid>
             <Grid item xs={6}>
-                <TableContainer component={Paper} sx={{maxHeight: 250}}>
-                    <Typography
-                        sx={{ flex: '1 1 100%' , p:1}}
-                        variant="h5"
-                        color="primary"
-                        id="tableTitle"
-                        component="div">Domaine(s)</Typography>
-                    <Table sx={{minWidth: 100}} aria-label="customized table">
+                <Typography
+                    sx={{ flex: '1 1 100%' , p:1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Domaine(s)</Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow>
                                 <StyledTableCell>Code</StyledTableCell>
@@ -158,14 +175,14 @@ const InformationsFicheDeFormation = (formation) => {
                 </TableContainer>
             </Grid>
             <Grid item xs={6}>
-                <TableContainer component={Paper}   sx={{maxHeight: 250}}>
-                    <Typography
-                        sx={{ flex: '1 1 100%', p:1 }}
-                        variant="h5"
-                        color="primary"
-                        id="tableTitle"
-                        component="div">Besoin(s) matériel(s)</Typography>
-                    <Table sx={{minWidth: 100}} aria-label="customized table">
+                <Typography
+                    sx={{ flex: '1 1 100%', p:1 }}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Besoin(s) matériel(s)</Typography>
+                <TableContainer component={Paper}   sx={{maxHeight: 350}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow>
                                 <StyledTableCell></StyledTableCell>
