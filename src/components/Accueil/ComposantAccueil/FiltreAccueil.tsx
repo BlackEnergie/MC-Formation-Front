@@ -3,7 +3,7 @@ import { formation } from "./TableAccueil";
 import AffichageFiltreAcceuil from "./AffichageFiltreAcceuil";
 import React from "react";
 
-export let filtre = {
+export let filtre : filtre= {
   date_debut: "",
   date_fin: "",
   statut: [statut.DEMANDE, statut.A_ATTRIBUER, statut.A_VENIR, statut.PASSEE],
