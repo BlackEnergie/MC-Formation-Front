@@ -20,6 +20,9 @@ export function FiltreAccueil(data: formation[]) {
   const fullFilter: filtre = GetFullFilter(data);
 
   console.log(fullFilter);
+  
+  
+
 }
 
 export interface domaines {
@@ -40,7 +43,7 @@ interface filtre {
 }
 
 function GetFullFilter(data: formation[]): filtre {
-  const filtre: filtre = {
+  return{
     date_debut: "",
     date_fin: "",
     statut: [statut.DEMANDE, statut.A_ATTRIBUER, statut.A_VENIR, statut.PASSEE],
@@ -50,8 +53,6 @@ function GetFullFilter(data: formation[]): filtre {
     asso: getAssoList(data),
     formateurs: getListFormateurs(data),
   };
-
-  return filtre;
 }
 
 function getAssoList(data: formation[]) {
