@@ -3,6 +3,7 @@ import { AiOutlineEdit, AiOutlineZoomIn } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { statutToString, statutToStyle } from "../../../utils/StatutUtils";
 import decodeToken from "../../../auth/decodeToken";
+import {FiltreAccueil} from "./FiltreAccueil";
 import {
   Box,
   IconButton,
@@ -39,6 +40,7 @@ export interface formation {
   id: number;
 }
 
+
 interface TablePaginationActionsProps {
   count: number;
   page: number;
@@ -50,6 +52,8 @@ interface TablePaginationActionsProps {
 }
 
 type Props = { data: formation[] };
+
+
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const { count, page, rowsPerPage, onPageChange } = props;
