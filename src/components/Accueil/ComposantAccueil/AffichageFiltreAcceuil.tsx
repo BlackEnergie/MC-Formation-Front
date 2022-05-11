@@ -13,7 +13,7 @@ function AffichageFiltreAcceuil(props: Props) {
 
     return (
 
-        <Stack spacing={1} sx={{width: 500}}>
+        <Stack spacing={1} sx={{width: 300}}>
             <Autocomplete
                 freeSolo
                 multiple

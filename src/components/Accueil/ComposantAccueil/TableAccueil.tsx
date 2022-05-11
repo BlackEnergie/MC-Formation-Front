@@ -1,9 +1,9 @@
 import React from "react";
 import { AiOutlineEdit, AiOutlineZoomIn } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { statutToString, statutToStyle } from "../../../utils/StatutUtils";
+import { statut, statutToString, statutToStyle } from "../../../utils/StatutUtils";
 import decodeToken from "../../../auth/decodeToken";
-import {FiltreAccueil} from "./FiltreAccueil";
+import { FiltreAccueil } from "./FiltreAccueil";
 import {
   Box,
   IconButton,
@@ -33,13 +33,12 @@ export interface formation {
     nom: string;
     prenom: string;
   }[];
-  statut: Number;
+  statut: statut;
   nom?: string;
   sujet: string;
   date?: string;
   id: number;
 }
-
 
 interface TablePaginationActionsProps {
   count: number;
@@ -52,8 +51,6 @@ interface TablePaginationActionsProps {
 }
 
 type Props = { data: formation[] };
-
-
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -90,11 +87,54 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
+function filtres(data: formation[]): formation[] {
+  const newdata: formation[] = [];
+  let checkFormateur: boolean;
+  let checkDomaine: boolean;
+  data.map((data) => {
+    checkFormateur = true;
+    checkDomaine = true;
+    if (
+      filtre.statut.includes(statutToString(data.statut)) &&
+      (filtre.cadre.length == 0 || filtre.cadre.includes(data.cadre)) &&
+      (filtre.asso.length == 0 ||
+        filtre.asso.includes(data.association.acronyme)) &&
+      (data.nom
+        ? data.nom.includes(filtre.sujet)
+        : data.sujet.includes(filtre.sujet))
+    ) {
+      data.formateurs.map((formateur) => {
+        if (
+          !filtre.formateurs.includes(formateur.prenom + " " + formateur.nom) &&
+          filtre.formateurs.length != 0
+        ) {
+          checkFormateur = false;
+        }
+      });
+      if (data.formateurs.length == 0 && filtre.formateurs.length != 0) {
+        checkFormateur = false;
+      }
+      data.domaines.map((domaine) => {
+        if (
+          !filtre.domaines.includes(domaine.libelle) &&
+          filtre.domaines.length != 0
+        ) {
+          checkDomaine = false;
+        }
+      });
+      if (checkDomaine && checkFormateur) {
+        newdata.push(data);
+      }
+    }
+  });
+
+  return newdata;
+}
+
 function TableAccueil(props: Props) {
+  const data = filtres(props.data);
 
-  const data = props.data
-
-  console.log(data)
+  console.log(data);
   console.log(filtre);
 
   const [page, setPage] = React.useState(0);
@@ -181,9 +221,7 @@ function TableAccueil(props: Props) {
                         : domaineLibelleList(row.domaines).join(", ")}
                     </TableCell>
                     <TableCell align="center">
-                      {row.nom != null
-                        ? row.nom
-                        : "Provisoire : " + row.sujet}
+                      {row.nom != null ? row.nom : "Provisoire : " + row.sujet}
                     </TableCell>
                     <TableCell
                       align="center"
