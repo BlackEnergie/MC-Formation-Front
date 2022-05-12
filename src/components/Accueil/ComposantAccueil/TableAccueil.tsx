@@ -302,9 +302,13 @@ function TableAccueil(data: formation[]) {
                       ? (
                         <></>
                       ) : (
-                        <Link to={"/formation/edit/" + row.id}>
+                        checkRoleBn() || ( statutToString(row?.statut)==='À venir') && row?.formateurs?.some(formateur => formateur.id===token.id)?
+                        (
+                          <Link to={"/formation/edit/" + row.id}>
                           <AiOutlineEdit className="Icones me-2" />
                         </Link>
+                        ):<></>
+                        
                       )}
                     </TableCell>
                   </TableRow>
