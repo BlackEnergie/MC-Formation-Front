@@ -291,13 +291,15 @@ function TableAccueil(data: formation[]) {
                         <DialogActions>
                           {
                           row?.formateurs?.some(formateur => formateur.id===token.id)
-                          ?<Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)==='A_ATTRIBUER'} color="warning">Se retirer de la formation</Button>
-                          :<Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)==='A_ATTRIBUER'}>S'affecter à la formation</Button>
+                          ?
+                          <Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)!=='À attribuer'} color="warning">Se retirer de la formation</Button>
+                          :<Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)!=='À attribuer'}>S'affecter à la formation</Button>
                           }
                           <Button onClick={()=>handleClose()}>Fermer</Button>
                         </DialogActions>
                       </Dialog>
-                      {checkRoleAsso() ? (
+                      {checkRoleAsso()
+                      ? (
                         <></>
                       ) : (
                         <Link to={"/formation/edit/" + row.id}>
