@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FetchAllFormation } from "../../serverInteraction/FetchFormation";
 import useAxiosPrivate from "../../auth/hooks/useAxiosPrivate";
-import TableAccueil from "./ComposantAccueil/TableAccueil";
-import { FiltreAccueil } from "./ComposantAccueil/FiltreAccueil";
+import AccueilAffichage from "./ComposantAccueil/AccueilAffichage";
 
 function Accueil() {
   const [data, setData] = useState([]);
@@ -22,9 +21,8 @@ function Accueil() {
     getFormationsAccueil();
   }, []);
 
-  FiltreAccueil(data);
-
-  return TableAccueil(data);
+  return AccueilAffichage(data)
+    ;
 }
 
 export default Accueil;
