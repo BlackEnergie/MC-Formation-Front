@@ -1,28 +1,5 @@
 import { statut } from "../../../utils/StatutUtils";
-import { formation } from "./TableAccueil";
-import AffichageFiltreAcceuil from "./AffichageFiltreAcceuil";
-import React from "react";
-
-export let filter : filtre= {
-  date_debut: "",
-  date_fin: "",
-  statut: [],
-  domaines: [],
-  cadre: [],
-  sujet: "",
-  asso: [],
-  formateurs: [],
-};
-
-export function getFiltre() : filtre{
-  return filter;
-}
-
-export function setFiltre(newFiltre: filtre) {
-  filter = newFiltre;
-  console.log(getFiltre())
-  
-}
+import { formation } from "./AccueilAffichage";
 
 export interface domaines {
   code: string;

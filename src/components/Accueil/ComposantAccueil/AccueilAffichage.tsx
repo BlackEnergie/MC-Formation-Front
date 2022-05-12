@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { AiOutlineEdit, AiOutlineZoomIn } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import {
@@ -9,10 +9,9 @@ import {
 import decodeToken from "../../../auth/decodeToken";
 import {
   filtre,
-  getFiltre,
   domaines,
   GetFullFilter,
-} from "../ComposantAccueil/FiltreAccueil";
+} from "./FiltreAccueil";
 import {
   Box,
   IconButton,
@@ -29,6 +28,7 @@ import {
   Stack,
   TextField,
   Grid,
+  Button,
 } from "@mui/material";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
@@ -63,17 +63,15 @@ interface TablePaginationActionsProps {
 }
 
 const INITIAL_FILTRE: filtre = {
-    date_debut: "",
-    date_fin: "",
-    statut: [],
-    domaines: [],
-    cadre: [],
-    sujet: "",
-    asso: [],
-    formateurs: [],
-  }
-
-type Props = { data: formation[] };
+  date_debut: "",
+  date_fin: "",
+  statut: [],
+  domaines: [],
+  cadre: [],
+  sujet: "",
+  asso: [],
+  formateurs: [],
+};
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -161,37 +159,21 @@ function Filtres(data: formation[], filtre: filtre): formation[] {
   return newdata;
 }
 
-function Help(unFilteredData: formation[]) {
-
-console.log(unFilteredData)
-
+function AccueilAffichage(unFilteredData: formation[]) {
   const fullFiltre = GetFullFilter(unFilteredData);
-
-console.log(fullFiltre)
-
-
-  let filtre = INITIAL_FILTRE;  
-
-  let data = Filtres(unFilteredData, filtre);
-
-  function setFiltre(newfiltre : filtre) {
-    filtre = newfiltre
-    data = Filtres(unFilteredData, filtre)
-}
-  console.log(data)
-
-  let newfiltre : filtre = filtre;
-
-  console.log("help with " + data);
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
   const [liveness, setLiveness] = useState(0);
 
-  useEffect(() => {
-      setLiveness(liveness + 1)
-  }, [filtre])
+  let filtre = INITIAL_FILTRE;
+  let newfiltre: filtre = filtre;
+  let data = Filtres(unFilteredData, filtre);
+
+  function SetFiltre(newfiltre: filtre) {
+    filtre = newfiltre;
+    data = Filtres(unFilteredData, filtre);
+    setLiveness(liveness+1)
+  }
 
   const domaineLibelleList = (domaines) => {
     let list = [];
@@ -200,8 +182,6 @@ console.log(fullFiltre)
     });
     return list;
   };
-
-  data.sort((a, b) => a.id - b.id);
 
   const checkRoleAsso = () => {
     const token = decodeToken(localStorage.getItem("accessToken")).decoded;
@@ -246,7 +226,7 @@ console.log(fullFiltre)
                 options={fullFiltre.statut}
                 onChange={(event, value) => {
                   newfiltre.statut = value;
-                  setFiltre(newfiltre);
+                  SetFiltre(newfiltre);
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -267,7 +247,7 @@ console.log(fullFiltre)
                 options={fullFiltre.domaines}
                 onChange={(event, value) => {
                   newfiltre.domaines = value;
-                  setFiltre(newfiltre);
+                  SetFiltre(newfiltre);
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -288,7 +268,7 @@ console.log(fullFiltre)
                 options={fullFiltre.cadre}
                 onChange={(event, value) => {
                   newfiltre.cadre = value;
-                  setFiltre(newfiltre);
+                  SetFiltre(newfiltre);
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -308,7 +288,7 @@ console.log(fullFiltre)
                 variant="outlined"
                 onInput={(event) => {
                   newfiltre.sujet = event.currentTarget.ariaValueText;
-                  setFiltre(newfiltre);
+                  SetFiltre(newfiltre);
                 }}
               />
 
@@ -320,7 +300,7 @@ console.log(fullFiltre)
                 options={fullFiltre.asso}
                 onChange={(event, value) => {
                   newfiltre.asso = value;
-                  setFiltre(newfiltre);
+                  SetFiltre(newfiltre);
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -342,7 +322,7 @@ console.log(fullFiltre)
                 options={fullFiltre.formateurs}
                 onChange={(event, value) => {
                   newfiltre.formateurs = value;
-                  setFiltre(newfiltre);
+                  SetFiltre(newfiltre);
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -358,7 +338,7 @@ console.log(fullFiltre)
             </Stack>
           </Grid>
         </Grid>
-        <Grid xs={9}>
+        <Grid xs={9} marginTop={5}>
           <div className="container-fluid" id="accueil">
             <TableContainer component={Paper}>
               <Table>
@@ -462,4 +442,4 @@ console.log(fullFiltre)
   );
 }
 
-export default Help;
+export default AccueilAffichage;

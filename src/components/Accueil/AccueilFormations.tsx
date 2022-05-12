@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FetchAllFormation } from "../../serverInteraction/FetchFormation";
 import useAxiosPrivate from "../../auth/hooks/useAxiosPrivate";
-import Help from "./dernierespoir/help";
-import {
-  filter,
-  getFiltre,
-} from "./ComposantAccueil/FiltreAccueil";
-import { Grid } from "@mui/material";
+import AccueilAffichage from "./ComposantAccueil/AccueilAffichage";
 
 function Accueil() {
   const [data, setData] = useState([]);
-  const [filtreAccueil, setFiltre] = useState(getFiltre());
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -27,12 +21,7 @@ function Accueil() {
     getFormationsAccueil();
   }, []);
 
-  useEffect(() => {
-    setFiltre(getFiltre());
-    console.log("test");
-  }, [filter]);
-
-  return Help(data)
+  return AccueilAffichage(data)
     ;
 }
 
