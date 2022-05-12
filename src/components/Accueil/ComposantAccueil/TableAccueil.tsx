@@ -7,7 +7,7 @@ import {
   statutToStyle,
 } from "../../../utils/StatutUtils";
 import decodeToken from "../../../auth/decodeToken";
-import { filter, filtre, FiltreAccueil, getFiltre } from "./FiltreAccueil";
+import { filtre, FiltreAccueil, getFiltre } from "./FiltreAccueil";
 import {
   Box,
   IconButton,
@@ -151,9 +151,11 @@ function TableAccueil(props: Props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
+  const [liveness, setLiveness] =  useState(0)
+
   useEffect(() => {
-    console.log("youpie")
-  }, [filter])
+    setLiveness(liveness + 1)
+  }, [liveness])
 
   const domaineLibelleList = (domaines) => {
     let list = [];
