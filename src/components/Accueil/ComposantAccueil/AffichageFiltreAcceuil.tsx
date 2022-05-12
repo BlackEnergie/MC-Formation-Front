@@ -1,8 +1,6 @@
 import {Autocomplete, Stack, TextField} from "@mui/material";
 import React from "react";
-import {filtre} from "./FiltreAccueil";
-import {formation} from "./TableAccueil";
-
+import {filtre, getFiltre, setFiltre} from "./FiltreAccueil";
 type Props = { filtre: filtre };
 
 function AffichageFiltreAcceuil(props: Props) {
@@ -10,6 +8,8 @@ function AffichageFiltreAcceuil(props: Props) {
     console.log(props.filtre)
 
     const listFiltre = []
+
+    let newfiltre : filtre = getFiltre();
 
     return (
 
@@ -20,6 +20,10 @@ function AffichageFiltreAcceuil(props: Props) {
                 id="free-solo-2-demo"
                 disableClearable
                 options={props.filtre.statut}
+                onChange= {(event, value) =>{
+                    newfiltre.statut = value;
+                    setFiltre(newfiltre)
+                } }
                 renderInput={(params) => (
                     <TextField
                         {...params}
