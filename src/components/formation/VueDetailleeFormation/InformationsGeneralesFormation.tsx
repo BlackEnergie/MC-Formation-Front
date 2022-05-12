@@ -1,150 +1,194 @@
-import React from 'react';
+import * as React from 'react';
+import {styled} from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, {tableCellClasses} from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import {Container} from '@mui/material';
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
-const InformationsGeneralesFormation = (formation) =>{
-    
+const InformationsGeneralesFormation = (formation) => {
+
+
     let Donnee = formation.formation;
     const AfficherDataInfoGenerales = () => {
-        console.log(Donnee);
         return (
             <>
-                <tr>
-                    <th>Statut</th>
-                    <td>{Donnee.statut}</td>
-                </tr>
-                <tr>
-                    <th>Cadre</th>
-                    <td>{Donnee.cadre}</td>
-                </tr>
-                <tr>
-                    <th>Type</th>
-                    <td>{Donnee.type}</td>
-                </tr>
-                <tr>
-                    <th>Date</th>
-                    <td>{Donnee.date}</td>
-                </tr>
+                <StyledTableRow>
+                    <StyledTableCellHead >Statut</StyledTableCellHead>
+                    <StyledTableCell>{Donnee.statut}</StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                    <StyledTableCellHead>Cadre</StyledTableCellHead>
+                    <StyledTableCell>{Donnee.cadre}</StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                    <StyledTableCellHead>Type</StyledTableCellHead>
+                    <StyledTableCell>{Donnee.type}</StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                    <StyledTableCellHead>Date</StyledTableCellHead>
+                    <StyledTableCell>{Donnee.date}</StyledTableCell>
+                </StyledTableRow>
             </>
         )
     }
     const AfficherDataDomaine = () => Donnee.domaines.map(
         (info) => {
             return (
-                <tr key={info.code} title={info.description}>
-                    <td>{info.code}</td>
-                    <td>{info.libelle}</td>
-                </tr>
+                <StyledTableRow key={info.code} title={info.description}>
+                    <StyledTableCell>{info.code}</StyledTableCell>
+                    <StyledTableCell>{info.libelle}</StyledTableCell>
+                </StyledTableRow>
             )
         }
     )
-    const AfficherDataFormateur =() => Donnee.formateurs.map(
+    const AfficherDataFormateur = () => Donnee.formateurs.map(
         (info) => {
             return (
-                <tr key={info.id}>
-                    <td>{info.nom}</td>
-                    <td>{info.prenom}</td>
-                </tr>
+                <StyledTableRow key={info.id}>
+                    <StyledTableCell>{info.nom}</StyledTableCell>
+                    <StyledTableCell>{info.prenom}</StyledTableCell>
+                </StyledTableRow>
             )
         }
     )
+    const StyledTableCell = styled(TableCell)(({theme}) => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+            height:55
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+        },
+    }));
+
+    const StyledTableCellHead = styled(TableCell)(({theme}) => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+            fontWeight:"bold",
+        },
+    }));
+
+    const StyledTableRow = styled(TableRow)(({theme}) => ({
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover,
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+        },
+    }));
+
+    const StyledTableHead = styled(TableHead)(({theme}) => ({
+        '&:nth-of-type(odd)': {
+            fontWeight: "bold",
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+        },
+    }));
+
     return (
-        <div className="container-fluid">
-            {/* Conteneur Info Domaines */}
-                <div className="row">
-                    {/* Conteneur Informations générales */}
-                    <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3>Informations Générales</h3>
-                        </div>
-                        <div className="container">
-                            <table className="table table-striped mt-2">
-                                <tbody>
-                                {AfficherDataInfoGenerales()}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        <Grid container spacing={2}>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div"> Informations Générales
+                </Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherDataInfoGenerales()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Domaine(s)
 
-                    {/* Conteneur Domaines */}
-                    <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3>
-                                Domaine(s)
-                            </h3>
-                        </div>
+                </Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell>Code</StyledTableCell>
+                                <StyledTableCell>Nom</StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherDataDomaine()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Formateur(s)</Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell>Nom</StyledTableCell>
+                                <StyledTableCell>Prenom</StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherDataFormateur()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    id="tableTitle"
+                    color="primary"
+                    component="div">Association(s) intéréssée(s)</Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader  sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell>Nom</StyledTableCell>
+                                <StyledTableCell>Ville</StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
 
-                        {/* Table Domaine */}
-                        <div className="container">
-                            <div className="table-wrapper">
-                                <table className="table table-striped mt-2">
-                                    <thead>
-                                    <tr>
-                                        <th>Code</th>
-                                        <th>Nom</th>
-                                    </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    {AfficherDataDomaine()}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            {/* Conteneur Formateur Association */}
-                <div className="row">
-
-                    {/* Conteneur Formateur */}
-                    <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3>Formateur(s)</h3>
-                        </div>
-
-                        {/* Table Formateur */}
-                        <div className="container">
-                            <div className="table-wrapper">
-                                <table className="table table-striped mt-2">
-                                    <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Prenom</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {AfficherDataFormateur()}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Conteneur Association */}
-                    <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3>Association(s) intéréssée(s)</h3>
-                        </div>
-
-                        {/* Table Association */}
-                        <div className="container">
-                            <div className="table-wrapper tableFixHead" >
-                                <table className="table table-striped mt-2" >
-                                    <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Ville</th>
-                                    </tr>
-                                    </thead>
-
-                                    <tbody >
-                                    
-                                    </tbody>
-
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>)
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+        </Grid>
+    )
 }
 export default InformationsGeneralesFormation;

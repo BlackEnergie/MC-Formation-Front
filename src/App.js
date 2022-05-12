@@ -11,7 +11,6 @@ import Accueil from "./components/Accueil/AccueilFormations";
 import ModificationFormation from "./components/formation/ModificationFormation/ModificationFormation";
 import Missing from './components/defaults/Missing';
 import VueDetailleeFormation from './components/formation/VueDetailleeFormation/VueDetailleeFormation'
-import VueDetailleeFormationV2 from './components/formation/VueDetailleeFormation/VueDetailleeFormationV2'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProtectedRoute from './components/defaults/ProtectedRoute';
 import FormulaireInscription from './components/auth/Inscription/FormulaireInscription';
@@ -66,7 +65,7 @@ function App() {
           path="formation/:id"
           element={
           <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
-            <VueDetailleeFormationV2/>
+            <VueDetailleeFormation/>
           </ProtectedRoute>}
         />
         <Route

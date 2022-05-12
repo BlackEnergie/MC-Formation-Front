@@ -26,7 +26,6 @@ const Header = (props) => {
     const checkAssoRole = () => {
         let res = false;
         const token = jwtUtils(localStorage.getItem("accessToken")).decoded;
-        console.log(token);
         if (token !== null && token.role === "ROLE_ASSO") {
             res = true;
         }

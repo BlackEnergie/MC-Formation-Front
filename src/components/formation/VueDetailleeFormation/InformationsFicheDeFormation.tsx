@@ -1,4 +1,14 @@
 import React, {} from 'react';
+import Grid from "@mui/material/Grid";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import {styled} from "@mui/material/styles";
+import TableCell, {tableCellClasses} from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableHead from "@mui/material/TableHead";
 
 const InformationsFicheDeFormation = (formation) => {
 
@@ -6,22 +16,22 @@ const InformationsFicheDeFormation = (formation) => {
     const AfficherFormationDetails = () => {
         return (
             <>
-            <tr>
-                <th>Type</th>
-                <td>{Donnee.type}</td>
-            </tr>
-            <tr>
-                <th>Audience</th>
-                <td>{Donnee.audience}</td>
-            </tr>
-            <tr>
-                <th>Durée</th>
-                <td>{Donnee.duree}</td>
-            </tr>
-            <tr>
-                <th>Prérequis</th>
-                <td>{Donnee.prerequis}</td>
-            </tr>
+            <StyledTableRow>
+                <StyledTableCellHead>Type</StyledTableCellHead>
+                <StyledTableCell>{Donnee.type}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow>
+                <StyledTableCellHead>Audience</StyledTableCellHead>
+                <StyledTableCell>{Donnee.audience}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow>
+                <StyledTableCellHead>Durée</StyledTableCellHead>
+                <StyledTableCell>{Donnee.duree}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow>
+                <StyledTableCellHead>Prérequis</StyledTableCellHead>
+                <StyledTableCell>{Donnee.prerequis}</StyledTableCell>
+            </StyledTableRow>
             </>
         )
     }
@@ -29,116 +39,162 @@ const InformationsFicheDeFormation = (formation) => {
     const AfficherBesoinsMaterielsFormation = () => Donnee.materiels?.map(
         (info) => {
             return (
-                <tr>
-                    <td></td>
-                    <td>{info}</td>
-                </tr>
+                <StyledTableRow>
+                    <StyledTableCell>{info}</StyledTableCell>
+                </StyledTableRow>
             )
         }
     )
     const AfficherObjetsPedagogiques = () => Donnee.objectifs?.map(
         (info) => {
             return (
-                <tr>
-                    <td></td>
-                    <td>{info}</td>
-                </tr>
+                <StyledTableRow>
+                    <StyledTableCell>{info}</StyledTableCell>
+                </StyledTableRow>
             )
         }
     )
     const AfficherDataDomaine = () => Donnee.domaines?.map(
         (info) => {
             return (
-                <tr key={info.code} title={info.description}>
-                    <td>{info.code}</td>
-                    <td>{info.libelle}</td>
-                </tr>
+                <StyledTableRow key={info.code} title={info.description}>
+                    <StyledTableCell>n°{info.code}</StyledTableCell>
+                    <StyledTableCell>{info.libelle}</StyledTableCell>
+                </StyledTableRow>
             )
         }
     )
+
+    const StyledTableCell = styled(TableCell)(({theme}) => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+            height:55
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+        },
+    }));
+
+    const StyledTableRow = styled(TableRow)(({theme}) => ({
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover,
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+        },
+    }));
+
+    const StyledTableHead = styled(TableHead)(({theme}) => ({
+        '&:nth-of-type(odd)': {
+            fontWeight: "bold",
+            paddingLeft: 50,
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+        },
+    }));
+
+    const StyledTableCellHead = styled(TableCell)(({theme}) => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+            fontWeight:"bold",
+        },
+    }));
+
     return (
-        <div className="container-fluid">
-
-                <div className="row">
-                    <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3 className="align-middle me-4">Informations</h3>
-                        </div>  
-                        <div className="container">
-                            <table className="table table-striped mt-2">
-                                <tbody>
-                                {AfficherFormationDetails()}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div className="col-6">
-                        <h3>
-                            Objectif(s) Pédagogique(s)
-                        </h3>
-                        <div className="container">
-                            <div className="table-wrapper">
-                                <table className="table table-striped mt-2">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {AfficherObjetsPedagogiques()}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-6">
-                        <h3>
-                            Domaine(s)
-                        </h3>
-                        <div className="container">
-                            <div className="table-wrapper tableFixHead">
-                                <table className="table table-striped mt-2">
-                                    <thead>
-                                    <tr>
-                                        <th>Code</th>
-                                        <th>Nom</th>
-                                    </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    {AfficherDataDomaine()}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3>
-                                Besoin(s) matériel(s)
-                            </h3>
-                        </div>
-                        <div className="container">
-                            <div className="table-wrapper tableFixHead">
-                                <table className="table table-striped mt-2">
-                                    <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {AfficherBesoinsMaterielsFormation()}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
+        <Grid container spacing={2}>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{ flex: '1 1 100%', p:1 }}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div"> Informations
+                </Typography>
+                <TableContainer component={Paper}   sx={{maxHeight: 350}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherFormationDetails()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{ flex: '1 1 100%', p:1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Objectif(s) Pédagogique(s)
+                </Typography>
+                <TableContainer component={Paper}  sx={{maxHeight: 350}}>
+                    <Table stickyHeader aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherObjetsPedagogiques()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{ flex: '1 1 100%' , p:1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Domaine(s)</Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell>Code</StyledTableCell>
+                                <StyledTableCell>Nom</StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherDataDomaine()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{ flex: '1 1 100%', p:1 }}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Besoin(s) matériel(s)</Typography>
+                <TableContainer component={Paper}   sx={{maxHeight: 350}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherBesoinsMaterielsFormation()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+        </Grid>
     );
 }
 export default InformationsFicheDeFormation;
