@@ -3,7 +3,7 @@ import { formation } from "./TableAccueil";
 import AffichageFiltreAcceuil from "./AffichageFiltreAcceuil";
 import React from "react";
 
-let filtre : filtre= {
+export let filter : filtre= {
   date_debut: "",
   date_fin: "",
   statut: [],
@@ -15,12 +15,13 @@ let filtre : filtre= {
 };
 
 export function getFiltre() : filtre{
-  return filtre;
+  return filter;
 }
 
 export function setFiltre(newFiltre: filtre) {
-  filtre = newFiltre;
+  filter = newFiltre;
   console.log(getFiltre())
+  
 }
 
 type Props = { data: formation[] };

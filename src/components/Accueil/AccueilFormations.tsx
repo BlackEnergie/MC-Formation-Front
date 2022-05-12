@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { FetchAllFormation } from "../../serverInteraction/FetchFormation";
 import useAxiosPrivate from "../../auth/hooks/useAxiosPrivate";
-import TableAccueil, { formation } from "./ComposantAccueil/TableAccueil";
-import { FiltreAccueil } from "./ComposantAccueil/FiltreAccueil";
-import {Autocomplete, Grid, Stack, TextField, Typography} from "@mui/material";
-import AffichageFiltreAcceuil from "./ComposantAccueil/AffichageFiltreAcceuil";
+import TableAccueil from "./ComposantAccueil/TableAccueil";
+import {
+  filter,
+  FiltreAccueil,
+  getFiltre,
+} from "./ComposantAccueil/FiltreAccueil";
+import { Grid } from "@mui/material";
 
 function Accueil() {
   const [data, setData] = useState([]);
+  const [filtreAccueil, setFiltre] = useState(getFiltre());
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -24,20 +28,21 @@ function Accueil() {
     getFormationsAccueil();
   }, []);
 
+  useEffect(() => {
+    setFiltre(getFiltre());
+    console.log("test");
+  }, [filter]);
 
   return (
     <>
       <Grid container spacing={2}>
-
         <Grid xs={3} marginTop={5}>
-          <Grid container marginLeft={6} >
-            <Grid>
-             <FiltreAccueil data = {data} />
-            </Grid>
+          <Grid marginLeft={6}>
+            <FiltreAccueil data={data} />
           </Grid>
         </Grid>
-        <Grid xs={9} >
-          <TableAccueil data={data} />
+        <Grid xs={9}>
+          <TableAccueil data={data} filtre={filtreAccueil} />
         </Grid>
       </Grid>
     </>
