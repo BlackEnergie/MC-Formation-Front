@@ -48,6 +48,7 @@ export interface formation {
   nom?: string;
   sujet: string;
   date?: string;
+  detail: string;
   id: number;
 }
 
