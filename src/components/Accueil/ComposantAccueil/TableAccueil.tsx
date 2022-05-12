@@ -168,7 +168,6 @@ function TableAccueil(data: formation[]) {
       const response = await FetchAssignFormateur(axiosPrivate,affectation);
       if (response.data.code == 200) {
         data.splice(data.indexOf(row),1);
-        console.log("splice : "+ data);
         data.push(JSON.parse(response.data.data));
         toast.success(response.data.message);
       } 
@@ -234,8 +233,6 @@ function TableAccueil(data: formation[]) {
                       {row?.formateurs?.map(
                         (formateur) => formateur.prenom + " " + formateur.nom.toUpperCase()
                       )}
-                      {console.log(row)
-                      }
                     </TableCell>
                     <TableCell align="center">
                       {row.date == null ? "N/A" : row.date}
