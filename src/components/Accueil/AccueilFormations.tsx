@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FetchAllFormation } from "../../serverInteraction/FetchFormation";
 import useAxiosPrivate from "../../auth/hooks/useAxiosPrivate";
-import TableAccueil from "./ComposantAccueil/TableAccueil";
+import Help from "./dernierespoir/help";
 import {
   filter,
-  FiltreAccueil,
   getFiltre,
 } from "./ComposantAccueil/FiltreAccueil";
 import { Grid } from "@mui/material";
@@ -33,20 +32,8 @@ function Accueil() {
     console.log("test");
   }, [filter]);
 
-  return (
-    <>
-      <Grid container spacing={2}>
-        <Grid xs={3} marginTop={5}>
-          <Grid marginLeft={6}>
-            <FiltreAccueil data={data} />
-          </Grid>
-        </Grid>
-        <Grid xs={9}>
-          <TableAccueil data={data} filtre={filtreAccueil} />
-        </Grid>
-      </Grid>
-    </>
-  );
+  return Help(data)
+    ;
 }
 
 export default Accueil;
