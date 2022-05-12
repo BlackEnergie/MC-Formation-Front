@@ -7,7 +7,6 @@ function AffichageFiltreAcceuil(props: Props) {
 
     console.log(props.filtre)
 
-    const listFiltre = []
 
     let newfiltre : filtre = getFiltre();
 
@@ -41,6 +40,10 @@ function AffichageFiltreAcceuil(props: Props) {
                 id="free-solo-2-demo"
                 disableClearable
                 options={props.filtre.domaines}
+                onChange= {(event, value) =>{
+                    newfiltre.domaines = value;
+                    setFiltre(newfiltre)
+                } }
                 renderInput={(params) => (
                     <TextField
                         {...params}
@@ -58,6 +61,10 @@ function AffichageFiltreAcceuil(props: Props) {
                 id="free-solo-2-demo"
                 disableClearable
                 options={props.filtre.cadre}
+                onChange= {(event, value) =>{
+                    newfiltre.cadre = value;
+                    setFiltre(newfiltre)
+                } }
                 renderInput={(params) => (
                     <TextField
                         {...params}
@@ -73,12 +80,19 @@ function AffichageFiltreAcceuil(props: Props) {
             <TextField
                 id="outlined-basic"
                 label="Sujet/nom"
-                variant="outlined" />
+                variant="outlined"
+            />
+
             <Autocomplete
                 freeSolo
+                multiple
                 id="free-solo-2-demo"
                 disableClearable
                 options={props.filtre.asso}
+                onChange= {(event, value) =>{
+                    newfiltre.asso = value;
+                    setFiltre(newfiltre)
+                } }
                 renderInput={(params) => (
                     <TextField
                         {...params}
@@ -90,12 +104,18 @@ function AffichageFiltreAcceuil(props: Props) {
                     />
                 )}
             />
+
+
             <Autocomplete
                 freeSolo
                 multiple
                 id="free-solo-2-demo"
                 disableClearable
                 options={props.filtre.formateurs}
+                onChange= {(event, value) =>{
+                    newfiltre.formateurs = value;
+                    setFiltre(newfiltre)
+                } }
                 renderInput={(params) => (
                     <TextField
                         {...params}
