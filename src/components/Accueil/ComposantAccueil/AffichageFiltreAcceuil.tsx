@@ -81,6 +81,10 @@ function AffichageFiltreAcceuil(props: Props) {
                 id="outlined-basic"
                 label="Sujet/nom"
                 variant="outlined"
+                onInput={(event) => {
+                    newfiltre.sujet = event.currentTarget.ariaValueText
+                    setFiltre(newfiltre)
+                }}
             />
 
             <Autocomplete

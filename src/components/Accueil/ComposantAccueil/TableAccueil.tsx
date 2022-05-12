@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineEdit, AiOutlineZoomIn } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { statut, statutToString, statutToStyle } from "../../../utils/StatutUtils";
+import {
+  statut,
+  statutToString,
+  statutToStyle,
+} from "../../../utils/StatutUtils";
 import decodeToken from "../../../auth/decodeToken";
-import { FiltreAccueil } from "./FiltreAccueil";
+import { filter, filtre, FiltreAccueil, getFiltre } from "./FiltreAccueil";
 import {
   Box,
   IconButton,
@@ -19,7 +23,8 @@ import {
 } from "@mui/material";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import { domaines, filtre } from "./FiltreAccueil";
+import { domaines } from "./FiltreAccueil";
+import { FaLastfmSquare } from "react-icons/fa";
 
 export interface formation {
   association: {
@@ -50,7 +55,7 @@ interface TablePaginationActionsProps {
   ) => void;
 }
 
-type Props = { data: formation[] };
+type Props = { data: formation[]; filtre: filtre };
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -87,15 +92,17 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
-function filtres(data: formation[]): formation[] {
+function Filtres(data: formation[], filtre: filtre): formation[] {
   const newdata: formation[] = [];
   let checkFormateur: boolean;
   let checkDomaine: boolean;
+  let checkDomaineUnit: boolean;
   data.map((data) => {
     checkFormateur = true;
     checkDomaine = true;
     if (
-      filtre.statut.includes(statutToString(data.statut)) &&
+      (filtre.statut.includes(statutToString(data.statut)) ||
+        filtre.statut.length == 0) &&
       (filtre.cadre.length == 0 || filtre.cadre.includes(data.cadre)) &&
       (filtre.asso.length == 0 ||
         filtre.asso.includes(data.association.acronyme)) &&
@@ -114,14 +121,19 @@ function filtres(data: formation[]): formation[] {
       if (data.formateurs.length == 0 && filtre.formateurs.length != 0) {
         checkFormateur = false;
       }
-      data.domaines.map((domaine) => {
-        if (
-          !filtre.domaines.includes(domaine.libelle) &&
-          filtre.domaines.length != 0
-        ) {
+
+      filtre.domaines.forEach((libelle) => {
+        checkDomaineUnit = false;
+        data.domaines.map((domaine) => {
+          if (domaine.libelle == libelle) {
+            checkDomaineUnit = true;
+          }
+        });
+        if (!checkDomaineUnit) {
           checkDomaine = false;
         }
       });
+
       if (checkDomaine && checkFormateur) {
         newdata.push(data);
       }
@@ -132,13 +144,16 @@ function filtres(data: formation[]): formation[] {
 }
 
 function TableAccueil(props: Props) {
-  const data = filtres(props.data);
+  const data = Filtres(props.data, props.filtre);
 
-  console.log(data);
-  console.log(filtre);
+  console.log("help with " + data);
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  useEffect(() => {
+    console.log("youpie")
+  }, [filter])
 
   const domaineLibelleList = (domaines) => {
     let list = [];
@@ -268,7 +283,6 @@ function TableAccueil(props: Props) {
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                   ActionsComponent={TablePaginationActions}
-                  align="right"
                 />
               </TableRow>
             </TableFooter>
