@@ -435,10 +435,12 @@ function AccueilAffichage(unFilteredData: formation[]) {
                           {row.association.acronyme}
                         </TableCell>
                         <TableCell align="center" hidden={!checkRoleBn()}>
-                          {row.formateurs.map(
-                            (formateur) =>
-                              formateur.prenom + " " + formateur.nom
-                          )}
+                        {formateurList(row.formateurs).join(", ").length >
+                          15
+                            ? formateurList(row.formateurs)
+                                .join(", ")
+                                .substring(0, 15) + "..."
+                            : formateurList(row.formateurs).join(", ")}
                         </TableCell>
                         <TableCell align="center">
                           {row.date == null ? "N/A" : row.date}
@@ -481,10 +483,13 @@ function AccueilAffichage(unFilteredData: formation[]) {
                                   <TableCell>Association</TableCell>
                                   <TableCell>{row?.association?.nomComplet}</TableCell>
                                 </TableRow>
-                                <TableRow>
-                                  <TableCell>Formateurs</TableCell>
-                                  <TableCell>{formateurList(row?.formateurs).join(", ")}</TableCell>
-                                </TableRow>
+                                {!checkRoleAsso
+                                  ?<TableRow>
+                                    <TableCell>Formateurs</TableCell>
+                                    <TableCell>{formateurList(row?.formateurs).join(", ")}</TableCell>
+                                  </TableRow>
+                                  :<></>
+                                }
                                 <TableRow>
                                   <TableCell>Informations complémentaires</TableCell>
                                   <TableCell>{row?.detail}</TableCell>
@@ -494,11 +499,12 @@ function AccueilAffichage(unFilteredData: formation[]) {
                           </TableContainer>
                         </DialogContent>
                         <DialogActions>
-                          {
-                          row?.formateurs?.some(formateur => formateur.id===token.id)
-                          ?
-                          <Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)!=='À attribuer'} color="warning">Se retirer de la formation</Button>
-                          :<Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)!=='À attribuer'}>S'affecter à la formation</Button>
+                          {!checkRoleAsso
+                            ?row?.formateurs?.some(formateur => formateur.id===token.id)
+                              ?
+                              <Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)!=='À attribuer'} color="warning">Se retirer de la formation</Button>
+                              :<Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)!=='À attribuer'}>S'affecter à la formation</Button>
+                            :<></>
                           }
                           <Button onClick={()=>handleClose()}>Fermer</Button>
                         </DialogActions>
