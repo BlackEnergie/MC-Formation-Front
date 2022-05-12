@@ -281,7 +281,7 @@ function TableAccueil(data: formation[]) {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell>Informations complémentaires</TableCell>
-                                  <TableCell>{row?.sujet}</TableCell>
+                                  <TableCell>{row?.detail}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
