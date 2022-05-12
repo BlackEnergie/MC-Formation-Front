@@ -7,7 +7,7 @@ import {
   statutToStyle,
 } from "../../../utils/StatutUtils";
 import decodeToken from "../../../auth/decodeToken";
-import { filtre, FiltreAccueil, getFiltre } from "./FiltreAccueil";
+import { filtre, getFiltre } from "./FiltreAccueil";
 import {
   Box,
   IconButton,
@@ -24,7 +24,6 @@ import {
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import { domaines } from "./FiltreAccueil";
-import { FaLastfmSquare } from "react-icons/fa";
 
 export interface formation {
   association: {

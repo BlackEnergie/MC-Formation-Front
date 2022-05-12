@@ -24,18 +24,6 @@ export function setFiltre(newFiltre: filtre) {
   
 }
 
-type Props = { data: formation[] };
-
-export function FiltreAccueil(props:Props) {
-  const data = props.data;
-  const fullFilter: filtre = GetFullFilter(data);
-  console.log(fullFilter);
-  return <AffichageFiltreAcceuil filtre={fullFilter} />
-  
-  
-
-}
-
 export interface domaines {
   code: string;
   libelle: string;
@@ -53,7 +41,7 @@ export interface filtre {
   formateurs: string[];
 }
 
-function GetFullFilter(data: formation[]): filtre {
+export function GetFullFilter(data: formation[]): filtre {
   return{
     date_debut: "",
     date_fin: "",
