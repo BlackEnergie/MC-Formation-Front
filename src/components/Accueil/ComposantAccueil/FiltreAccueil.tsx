@@ -3,10 +3,10 @@ import { formation } from "./TableAccueil";
 import AffichageFiltreAcceuil from "./AffichageFiltreAcceuil";
 import React from "react";
 
-export let filtre : filtre= {
+let filtre : filtre= {
   date_debut: "",
   date_fin: "",
-  statut: [statut.DEMANDE, statut.A_ATTRIBUER, statut.A_VENIR, statut.PASSEE],
+  statut: [],
   domaines: [],
   cadre: [],
   sujet: "",
@@ -14,8 +14,13 @@ export let filtre : filtre= {
   formateurs: [],
 };
 
-function setFiltre(newFiltre: filtre) {
+export function getFiltre() : filtre{
+  return filtre;
+}
+
+export function setFiltre(newFiltre: filtre) {
   filtre = newFiltre;
+  console.log(getFiltre())
 }
 
 type Props = { data: formation[] };
@@ -39,7 +44,7 @@ export interface domaines {
 export interface filtre {
   date_debut: string;
   date_fin: string;
-  statut: statut[];
+  statut: string[];
   domaines: string[];
   cadre: string[];
   sujet: string;
