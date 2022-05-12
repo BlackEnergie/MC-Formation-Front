@@ -1,6 +1,10 @@
 import React, {  useState } from "react";
 import { AiOutlineEdit, AiOutlineZoomIn } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import AffectationFormation from "../../../api/model/AffectationFormation";
+import { FetchAssignFormateur } from "../../../serverInteraction/FetchFormation";
+import useAxiosPrivate from "../../../auth/hooks/useAxiosPrivate";
+import toast from "react-hot-toast";
 import {
   statut,
   statutToString,
@@ -29,6 +33,10 @@ import {
   TextField,
   Grid,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
@@ -48,6 +56,7 @@ export interface formation {
   statut: statut;
   nom?: string;
   sujet: string;
+  detail: string;
   date?: string;
   id: number;
 }
@@ -164,6 +173,10 @@ function AccueilAffichage(unFilteredData: formation[]) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [liveness, setLiveness] = useState(0);
+  const [open, setOpen] = React.useState(0);
+
+  const axiosPrivate = useAxiosPrivate();
+  const token = decodeToken(localStorage.getItem("accessToken")).decoded;
 
   let filtre = INITIAL_FILTRE;
   let newfiltre: filtre = filtre;
@@ -183,18 +196,24 @@ function AccueilAffichage(unFilteredData: formation[]) {
     return list;
   };
 
+  const formateurList = (formateurs) => {
+    let list = [];
+    formateurs?.map((formateur) => {
+      list.push(formateur.prenom+" "+formateur.nom.toUpperCase());
+    });
+    return list;
+  };
+
+
   const checkRoleAsso = () => {
-    const token = decodeToken(localStorage.getItem("accessToken")).decoded;
     return token.role === "ROLE_ASSO";
   };
 
   const checkRoleBn = () => {
-    const token = decodeToken(localStorage.getItem("accessToken")).decoded;
     return token.role === "ROLE_BN";
   };
 
   const checkRoleFormateur = () => {
-    const token = decodeToken(localStorage.getItem("accessToken")).decoded;
     return token.role === "ROLE_FORMATEUR";
   };
 
@@ -210,6 +229,31 @@ function AccueilAffichage(unFilteredData: formation[]) {
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+  const handleOpen =(id:number) =>{
+    setOpen(id);
+  }
+  const handleClose =() =>{
+    setOpen(0);
+  }
+
+  const postAssignFormateur = async (row:formation) => {
+    try {
+      let affectation = new AffectationFormation();
+      affectation.idFormation=row.id;
+      affectation.nomUtilisateur=token.sub;
+      const response = await FetchAssignFormateur(axiosPrivate,affectation);
+      if (response.data.code == 200) {
+        data.splice(data.indexOf(row),1);
+        data.push(JSON.parse(response.data.data));
+        unFilteredData.splice(data.indexOf(row),1);
+        unFilteredData.push(JSON.parse(response.data.data));
+        toast.success(response.data.message);
+      } 
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
+    handleClose()
   };
 
   return (
@@ -400,15 +444,75 @@ function AccueilAffichage(unFilteredData: formation[]) {
                           {row.date == null ? "N/A" : row.date}
                         </TableCell>
                         <TableCell align="center">
-                          <Link to={"/formation/" + row.id}>
+                        {checkRoleBn()
+                        ? <Link to={"/formation/" + row.id}>
                             <AiOutlineZoomIn className="Icones me-2" />
                           </Link>
+                        :<AiOutlineZoomIn className="Icones me-2" onClick={()=>handleOpen(row.id)}/>
+                      }
+                      <Dialog
+                        open={open===row.id}
+                        onClose={()=>handleClose()}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                        {row?.nom != null
+                        ? row?.nom
+                        : "Provisoire : " + row?.sujet}
+                        </DialogTitle>
+                        <DialogContent>
+                          <TableContainer>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell>Statut</TableCell>
+                                  <TableCell> {statutToString(row?.statut)}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Cadre</TableCell>
+                                  <TableCell> {row?.cadre == null ? "N/A" : row?.cadre}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Domaine(s)</TableCell>
+                                  <TableCell>{domaineLibelleList(row?.domaines).join(", ")}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Association</TableCell>
+                                  <TableCell>{row?.association?.nomComplet}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Formateurs</TableCell>
+                                  <TableCell>{formateurList(row?.formateurs).join(", ")}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Informations complémentaires</TableCell>
+                                  <TableCell>{row?.detail}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </DialogContent>
+                        <DialogActions>
+                          {
+                          row?.formateurs?.some(formateur => formateur.id===token.id)
+                          ?
+                          <Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)!=='À attribuer'} color="warning">Se retirer de la formation</Button>
+                          :<Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)!=='À attribuer'}>S'affecter à la formation</Button>
+                          }
+                          <Button onClick={()=>handleClose()}>Fermer</Button>
+                        </DialogActions>
+                      </Dialog>
                           {checkRoleAsso() ? (
                             <></>
                           ) : (
-                            <Link to={"/formation/edit/" + row.id}>
+                            checkRoleBn() || ( statutToString(row?.statut)==='À venir') && row?.formateurs?.some(formateur => formateur.id===token.id)?
+                            (
+                              <Link to={"/formation/edit/" + row.id}>
                               <AiOutlineEdit className="Icones me-2" />
                             </Link>
+                            ):<></>
+
                           )}
                         </TableCell>
                       </TableRow>
