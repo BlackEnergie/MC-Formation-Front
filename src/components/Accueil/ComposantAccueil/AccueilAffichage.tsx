@@ -5,7 +5,6 @@ import AffectationFormation from "../../../api/model/AffectationFormation";
 import { FetchAssignFormateur } from "../../../serverInteraction/FetchFormation";
 import useAxiosPrivate from "../../../auth/hooks/useAxiosPrivate";
 import toast from "react-hot-toast";
-
 import {
   statut,
   statutToString,
@@ -196,6 +195,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
     });
     return list;
   };
+
   const formateurList = (formateurs) => {
     let list = [];
     formateurs?.map((formateur) => {
@@ -512,6 +512,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
                               <AiOutlineEdit className="Icones me-2" />
                             </Link>
                             ):<></>
+
                           )}
                         </TableCell>
                       </TableRow>
