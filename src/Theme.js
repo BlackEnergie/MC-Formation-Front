@@ -10,6 +10,9 @@ export const theme = createTheme({
       main: '#4E53AC'
      
     },
+    warning:{
+      main:'#f44336'
+    }
   },
   typography:{
     button:{

@@ -1,10 +1,17 @@
 import React from "react";
 import { AiOutlineEdit, AiOutlineZoomIn } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { statutToString, statutToStyle } from "../../../utils/StatutUtils";
 import decodeToken from "../../../auth/decodeToken";
+import { FetchAssignFormateur } from "../../../serverInteraction/FetchFormation";
+import useAxiosPrivate from "../../../auth/hooks/useAxiosPrivate";
 import {
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
   Paper,
   Table,
@@ -14,10 +21,12 @@ import {
   TableFooter,
   TableHead,
   TablePagination,
-  TableRow,
+  TableRow
 } from "@mui/material";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import AffectationFormation from "../../../api/model/AffectationFormation";
+import toast from "react-hot-toast";
 
 export interface formation {
   association: {
@@ -50,6 +59,11 @@ interface TablePaginationActionsProps {
     event: React.MouseEvent<HTMLButtonElement>,
     newPage: number
   ) => void;
+}
+
+export interface rowToDisplay{
+  open:boolean;
+  row:formation;
 }
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
@@ -88,16 +102,25 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 function TableAccueil(data: formation[]) {
-
-    console.log(data)
-
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [open, setOpen] = React.useState(0);
+
+  const axiosPrivate = useAxiosPrivate();
+  const token = decodeToken(localStorage.getItem("accessToken")).decoded;
 
   const domaineLibelleList = (domaines) => {
     let list = [];
-    domaines.map((domaine) => {
+    domaines?.map((domaine) => {
       list.push(domaine.libelle);
+    });
+    return list;
+  };
+
+  const formateurList = (formateurs) => {
+    let list = [];
+    formateurs?.map((formateur) => {
+      list.push(formateur.prenom+" "+formateur.nom.toUpperCase());
     });
     return list;
   };
@@ -105,17 +128,14 @@ function TableAccueil(data: formation[]) {
   data.sort((a, b) => a.id - b.id);
 
   const checkRoleAsso = () => {
-    const token = decodeToken(localStorage.getItem("accessToken")).decoded;
     return token.role === "ROLE_ASSO";
   };
 
   const checkRoleBn = () => {
-    const token = decodeToken(localStorage.getItem("accessToken")).decoded;
     return token.role === "ROLE_BN";
   };
 
   const checkRoleFormateur = () => {
-    const token = decodeToken(localStorage.getItem("accessToken")).decoded;
     return token.role === "ROLE_FORMATEUR";
   };
 
@@ -131,6 +151,31 @@ function TableAccueil(data: formation[]) {
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleOpen =(id:number) =>{
+    setOpen(id);
+  }
+  const handleClose =() =>{
+    setOpen(0);
+  }
+
+  const postAssignFormateur = async (row:formation) => {
+    try {
+      let affectation = new AffectationFormation();
+      affectation.idFormation=row.id;
+      affectation.nomUtilisateur=token.sub;
+      const response = await FetchAssignFormateur(axiosPrivate,affectation);
+      if (response.data.code == 200) {
+        data.splice(data.indexOf(row),1);
+        console.log("splice : "+ data);
+        data.push(JSON.parse(response.data.data));
+        toast.success(response.data.message);
+      } 
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
+    handleClose()
   };
 
   return (
@@ -181,22 +226,79 @@ function TableAccueil(data: formation[]) {
                     </TableCell>
                     <TableCell
                       align="center"
-                      title={row.association.nomComplet}
+                      title={row?.association?.nomComplet}
                     >
-                      {row.association.acronyme}
+                      {row?.association?.nomComplet}
                     </TableCell>
                     <TableCell align="center" hidden={!checkRoleBn()}>
-                      {row.formateurs.map(
-                        (formateur) => formateur.prenom + " " + formateur.nom
+                      {row?.formateurs?.map(
+                        (formateur) => formateur.prenom + " " + formateur.nom.toUpperCase()
                       )}
+                      {console.log(row)
+                      }
                     </TableCell>
                     <TableCell align="center">
                       {row.date == null ? "N/A" : row.date}
                     </TableCell>
                     <TableCell align="center">
-                      <Link to={"/formation/" + row.id}>
-                        <AiOutlineZoomIn className="Icones me-2" />
-                      </Link>
+                      {checkRoleBn()
+                        ? <Link to={"/formation/" + row.id}>
+                            <AiOutlineZoomIn className="Icones me-2" />
+                          </Link>
+                        :<AiOutlineZoomIn className="Icones me-2" onClick={()=>handleOpen(row.id)}/>
+                      }
+                      <Dialog
+                        open={open===row.id}
+                        onClose={()=>handleClose()}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                        {row?.nom != null
+                        ? row?.nom
+                        : "Provisoire : " + row?.sujet}
+                        </DialogTitle>
+                        <DialogContent>
+                          <TableContainer>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell>Statut</TableCell>
+                                  <TableCell> {statutToString(row?.statut)}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Cadre</TableCell>
+                                  <TableCell> {row?.cadre == null ? "N/A" : row?.cadre}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Domaine(s)</TableCell>
+                                  <TableCell>{domaineLibelleList(row?.domaines).join(", ")}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Association</TableCell>
+                                  <TableCell>{row?.association?.nomComplet}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Formateurs</TableCell>
+                                  <TableCell>{formateurList(row?.formateurs).join(", ")}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Informations complémentaires</TableCell>
+                                  <TableCell>{row?.sujet}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </DialogContent>
+                        <DialogActions>
+                          {
+                          row?.formateurs?.some(formateur => formateur.id===token.id)
+                          ?<Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)==='A_ATTRIBUER'} color="warning">Se retirer de la formation</Button>
+                          :<Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)==='A_ATTRIBUER'}>S'affecter à la formation</Button>
+                          }
+                          <Button onClick={()=>handleClose()}>Fermer</Button>
+                        </DialogActions>
+                      </Dialog>
                       {checkRoleAsso() ? (
                         <></>
                       ) : (
@@ -233,5 +335,8 @@ function TableAccueil(data: formation[]) {
       </div>
     </>
   );
+
 }
 export default TableAccueil;
+
+
