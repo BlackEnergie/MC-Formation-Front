@@ -25,8 +25,6 @@ const ModificationFormation = (props) => {
         try {
             const response = await FetchFormationById(axiosPrivate, id)
             setFormation(response?.data);
-            console.log(response.data);
-
             setShowComponent(1);
         } catch (err) {
             console.error(err);
@@ -37,7 +35,7 @@ const ModificationFormation = (props) => {
     }
 
     const sauvegarderTout = () => {
-        console.log("sauvergadé ici");
+        // TODO: Save
     }
 
     return (

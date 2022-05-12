@@ -75,12 +75,6 @@ export default class Api {
             });
     }
 
-    async getDonnees() {
-        this.getDomaines().then(domaines => {
-            console.log(domaines)
-        });
-    }
-
     async getDomaines(bearer){
         let request = this.getRequestOptions('GET', this.CONTENT_TYPE.json,bearer);
         return fetch(this.getDomainesUrl(), request)
@@ -89,7 +83,6 @@ export default class Api {
 
     async postDemande(demande,bearer) {
         let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json, bearer, demande);
-        console.log(request)
         fetch(this.postDemandeUrl(), request)
             .then(response => {
                 if (!response.ok) {
@@ -103,7 +96,6 @@ export default class Api {
 
     async postInscription(inscription,bearer) {
         let request = this.getRequestOptions('POST', this.CONTENT_TYPE.json, bearer, inscription);
-        console.log(request)
         fetch(this.postInscriptionUrl(), request)
             .then(response => {
                 if (!response.ok) {

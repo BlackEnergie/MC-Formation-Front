@@ -76,7 +76,6 @@ const MotDePasseOublie = () => {
   };
 
   const validate = (e) => {
-    console.log(token)
     e.preventDefault();
     if (values.password != values.passwordConfirmation) {
       toast.error("Les mots de passe sont différents");

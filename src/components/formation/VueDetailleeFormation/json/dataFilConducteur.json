@@ -1,15 +1,30 @@
 [
   {
-    "partie": "Partie 1 : Faire du HTML",
-    "duree": "3h",
-    "contenu": "Toutes les balises html",
-    "methodologie": "Formation avec support powerpoint"
+    "id": 1,
+    "plan": "Ressenti du bureau entrant sur les administrateurs sur l’année passée",
+    "timing": "10 minutes",
+    "contenu": "Le Bureau entrant exprime son ressenti par rapport à l’administration de cette année",
+    "methodologie": "Pédagogie"
   },
   {
     "id": 2,
-    "plan": "Partie 2 : Faire du CSS",
-    "timing": "2h",
-    "contenu": "Les blocs en CSS, changer des couleurs, les tableaux, les bordures, les marges, la taille des objets, etc.",
-    "methodologie": "Atelier pratique"
+    "plan": "Priorisation des actions recensées lors des formation du CdH",
+    "timing": "40 minutes",
+    "contenu": "Les participants sont amenés à prioriser les actions recensées lors du CdH 2020",
+    "methodologie": "Raccrochez la liste des actions possibles. Dessinez une colonne à côté, intitulée «Importance (en $)». L'équipe peut dépenser 100 dollars (virtuels) pour les éléments d'action. Plus c'est important pour eux, plus ils devraient dépenser. Rendez-le plus amusant en apportant du papier-monnaie d'un jeu de société tel que Monopoly.Laissez-les s'entendre sur les prix. Considérez les 2 ou 3 éléments d'action les plus élevés choisis."
+  },
+  {
+    "id": 3,
+    "plan": "Poker-planning",
+    "timing": "40 minutes",
+    "contenu": "Les participants valorisent les actions sortant du lot de la partie précédente",
+    "methodologie": "Utilisation du poker planning afin que les participants puissent débattre"
+  },
+  {
+    "id": 4,
+    "plan": "Synthèse",
+    "timing": "10 minutes",
+    "contenu": "À chaud : pensez-vous que ces actions auront un impact considérable ? Notez sur 10",
+    "methodologie": "Demande"
   }
 ]

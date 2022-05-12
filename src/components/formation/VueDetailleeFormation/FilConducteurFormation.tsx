@@ -1,56 +1,86 @@
 import React from 'react';
+import Grid from '@mui/material/Grid';
+import TableContainer from '@mui/material/TableContainer';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import {styled} from '@mui/material/styles';
+import TableCell, {tableCellClasses} from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import TableHead from '@mui/material/TableHead';
+import Partie from '../../../api/model/Partie';
 
-const FilConducteurFormation = (formation) =>{
-    
-    let Donnee = formation.formation;
-    const AfficherDataFilConducteur = Donnee.data.map(
-        (info) => {
+const FilConducteurFormation = (formation) => {
+    let parties: Partie[] | undefined;
+
+    try {
+        parties = formation.formation.parties ? JSON.parse(formation.formation.parties) : undefined;
+    } catch (e) {
+        console.error(e);
+    }
+
+    const StyledTableCell = styled(TableCell)(({theme}) => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+        },
+    }));
+
+    const StyledTableRow = styled(TableRow)(({theme}) => ({
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover,
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+        },
+    }));
+
+    const StyledTableHead = styled(TableHead)(({theme}) => ({
+        '&:nth-of-type(odd)': {
+            fontWeight: 'bold',
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+        },
+    }));
+
+    const AfficherDataFilConducteur = parties?.map(
+        (partie) => {
             return (
-                <tr key={info.id}>
-                    <td>{info.id}</td>
-                    <td>{info.plan}</td>
-                    <td>{info.timing}</td>
-                    <td>{info.contenu}</td>
-                    <td>{info.methodologie}</td>
-                </tr>
+                <StyledTableRow key={partie.id}>
+                    <StyledTableCell>{partie.plan}</StyledTableCell>
+                    <StyledTableCell>{partie.timing}</StyledTableCell>
+                    <StyledTableCell>{partie.contenu}</StyledTableCell>
+                    <StyledTableCell>{partie.methodologie}</StyledTableCell>
+                </StyledTableRow>
             )
         }
     )
 
-    return(
-        <div className="container-fluid mt-10 main" >
-            <div className="row">
-                <h2 className="mt-2">
-                    Fil conducteur
-                </h2>
-            </div>
+    return (
 
-
-            <div className="container-fluid shadow p-3 mb-3 bg-white rounded">
-                <div className="row  mb-3">
-
-                    {/* Table filConducteur */}
-                    <div className="container">
-                        <div className="table-wrapper">
-                            <table className="table table-striped mt-2">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Plan / Partie</th>
-                                        <th>Timing</th>
-                                        <th>Contenu</th>
-                                        <th>Méthodologie pédagogique</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {AfficherDataFilConducteur}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Grid>
+            <TableContainer component={Paper}>
+                <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+                    <StyledTableHead>
+                        <StyledTableRow>
+                            <StyledTableCell>Plan/Partie</StyledTableCell>
+                            <StyledTableCell>Timing</StyledTableCell>
+                            <StyledTableCell>Contenu</StyledTableCell>
+                            <StyledTableCell>Méthodologie pédagogique</StyledTableCell>
+                        </StyledTableRow>
+                    </StyledTableHead>
+                    <TableBody>
+                        {AfficherDataFilConducteur}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Grid>
     )
 }
 

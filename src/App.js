@@ -65,7 +65,7 @@ function App() {
           path="formation/:id"
           element={
           <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
-            <VueDetailleeFormation />
+            <VueDetailleeFormation/>
           </ProtectedRoute>}
         />
         <Route

@@ -45,7 +45,6 @@ function ModificationFicheDeFormation() {
 
     function getMax(list){
         let cpt=1;
-        console.log(list);
         list.forEach(val=>{
             if(val.id>cpt){
                 cpt=val.id
@@ -133,8 +132,6 @@ function ModificationFicheDeFormation() {
         }
     )
     const handleAjoutDomaines = () =>{
-        console.log(messageDomaine);
-        console.log(itemsDomaine);
         if (messageDomaine !=="")
             setItemsDomaine(
                 itemsDomaine => [...itemsDomaine,

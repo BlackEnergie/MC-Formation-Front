@@ -4,7 +4,6 @@ const ModificationInformationsGenerales = (formation) => {
     let Donnee = formation.formation;
 
     const AfficherDataInfoGenerales = () => {
-        console.log(Donnee);
         return (
             <>
                 <tr>
