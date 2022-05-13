@@ -93,7 +93,7 @@ const MotDePasseOublie = () => {
     <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Link to="/" id="linkAccueil">
+          <Link to="/connexion" id="linkAccueil">
             <Button
               startIcon={<AiOutlineRollback className="Icones me-2" />}
               color="primary"
