@@ -483,7 +483,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
                                   <TableCell>Association</TableCell>
                                   <TableCell>{row?.association?.nomComplet}</TableCell>
                                 </TableRow>
-                                {!checkRoleAsso
+                                {!checkRoleAsso()
                                   ?<TableRow>
                                     <TableCell>Formateurs</TableCell>
                                     <TableCell>{formateurList(row?.formateurs).join(", ")}</TableCell>
@@ -499,7 +499,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
                           </TableContainer>
                         </DialogContent>
                         <DialogActions>
-                          {!checkRoleAsso
+                          {!checkRoleAsso()
                             ?row?.formateurs?.some(formateur => formateur.id===token.id)
                               ?
                               <Button onClick={() => postAssignFormateur(row)} hidden={statutToString(row?.statut)!=='À attribuer'} color="warning">Se retirer de la formation</Button>
