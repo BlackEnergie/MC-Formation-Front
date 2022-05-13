@@ -21,6 +21,7 @@ export default class Formation {
     dateDemande: string;
     statut: string;
     association: Association;
+    associationsInteressees: Association[];
 
     constructor() {
         this.id = "";
@@ -42,5 +43,6 @@ export default class Formation {
         this.dateDemande = "";
         this.statut = "";
         this.association = new Association();
+        this.associationsInteressees = [];
     }
 }

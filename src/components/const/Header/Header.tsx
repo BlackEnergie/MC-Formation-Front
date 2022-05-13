@@ -4,11 +4,9 @@ import Navbar from 'react-bootstrap/Navbar';
 import './Header.css';
 import {Link, useNavigate} from 'react-router-dom';
 import {AiFillSetting} from 'react-icons/ai';
-import {BsFillPersonFill} from 'react-icons/bs';
-import jwtUtils from "../../../auth/decodeToken";
-import {FiLogOut} from "react-icons/fi";
-import {IoIosAddCircleOutline} from "react-icons/io";
-
+import jwtUtils from '../../../auth/decodeToken';
+import {FiLogOut} from 'react-icons/fi';
+import {IoIosAddCircleOutline} from 'react-icons/io';
 
 const Header = (props) => {
 
@@ -16,8 +14,8 @@ const Header = (props) => {
 
     const checkAdminRole = () => {
         let res = false;
-        const token = jwtUtils(localStorage.getItem("accessToken")).decoded;
-        if (token !== null && token.role === "ROLE_BN") {
+        const token = jwtUtils(localStorage.getItem('accessToken')).decoded;
+        if (token !== null && token.role === 'ROLE_BN') {
             res = true;
         }
         return res;
@@ -25,8 +23,8 @@ const Header = (props) => {
 
     const checkAssoRole = () => {
         let res = false;
-        const token = jwtUtils(localStorage.getItem("accessToken")).decoded;
-        if (token !== null && token.role === "ROLE_ASSO") {
+        const token = jwtUtils(localStorage.getItem('accessToken')).decoded;
+        if (token !== null && token.role === 'ROLE_ASSO') {
             res = true;
         }
         return res;
@@ -38,14 +36,13 @@ const Header = (props) => {
         navigate('/connexion');
     }
 
-
     return (
         <header>
             <Navbar id="header-connexion" expand="lg">
                 <Nav className="ml-auto">
                     <Link className="text-decoration-none d-flex" to="/">
-                        <img src={require("../../../assets/img/logoblue_bgwht.png")} id='imageNavBar'
-                             alt='logoMCBlanc'/>
+                        <img src={require('../../../assets/img/logoblue_bgwht.png')} id="imageNavBar"
+                             alt="logoMCBlanc"/>
                         <Navbar.Brand className="navbar-brand">MIAGE Connection - Formation</Navbar.Brand>
                     </Link>
                 </Nav>
@@ -90,21 +87,14 @@ const Header = (props) => {
                                 props.login ? (
                                     <div id="right-side-navbar">
                                         <Nav.Link>
-                                            <button title="Déconnexion" onClick={deconnect} className="btn btn-outline-mc">
+                                            <button title="Déconnexion" onClick={deconnect}
+                                                    className="btn btn-outline-mc">
                                                 <FiLogOut className="Icones"/>
                                             </button>
                                         </Nav.Link>
                                     </div>
                                 ) : (
-                                    <div id="right-side-navbar">
-                                        <Nav.Link>
-                                            <button className="btn btn-outline-mc">
-                                                <BsFillPersonFill className="Icones"/>
-                                                Se Connecter
-                                            </button>
-                                        </Nav.Link>
-                                    </div>
-
+                                    <></>
                                 )
                             }
                         </Nav>

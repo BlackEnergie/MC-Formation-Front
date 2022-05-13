@@ -18,6 +18,7 @@ import {toast} from 'react-hot-toast';
 
 const VueDetailleeFormation = () => {
     const [formation, setFormation] = useState(new Formation());
+    const [loading, setLoading] = useState(true);
     let {id} = useParams();
     const axiosPrivate = useAxiosPrivate()
 
@@ -29,6 +30,7 @@ const VueDetailleeFormation = () => {
         try {
             const response = await FetchFormationById(axiosPrivate, id)
             setFormation(response?.data);
+            setLoading(false);
         } catch (err) {
             toast.error(err.message);
             console.error(err);
@@ -58,7 +60,7 @@ const VueDetailleeFormation = () => {
                         </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <InformationsGeneralesFormation formation={formation}/>
+                        <InformationsGeneralesFormation formation={formation} loading={loading} setLoading={setLoading}/>
                     </AccordionDetails>
                 </Accordion>
                 <Accordion>

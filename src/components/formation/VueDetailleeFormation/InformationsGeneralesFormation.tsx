@@ -7,61 +7,123 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {Container} from '@mui/material';
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import {Skeleton} from '@mui/material';
 
-const InformationsGeneralesFormation = (formation) => {
+const InformationsGeneralesFormation = (props) => {
 
-
-    let Donnee = formation.formation;
+    let Donnee = props.formation;
     const AfficherDataInfoGenerales = () => {
         return (
             <>
                 <StyledTableRow>
-                    <StyledTableCellHead >Statut</StyledTableCellHead>
-                    <StyledTableCell>{Donnee.statut}</StyledTableCell>
+                    <StyledTableCellHead>Statut</StyledTableCellHead>
+                    <StyledTableCell>
+                        {
+                            props.loading ? <Skeleton sx={{width: 'auto'}}/> :
+                                Donnee.statut
+                        }
+                    </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
                     <StyledTableCellHead>Cadre</StyledTableCellHead>
-                    <StyledTableCell>{Donnee.cadre}</StyledTableCell>
+                    <StyledTableCell>
+                        {
+                            props.loading ? <Skeleton sx={{width: 'auto'}}/> :
+                                Donnee.cadre
+                        }
+                    </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
                     <StyledTableCellHead>Type</StyledTableCellHead>
-                    <StyledTableCell>{Donnee.type}</StyledTableCell>
+                    <StyledTableCell>
+                        {
+                            props.loading ? <Skeleton sx={{width: 'auto'}}/> :
+                                Donnee.type
+                        }
+                    </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
                     <StyledTableCellHead>Date</StyledTableCellHead>
-                    <StyledTableCell>{Donnee.date}</StyledTableCell>
+                    <StyledTableCell>
+                        {
+                            props.loading ? <Skeleton sx={{width: 'auto'}}/> :
+                                Donnee.date
+                        }
+                    </StyledTableCell>
                 </StyledTableRow>
             </>
         )
     }
-    const AfficherDataDomaine = () => Donnee.domaines.map(
-        (info) => {
-            return (
-                <StyledTableRow key={info.code} title={info.description}>
-                    <StyledTableCell>{info.code}</StyledTableCell>
-                    <StyledTableCell>{info.libelle}</StyledTableCell>
-                </StyledTableRow>
-            )
-        }
-    )
-    const AfficherDataFormateur = () => Donnee.formateurs.map(
-        (info) => {
-            return (
-                <StyledTableRow key={info.id}>
-                    <StyledTableCell>{info.nom}</StyledTableCell>
-                    <StyledTableCell>{info.prenom}</StyledTableCell>
-                </StyledTableRow>
-            )
-        }
-    )
+    const AfficherDataDomaine = () => {
+        return !props.loading ?
+            Donnee.domaines.map(
+                (info) => {
+                    return (
+                        <StyledTableRow key={info.code} title={info.description}>
+                            <StyledTableCell>
+                                {info.code}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                                {info.libelle}
+                            </StyledTableCell>
+                        </StyledTableRow>
+                    )
+                }
+            ) :
+            <StyledTableRow>
+                <StyledTableCell>
+                    <Skeleton sx={{width: 'auto'}}/>
+                </StyledTableCell>
+                <StyledTableCell>
+                    <Skeleton sx={{width: 'auto'}}/>
+                </StyledTableCell>
+            </StyledTableRow>
+        ;
+    }
+
+    const AfficherDataFormateur = () => {
+        return !props.loading ?
+        Donnee.formateurs.map(
+            (info) => {
+                return (
+                    <StyledTableRow key={info.id}>
+                        <StyledTableCell>{info.nom}</StyledTableCell>
+                        <StyledTableCell>{info.prenom}</StyledTableCell>
+                    </StyledTableRow>
+                )
+            }
+        ) :
+            <StyledTableRow>
+                <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
+                <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
+            </StyledTableRow>
+    }
+
+    const AfficherAssociationsInteressees = () => {
+        return !props.loading ?
+            Donnee.associationsInteressees?.map(
+                (info) => {
+                    return (
+                        <StyledTableRow key={info.id}>
+                            <StyledTableCell>{info.nomComplet}</StyledTableCell>
+                            <StyledTableCell>{info.ville}</StyledTableCell>
+                        </StyledTableRow>
+                    )
+                }
+            ) :
+            <StyledTableRow>
+                <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
+                <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
+            </StyledTableRow>
+    }
+
     const StyledTableCell = styled(TableCell)(({theme}) => ({
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.common.white,
-            height:55
+            height: 55
         },
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
@@ -75,7 +137,7 @@ const InformationsGeneralesFormation = (formation) => {
         },
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
-            fontWeight:"bold",
+            fontWeight: 'bold',
         },
     }));
 
@@ -91,7 +153,7 @@ const InformationsGeneralesFormation = (formation) => {
 
     const StyledTableHead = styled(TableHead)(({theme}) => ({
         '&:nth-of-type(odd)': {
-            fontWeight: "bold",
+            fontWeight: 'bold',
         },
         // hide last border
         '&:last-child td, &:last-child th': {
@@ -113,7 +175,7 @@ const InformationsGeneralesFormation = (formation) => {
                     <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow>
-                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell sx={{width: 100}}></StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
                             </StyledTableRow>
                         </StyledTableHead>
@@ -130,13 +192,12 @@ const InformationsGeneralesFormation = (formation) => {
                     color="primary"
                     id="tableTitle"
                     component="div">Domaine(s)
-
                 </Typography>
                 <TableContainer component={Paper} sx={{maxHeight: 350}}>
                     <Table stickyHeader aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow>
-                                <StyledTableCell>Code</StyledTableCell>
+                                <StyledTableCell sx={{width: 100}}>Code</StyledTableCell>
                                 <StyledTableCell>Nom</StyledTableCell>
                             </StyledTableRow>
                         </StyledTableHead>
@@ -175,7 +236,7 @@ const InformationsGeneralesFormation = (formation) => {
                     color="primary"
                     component="div">Association(s) intéréssée(s)</Typography>
                 <TableContainer component={Paper} sx={{maxHeight: 350}}>
-                    <Table stickyHeader  sx={{minWidth: 100}} aria-label="customized table">
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow>
                                 <StyledTableCell>Nom</StyledTableCell>
@@ -183,7 +244,7 @@ const InformationsGeneralesFormation = (formation) => {
                             </StyledTableRow>
                         </StyledTableHead>
                         <TableBody>
-
+                            {AfficherAssociationsInteressees()}
                         </TableBody>
                     </Table>
                 </TableContainer>

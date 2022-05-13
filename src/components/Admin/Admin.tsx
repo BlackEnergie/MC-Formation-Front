@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import axios, { axiosPrivate } from '../../api/axios'
 import toast from 'react-hot-toast';
-import {loader} from "../../utils/LoaderUtils";
+import {loader} from '../../utils/LoaderUtils';
 import {FaRegPaperPlane} from "react-icons/fa";
 import Select from "react-select";
 import {Link} from "react-router-dom";
