@@ -1,5 +1,6 @@
 import Domaine from './Domaine';
 import Association from './Association';
+import {Statut} from '../../utils/StatutUtils';
 
 export default class Formation {
     id: string;
@@ -19,7 +20,7 @@ export default class Formation {
     detail: string;
     domaines: Domaine[];
     dateDemande: string;
-    statut: string;
+    statut: Statut;
     association: Association;
     associationsInteressees: Association[];
 
@@ -41,7 +42,7 @@ export default class Formation {
         this.detail = "";
         this.domaines = [];
         this.dateDemande = "";
-        this.statut = "";
+        this.statut = undefined;
         this.association = new Association();
         this.associationsInteressees = [];
     }

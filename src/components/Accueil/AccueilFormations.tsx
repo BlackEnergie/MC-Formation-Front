@@ -21,8 +21,7 @@ function Accueil() {
     getFormationsAccueil();
   }, []);
 
-  return AccueilAffichage(data)
-    ;
+  return AccueilAffichage(data);
 }
 
 export default Accueil;

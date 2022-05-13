@@ -1,9 +1,6 @@
 import React from 'react';
 import './App.css';
-import {
-  Route,
-  Routes,
-} from 'react-router-dom';
+import {Route, Routes,} from 'react-router-dom';
 import Connexion from './components/auth/Connexion/Connexion';
 import Layout from './Layout';
 import DemandeFormation from './components/formation/DemandeFormation/DemandeFormation';
@@ -18,6 +15,7 @@ import Admin from './components/Admin/Admin';
 import MotDePasseOublie from './components/auth/MotDePasseOublie/MotDePasseOublie';
 import ReinitialisationMotDePasse from "./components/auth/MotDePasseOublie/ReinitialisationMotDePasse";
 import decodeToken from './auth/decodeToken';
+import toast from "react-hot-toast";
 
 function App() {
 
@@ -30,7 +28,11 @@ function App() {
       const {isValid, decoded} = decodeToken(jwt);
       if (isValid) {
           role = decoded.role;
-      }
+      } else {
+          localStorage.clear();
+          window.location.href = '/connexion';
+          toast.error('Session expirée');
+    }
     }
   }
   setRole();

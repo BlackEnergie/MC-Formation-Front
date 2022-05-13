@@ -1,4 +1,4 @@
-export enum statut{
+export enum Statut{
     DEMANDE = "Demande",
     A_ATTRIBUER = "À attribuer",
     A_VENIR = "À venir",

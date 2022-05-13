@@ -1,4 +1,4 @@
-import { statut } from "../../../utils/StatutUtils";
+import { Statut } from "../../../utils/StatutUtils";
 import { formation } from "./AccueilAffichage";
 
 export interface domaines {
@@ -22,7 +22,7 @@ export function GetFullFilter(data: formation[]): filtre {
   return{
     date_debut: "",
     date_fin: "",
-    statut: [statut.DEMANDE, statut.A_ATTRIBUER, statut.A_VENIR, statut.PASSEE],
+    statut: [Statut.DEMANDE, Statut.A_ATTRIBUER, Statut.A_VENIR, Statut.PASSEE],
     domaines: getDomainesList(data),
     cadre: getCadreList(data),
     sujet: "",
