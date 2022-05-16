@@ -1,6 +1,6 @@
 import './VueDetailleeFormation.css';
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {FetchFormationById} from '../../../serverInteraction/FetchFormation';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -14,10 +14,10 @@ import Formation from '../../../api/model/Formation';
 import InformationsFicheDeFormation from './InformationsFicheDeFormation';
 import FilConducteurFormation from './FilConducteurFormation';
 import {toast} from 'react-hot-toast';
-import {Skeleton} from '@mui/material';
+import {Fab, Skeleton} from '@mui/material';
 import {Statut} from '../../../utils/StatutUtils';
 import InformationsDemande from './InformationsDemande';
-
+import EditIcon from '@mui/icons-material/Edit';
 
 const VueDetailleeFormation = () => {
     const [formation, setFormation] = useState(new Formation());
@@ -45,23 +45,38 @@ const VueDetailleeFormation = () => {
         nomFiche = 'FDA'
     }
 
+    const FabStyle = {
+        margin: 0,
+        top: 'auto',
+        right: 40,
+        bottom: 40,
+        left: 'auto',
+        position: 'fixed',
+    }
+
     return (
         <Container maxWidth={'xl'}>
-            <Typography
-                mb="10px"
-                color="primary"
-                variant="h4"
-                id="tableTitle"
-                component="div">
-                {loading ?
-                    <Skeleton sx={{width: 'auto'}}/> :
-                    <>
-                        <span color="primary">{
-                            formation.nom ? formation.nom : formation.sujet
-                        }</span>
-                    </>
-                }
-            </Typography>
+            {loading ?
+                <Skeleton sx={{width: 'auto'}}/> :
+                <>
+                    <Typography
+                        mb="10px"
+                        color="primary"
+                        variant="h4"
+                        id="tableTitle"
+                        component="div">
+                        <span color="primary">
+                            {formation.nom ? formation.nom : formation.sujet}
+                        </span>
+                    </Typography>
+                    <Link className="text-decoration-none" to={'/formation/edit/' + formation.id}
+                          title="Modifier la formation">
+                        <Fab sx={FabStyle} color="primary" aria-label="edit">
+                            <EditIcon/>
+                        </Fab>
+                    </Link>
+                </>
+            }
             <Accordion defaultExpanded={true}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon/>}
