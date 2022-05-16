@@ -18,12 +18,14 @@ import {Fab, Skeleton} from '@mui/material';
 import {Statut} from '../../../utils/StatutUtils';
 import InformationsDemande from './InformationsDemande';
 import EditIcon from '@mui/icons-material/Edit';
+import { useNavigate } from "react-router-dom";
 
 const VueDetailleeFormation = () => {
     const [formation, setFormation] = useState(new Formation());
     const [loading, setLoading] = useState(true);
     let {id} = useParams();
     const axiosPrivate = useAxiosPrivate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         getFormationDetails();
@@ -35,8 +37,10 @@ const VueDetailleeFormation = () => {
             setFormation(response?.data);
             setLoading(false);
         } catch (err) {
-            toast.error(err.message);
-            console.error(err);
+            toast.error(err.response.data.message);
+            if (err.response.data.code === 403){
+                navigate('/')
+            }
         }
     }
 

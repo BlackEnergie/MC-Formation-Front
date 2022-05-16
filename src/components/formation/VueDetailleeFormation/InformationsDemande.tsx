@@ -106,8 +106,9 @@ const InformationsDemande = (props) => {
 
     const AfficherAssociationsInteressees = () => {
         return !props.loading ?
-            formation.associationsFavorables?.map(
-                (info) => {
+            formation.associationsFavorables?.length > 0 ?
+                formation.associationsFavorables.map(
+                    (info) => {
                     return (
                         <StyledTableRow key={info.id}>
                             <StyledTableCell>{info.ville}</StyledTableCell>
@@ -116,6 +117,11 @@ const InformationsDemande = (props) => {
                     )
                 }
             ) :
+            <StyledTableRow>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+            </StyledTableRow>
+            :
             <StyledTableRow>
                 <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
                 <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>

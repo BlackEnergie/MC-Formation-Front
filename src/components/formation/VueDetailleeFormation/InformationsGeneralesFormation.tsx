@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import {Skeleton} from '@mui/material';
+import {statutToString, statutToStyle} from '../../../utils/StatutUtils';
 
 const InformationsGeneralesFormation = (props) => {
 
@@ -19,10 +20,10 @@ const InformationsGeneralesFormation = (props) => {
             <>
                 <StyledTableRow>
                     <StyledTableCellHead>Statut</StyledTableCellHead>
-                    <StyledTableCell>
+                    <StyledTableCell style={{color:statutToStyle(formation.statut)}}>
                         {
                             props.loading ? <Skeleton sx={{width: 'auto'}}/> :
-                                formation.statut
+                                statutToString(formation.statut)
                         }
                     </StyledTableCell>
                 </StyledTableRow>
@@ -86,16 +87,22 @@ const InformationsGeneralesFormation = (props) => {
 
     const AfficherDataFormateur = () => {
         return !props.loading ?
-            formation.formateurs.map(
-                (info) => {
-                    return (
-                        <StyledTableRow key={info.id}>
-                            <StyledTableCell>{info.nom}</StyledTableCell>
-                            <StyledTableCell>{info.prenom}</StyledTableCell>
-                        </StyledTableRow>
-                    )
-                }
-            ) :
+            formation.formateurs?.length > 0 ?
+                formation.formateurs.map(
+                    (info) => {
+                        return (
+                            <StyledTableRow key={info.id}>
+                                <StyledTableCell>{info.nom}</StyledTableCell>
+                                <StyledTableCell>{info.prenom}</StyledTableCell>
+                            </StyledTableRow>
+                        )
+                    }
+                ) :
+                <StyledTableRow>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                </StyledTableRow>
+            :
             <StyledTableRow>
                 <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
                 <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
