@@ -21,18 +21,6 @@ const optionsDomaine = [
 
 ];
 
-
-const AfficherBesoinsMaterielsFormation = Donnee.data[0].BesoinsMaterielsFormation.map(
-    (info) => {
-        return (
-            <tr key={info.id}>
-                <td></td>
-                <td>{info.nom}</td>
-            </tr>
-        )
-    }
-)
-
 function ModificationFicheDeFormation() {
     const [selectedType, setSelectedType] = useState();
     const [messageObjPedagogique, setMessageObjPedagogique] = useState("");
@@ -141,7 +129,6 @@ function ModificationFicheDeFormation() {
             );
         //setMessageDomaine("");
     }
-
     /*  FIN PARTIE DOMAINES */
 
 
@@ -177,7 +164,6 @@ function ModificationFicheDeFormation() {
             );
         setMessageMateriel("");
     }
-
     /*  FIN PARTIE BESOINS MATERIELS */
 
 
@@ -220,6 +206,7 @@ function ModificationFicheDeFormation() {
                                                     type="text"
                                                     value={messageObjPedagogique}
                                                     onChange={(e) => setMessageObjPedagogique(e.target.value) }
+
                                                 />
                                             </td>
                                             <td className="d-flex justify-content-center">

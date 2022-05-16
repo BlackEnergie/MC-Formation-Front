@@ -1,7 +1,7 @@
 export default class Partie {
     id: number;
     plan: string;
-    timing: number;
+    timing: string;
     contenu: string;
     methodologie: string;
 }
