@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {AiOutlineEdit, AiOutlineZoomIn} from 'react-icons/ai';
 import {Link} from 'react-router-dom';
 import AffectationFormation from '../../../api/model/AffectationFormation';
-import {FetchAssignFormateur} from '../../../serverInteraction/FetchFormation';
+import {FetchAssignFormateur, FetchLikeFormation} from '../../../serverInteraction/FetchFormation';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import toast from 'react-hot-toast';
 import {Statut, statutToString, statutToStyle,} from '../../../utils/StatutUtils';
@@ -33,14 +33,24 @@ import {
 } from '@mui/material';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import {tableCellClasses} from '@mui/material/TableCell';
 import {styled} from '@mui/material/styles';
+import Association from '../../../api/model/Association';
+import InteresserFormation from '../../../api/model/InteresserFormation';
 
 export interface formation {
     association: {
+        id:number;
         acronyme: string;
         nomComplet: string;
     };
+    associationsFavorables: {
+        id:number;
+        acronyme: string;
+        nomComplet: string;
+    }[];
     cadre?: string;
     domaines: domaines[];
     formateurs: {
@@ -235,15 +245,16 @@ function AccueilAffichage(unFilteredData: formation[]) {
 
     const postAssignFormateur = async (row: formation) => {
         try {
+            
             let affectation = new AffectationFormation();
             affectation.idFormation = row.id;
             affectation.nomUtilisateur = token.sub;
             const response = await FetchAssignFormateur(axiosPrivate, affectation);
             if (response.data.code == 200) {
-                data.splice(data.indexOf(row), 1);
-                data.push(JSON.parse(response.data.data));
-                unFilteredData.splice(data.indexOf(row), 1);
+                unFilteredData.splice(unFilteredData.indexOf(row), 1);
                 unFilteredData.push(JSON.parse(response.data.data));
+                data = Filtres(unFilteredData, filtre);
+                setLiveness(liveness + 1);
                 toast.success(response.data.message);
             }
         } catch (err) {
@@ -251,6 +262,26 @@ function AccueilAffichage(unFilteredData: formation[]) {
         }
         handleClose()
     };
+
+    const postLikeFormation = async (row: formation) => {
+        try {
+            let interesser = new InteresserFormation();
+            interesser.idFormation = row.id;
+            interesser.idUtilisateur = token.id;
+            const response = await FetchLikeFormation(axiosPrivate, interesser);
+            if (response.data.code == 200) {
+                unFilteredData.splice(unFilteredData.indexOf(row), 1);
+                unFilteredData.push(JSON.parse(response.data.data));
+                data = Filtres(unFilteredData, filtre);
+                setLiveness(liveness + 1);
+                toast.success(response.data.message);
+            }
+        } catch (err) {
+            toast.error(err.response.data.message);
+        }
+        handleClose();
+    };
+
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -550,9 +581,14 @@ function AccueilAffichage(unFilteredData: formation[]) {
                                                             <Button onClick={() => handleClose()}>Fermer</Button>
                                                         </DialogActions>
                                                     </Dialog>
-                                                    {checkRoleAsso() ? (
-                                                        <></>
-                                                    ) : (
+                                                    {checkRoleAsso() && row.association.id !==token.id
+                                                    ?(<Button onClick={() => postLikeFormation(row)}>
+                                                        {row?.associationsFavorables?.some(association => association.id === token.id)
+                                                            ?<FavoriteOutlinedIcon/>
+                                                            :<FavoriteBorderOutlinedIcon/>
+                                                        }
+                                                        </Button>
+                                                    ): (
                                                         checkRoleBn() || (statutToString(row?.statut) === 'À venir') && row?.formateurs?.some(formateur => formateur.id === token.id) ?
                                                             (
                                                                 <Link to={'/formation/edit/' + row.id}>
