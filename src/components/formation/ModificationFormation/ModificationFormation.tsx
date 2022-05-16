@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import ModificationFormationInformationGenerales from "./ModificationInformationsGenerales";
 import ModificationFicheDeFormation from "./ModificationFicheDeFormation";
-import FilConducteurFormation from "../VueDetailleeFormation/FilConducteurFormation";
+import ModificationFilConducteur from "./ModificationFilConducteur";
 import NavFormation from "../NavigationFormation/NavFormation";
 import {useParams} from "react-router-dom";
-import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
 import { FetchFormationById } from '../../../serverInteraction/FetchFormation';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 
-const ModificationFormation = (props) => {
+const ModificationFormation = () => {
 
     const [formation, setFormation] = useState(null);
     const [showComponent, setShowComponent] = useState(0);
+    /*const [itemsPartie, setItemsParties] = useState(formation.parties);*/
+
+
     let { id } = useParams();
 
     const axiosPrivate = useAxiosPrivate()
@@ -57,7 +59,7 @@ const ModificationFormation = (props) => {
                     }
                     {
                         (showComponent === 3) ? (
-                            <FilConducteurFormation formation={formation}/>
+                            <ModificationFilConducteur formation={formation}/>
                         ) : (<></>)
                     }
                     <div className="container-fluid">
