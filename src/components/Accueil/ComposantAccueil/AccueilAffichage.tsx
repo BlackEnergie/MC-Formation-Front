@@ -39,6 +39,7 @@ import {tableCellClasses} from '@mui/material/TableCell';
 import {styled} from '@mui/material/styles';
 import Association from '../../../api/model/Association';
 import InteresserFormation from '../../../api/model/InteresserFormation';
+import Formation from '../../../api/model/Formation';
 
 export interface formation {
     association: {
@@ -251,7 +252,11 @@ function AccueilAffichage(unFilteredData: formation[]) {
             affectation.nomUtilisateur = token.sub;
             const response = await FetchAssignFormateur(axiosPrivate, affectation);
             if (response.data.code == 200) {
-                unFilteredData[unFilteredData.indexOf(row)] = JSON.parse(response.data.data)
+                var json = JSON.parse(response.data.data);
+                if(json.date!=null){
+                    json.date= new Date(json.date).toLocaleDateString("fr-CA");
+                }
+                unFilteredData[unFilteredData.indexOf(row)] = json;
                 data = Filtres(unFilteredData, filtre);
                 setLiveness(liveness + 1);
                 toast.success(response.data.message);
@@ -269,10 +274,13 @@ function AccueilAffichage(unFilteredData: formation[]) {
             interesser.idUtilisateur = token.id;
             const response = await FetchLikeFormation(axiosPrivate, interesser);
             if (response.data.code == 200) {
-                unFilteredData[unFilteredData.indexOf(row)] = JSON.parse(response.data.data)
+                var json = JSON.parse(response.data.data);
+                if(json.date!=null){
+                    json.date= new Date(json.date).toLocaleDateString("fr-CA");
+                }
+                unFilteredData[unFilteredData.indexOf(row)] = json;
                 data = Filtres(unFilteredData, filtre);
                 setLiveness(liveness + 1);
-                toast.success(response.data.message);
             }
         } catch (err) {
             toast.error(err.response.data.message);
@@ -579,7 +587,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
                                                             <Button onClick={() => handleClose()}>Fermer</Button>
                                                         </DialogActions>
                                                     </Dialog>
-                                                    {checkRoleAsso() && row.association.id !==token.id
+                                                    {checkRoleAsso() && row.association.id !==token.id && (statutToString(row?.statut) !== 'Passée')
                                                     ?(<Button onClick={() => postLikeFormation(row)}>
                                                         {row?.associationsFavorables?.some(association => association.id === token.id)
                                                             ?<FavoriteOutlinedIcon/>
