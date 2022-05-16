@@ -106,12 +106,12 @@ const InformationsDemande = (props) => {
 
     const AfficherAssociationsInteressees = () => {
         return !props.loading ?
-            formation.associationsInteressees?.map(
+            formation.associationsFavorables?.map(
                 (info) => {
                     return (
                         <StyledTableRow key={info.id}>
-                            <StyledTableCell>{info.nomComplet}</StyledTableCell>
                             <StyledTableCell>{info.ville}</StyledTableCell>
+                            <StyledTableCell>{info.nomComplet}</StyledTableCell>
                         </StyledTableRow>
                     )
                 }
@@ -188,8 +188,8 @@ const InformationsDemande = (props) => {
                         <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
                             <StyledTableHead>
                                 <StyledTableRow>
-                                    <StyledTableCell sx={{width: 180}}>Nom</StyledTableCell>
-                                    <StyledTableCell>Ville</StyledTableCell>
+                                    <StyledTableCell sx={{width: 180}}>Ville</StyledTableCell>
+                                    <StyledTableCell>Nom</StyledTableCell>
                                 </StyledTableRow>
                             </StyledTableHead>
                             <TableBody>
