@@ -14,6 +14,9 @@ import Formation from '../../../api/model/Formation';
 import InformationsFicheDeFormation from './InformationsFicheDeFormation';
 import FilConducteurFormation from './FilConducteurFormation';
 import {toast} from 'react-hot-toast';
+import {Skeleton} from '@mui/material';
+import {Statut} from '../../../utils/StatutUtils';
+import InformationsDemande from './InformationsDemande';
 
 
 const VueDetailleeFormation = () => {
@@ -37,69 +40,86 @@ const VueDetailleeFormation = () => {
         }
     }
 
-    let nomFiche = 'Fiche de formation';
+    let nomFiche = 'FDF';
     if (formation && formation.type === 'Atelier') {
-        nomFiche = 'Fiche d\'Atelier'
+        nomFiche = 'FDA'
     }
 
     return (
         <Container maxWidth={'xl'}>
-            <div>
-                <Accordion defaultExpanded={true}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon/>}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                    >
-                        <Typography
-                            fontWeight="bold"
-                            color="primary"
-                            component="h1"
-                            variant="h5">
-                            Informations détaillées
-                        </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <InformationsGeneralesFormation formation={formation} loading={loading} setLoading={setLoading}/>
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon/>}
-                        aria-controls="panel2a-content"
-                        id="panel2a-header"
-                    >
-                        <Typography
-                            fontWeight="bold"
-                            color="primary"
-                            component="h1"
-                            variant="h5">
-                            {nomFiche}
-                        </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <InformationsFicheDeFormation formation={formation}/>
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon/>}
-                        aria-controls="panel3a-content"
-                        id="panel3a-header"
-                    >
-                        <Typography
-                            fontWeight="bold"
-                            color="primary"
-                            component="h1"
-                            variant="h5">
-                            Fil conducteur
-                        </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <FilConducteurFormation formation={formation}/>
-                    </AccordionDetails>
-                </Accordion>
-            </div>
+            <Typography
+                mb="10px"
+                color="primary"
+                variant="h4"
+                id="tableTitle"
+                component="div">
+                {loading ?
+                    <Skeleton sx={{width: 'auto'}}/> :
+                    <>
+                        <span color="primary">{
+                            formation.nom ? formation.nom : formation.sujet
+                        }</span>
+                    </>
+                }
+            </Typography>
+            <Accordion defaultExpanded={true}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon/>}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header">
+                    <Typography
+                        fontWeight="bold"
+                        color="primary"
+                        component="h1"
+                        variant="h5">
+                        Informations demande
+                    </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <InformationsDemande formation={formation} loading={loading} setLoading={setLoading}/>
+                </AccordionDetails>
+            </Accordion>
+            {!loading && (formation.statut !== Statut.DEMANDE.toUpperCase()) ?
+                <>
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header">
+                            <Typography
+                                fontWeight="bold"
+                                color="primary"
+                                component="h1"
+                                variant="h5">
+                                Informations {formation.type.toLowerCase()}
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <InformationsGeneralesFormation formation={formation} loading={loading}
+                                                            setLoading={setLoading}/>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel2a-content"
+                            id="panel2a-header">
+                            <Typography
+                                fontWeight="bold"
+                                color="primary"
+                                component="h1"
+                                variant="h5">
+                                {nomFiche}
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <InformationsFicheDeFormation formation={formation}/>
+                            <FilConducteurFormation formation={formation}/>
+                        </AccordionDetails>
+                    </Accordion>
+                </>
+                : <></>
+            }
         </Container>
     )
 }

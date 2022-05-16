@@ -9,6 +9,7 @@ import TableCell, {tableCellClasses} from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Partie from '../../../api/model/Partie';
+import Typography from '@mui/material/Typography';
 
 const FilConducteurFormation = (formation) => {
     let parties: Partie[] | undefined;
@@ -63,8 +64,15 @@ const FilConducteurFormation = (formation) => {
     )
 
     return (
-
         <Grid>
+            <Typography
+                sx={{ flex: '1 1 100%', p:1 }}
+                variant="h5"
+                color="primary"
+                id="tableTitle"
+                component="div">
+                Fil conducteur
+            </Typography>
             <TableContainer component={Paper}>
                 <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
                     <StyledTableHead>
