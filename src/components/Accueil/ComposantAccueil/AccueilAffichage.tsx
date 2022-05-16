@@ -251,8 +251,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
             affectation.nomUtilisateur = token.sub;
             const response = await FetchAssignFormateur(axiosPrivate, affectation);
             if (response.data.code == 200) {
-                unFilteredData.splice(unFilteredData.indexOf(row), 1);
-                unFilteredData.push(JSON.parse(response.data.data));
+                unFilteredData[unFilteredData.indexOf(row)] = JSON.parse(response.data.data)
                 data = Filtres(unFilteredData, filtre);
                 setLiveness(liveness + 1);
                 toast.success(response.data.message);
@@ -270,8 +269,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
             interesser.idUtilisateur = token.id;
             const response = await FetchLikeFormation(axiosPrivate, interesser);
             if (response.data.code == 200) {
-                unFilteredData.splice(unFilteredData.indexOf(row), 1);
-                unFilteredData.push(JSON.parse(response.data.data));
+                unFilteredData[unFilteredData.indexOf(row)] = JSON.parse(response.data.data)
                 data = Filtres(unFilteredData, filtre);
                 setLiveness(liveness + 1);
                 toast.success(response.data.message);
