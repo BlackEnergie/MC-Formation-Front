@@ -14,7 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {Input, TextField, textFieldClasses} from '@mui/material';
 
-const FilConducteurFormation = (formation) => {
+const ModificationFilConducteur = (formation) => {
     const INITIAL_PARTIE : Partie = {
         id: 0,
         plan: "",
@@ -35,6 +35,20 @@ const FilConducteurFormation = (formation) => {
             console.log(filConducteur);
         };*/
 
+    const handleChange = (i) => {
+
+        let items = INITIAL_PARTIE;
+        items = filConducteur;
+        console.log(items[i])
+        items[i].plan = temporairePartie.plan;
+        items[i].timing = temporairePartie.timing;
+        items[i].contenu = temporairePartie.contenu;
+        items[i].methodologie = temporairePartie.methodologie;
+
+        setFilConducteur(items);
+        console.log(filConducteur[i])
+    };
+
 
     const AfficherDataFilConducteur = () => filConducteur?.map(
         (partie,i) => {
@@ -48,6 +62,12 @@ const FilConducteurFormation = (formation) => {
                             inputProps={{style: {fontSize: 12}}}
                             size="small"
                             multiline={true}
+                           onChange={
+                                (event) => {
+                                    temporairePartie.plan = event.target.value;
+                                    handleChange(i);
+                                }
+                            }
                         >
                         </StyledTextField>
                     </TableCell>
@@ -58,7 +78,13 @@ const FilConducteurFormation = (formation) => {
                             variant="standard"
                             inputProps={{style: {fontSize: 12}}}
                             size="small"
-                            multiline={true}>
+                            multiline={true}
+                            onChange={
+                                (event) => {
+                                    temporairePartie.timing = event.target.value;
+                                    handleChange(i);
+                                }
+                            }>
                         </StyledTextField>
                     </StyledTableCell>
                     <StyledTableCell>
@@ -68,7 +94,13 @@ const FilConducteurFormation = (formation) => {
                             variant="standard"
                             inputProps={{style: {fontSize: 12}}}
                             size="small"
-                            multiline={true}>
+                            multiline={true}
+                            onChange={
+                                (event) => {
+                                    temporairePartie.contenu = event.target.value;
+                                    handleChange(i);
+                                }
+                            }>
                         </StyledTextField>
                     </StyledTableCell>
                     <StyledTableCell>
@@ -78,7 +110,13 @@ const FilConducteurFormation = (formation) => {
                             variant="standard"
                             inputProps={{style: {fontSize: 12}}}
                             size="small"
-                            multiline={true}>
+                            multiline={true}
+                            onChange={
+                                (event) => {
+                                    temporairePartie.methodologie = event.target.value;
+                                    handleChange(i);
+                                }
+                            }>
                         </StyledTextField>
 
                     </StyledTableCell>
@@ -254,4 +292,4 @@ const FilConducteurFormation = (formation) => {
     )
 }
 
-export default FilConducteurFormation;
+export default ModificationFilConducteur;
