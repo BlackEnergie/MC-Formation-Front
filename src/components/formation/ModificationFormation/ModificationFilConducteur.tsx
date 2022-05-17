@@ -19,21 +19,21 @@ import Formation from '../../../api/model/Formation';
 
 interface Props{
     formation: Formation
+    modifFormation: (
+        newFormation: Formation
+    ) => void
 }
 
 const ModificationFilConducteur = (props: Props) => {
 
     const axiosPrivate = useAxiosPrivate();
+    let newformation = props.formation
 
     console.log(props.formation)
 
-    const handleSubmit = async () => {
-        try {
-            const response = await PostFormation(axiosPrivate, filConducteur);
-            toast.success("youpi");
-        } catch (err) {
-            toast.error("lol");
-        }
+    const handleSubmit = () => {
+        newformation.parties = JSON.stringify(filConducteur)
+        props.modifFormation(newformation)
     };
 
 
