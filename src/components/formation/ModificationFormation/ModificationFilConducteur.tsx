@@ -9,52 +9,70 @@ import TableCell, {tableCellClasses} from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import Partie from '../../../api/model/Partie';
-import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import {Input, TextField, textFieldClasses} from '@mui/material';
+import {TextField, textFieldClasses} from '@mui/material';
+import toast from "react-hot-toast";
+import {PostFormation} from "../../../serverInteraction/PostFormation";
+import useAxiosPrivate from "../../../auth/hooks/useAxiosPrivate";
 
 const ModificationFilConducteur = (formation) => {
-    const INITIAL_PARTIE : Partie = {
+
+    const axiosPrivate = useAxiosPrivate();
+
+
+    const handleSubmit = async () => {
+        try {
+            const response = await PostFormation(axiosPrivate, filConducteur);
+            toast.success("youpi");
+        } catch (err) {
+            toast.error("lol");
+        }
+    };
+
+
+    const INITIAL_PARTIE: Partie = {
         id: 0,
         plan: "",
         timing: "",
         contenu: "",
         methodologie: "",
     }
-    let temporairePartie = INITIAL_PARTIE ;
-    const [filConducteur , setFilConducteur] = useState(JSON.parse(formation.formation.parties));
+    let temporairePartie = INITIAL_PARTIE;
+    const [filConducteur, setFilConducteur] = useState(JSON.parse(formation.formation.parties));
 
-    /*const handleChange = (attribut, i, value) => {
-            setFilConducteur({
-                plan:temporairePartie.plan,
-                timing:temporairePartie.timing,
-                contenu:temporairePartie.contenu,
-                methodologie:temporairePartie.methodologie
-            });
-            console.log(filConducteur);
-        };*/
 
-    const handleChange = (i) => {
+    const handleChange = (i, s) => {
 
-        let items = INITIAL_PARTIE;
-        items = filConducteur;
-        console.log(items[i])
-        items[i].plan = temporairePartie.plan;
-        items[i].timing = temporairePartie.timing;
-        items[i].contenu = temporairePartie.contenu;
-        items[i].methodologie = temporairePartie.methodologie;
-
+        let items = filConducteur;
+        switch (s) {
+            case 'plan' :
+                items[i].plan = temporairePartie.plan;
+                temporairePartie.plan = "";
+                break;
+            case "timing" :
+                items[i].timing = temporairePartie.timing;
+                temporairePartie.timing = "";
+                break;
+            case "contenu" :
+                items[i].contenu = temporairePartie.contenu;
+                temporairePartie.contenu = "";
+                break;
+            case "methodologie" :
+                items[i].methodologie = temporairePartie.methodologie;
+                temporairePartie.methodologie = "";
+                break;
+        }
+        ;
         setFilConducteur(items);
-        console.log(filConducteur[i])
     };
 
 
     const AfficherDataFilConducteur = () => filConducteur?.map(
-        (partie,i) => {
+        (partie, i) => {
             return (
                 <StyledTableRow key={partie.id}>
-                    <TableCell>
+                    <StyledTableCell>
                         <StyledTextField
                             fullWidth={true}
                             defaultValue={partie.plan}
@@ -62,15 +80,15 @@ const ModificationFilConducteur = (formation) => {
                             inputProps={{style: {fontSize: 12}}}
                             size="small"
                             multiline={true}
-                           onChange={
+                            onChange={
                                 (event) => {
                                     temporairePartie.plan = event.target.value;
-                                    handleChange(i);
+                                    handleChange(i, "plan");
                                 }
                             }
                         >
                         </StyledTextField>
-                    </TableCell>
+                    </StyledTableCell>
                     <StyledTableCell>
                         <StyledTextField
                             fullWidth={true}
@@ -82,7 +100,7 @@ const ModificationFilConducteur = (formation) => {
                             onChange={
                                 (event) => {
                                     temporairePartie.timing = event.target.value;
-                                    handleChange(i);
+                                    handleChange(i, "timing");
                                 }
                             }>
                         </StyledTextField>
@@ -98,7 +116,7 @@ const ModificationFilConducteur = (formation) => {
                             onChange={
                                 (event) => {
                                     temporairePartie.contenu = event.target.value;
-                                    handleChange(i);
+                                    handleChange(i, "contenu");
                                 }
                             }>
                         </StyledTextField>
@@ -114,18 +132,19 @@ const ModificationFilConducteur = (formation) => {
                             onChange={
                                 (event) => {
                                     temporairePartie.methodologie = event.target.value;
-                                    handleChange(i);
+                                    handleChange(i, "methodologie");
                                 }
                             }>
                         </StyledTextField>
 
                     </StyledTableCell>
 
-                    <StyledTableCell>
+                    <TableCell
+                        align="center">
                         <a onClick={() => handleItemDeletedPartie(i)}>
                             <DeleteIcon className="Icones"/>
                         </a>
-                    </StyledTableCell>
+                    </TableCell>
                 </StyledTableRow>
             )
         }
@@ -134,25 +153,25 @@ const ModificationFilConducteur = (formation) => {
     const handleItemDeletedPartie = (i) => {
         setFilConducteur(filConducteur.filter((item, index) => index !== i));
     }
-    const handleAjoutPartie = () =>{
+    const handleAjoutPartie = () => {
         setFilConducteur(
             filConducteur => [...filConducteur,
                 {
-                    id:getMax(filConducteur),
-                    plan:temporairePartie.plan,
-                    timing:temporairePartie.timing,
-                    contenu:temporairePartie.contenu,
-                    methodologie:temporairePartie.methodologie
+                    id: getMax(filConducteur),
+                    plan: temporairePartie.plan,
+                    timing: temporairePartie.timing,
+                    contenu: temporairePartie.contenu,
+                    methodologie: temporairePartie.methodologie
                 }
             ]
         );
     }
 
-    function getMax(list){
-        let cpt=1;
-        list.forEach(val=>{
-            if(val.id>cpt){
-                cpt=val.id
+    function getMax(list) {
+        let cpt = 1;
+        list.forEach(val => {
+            if (val.id > cpt) {
+                cpt = val.id
             }
         })
         cpt++;
@@ -167,6 +186,7 @@ const ModificationFilConducteur = (formation) => {
         },
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
+            verticalAlign: 'bottom',
         },
     }));
 
@@ -174,7 +194,7 @@ const ModificationFilConducteur = (formation) => {
         [`&.${textFieldClasses}`]: {
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.common.white,
-            fontSize:20,
+            fontSize: 20,
         },
     }));
 
@@ -198,9 +218,9 @@ const ModificationFilConducteur = (formation) => {
         },
     }));
 
-    return(
+    return (
         <Grid marginBottom={4}>
-            <TableContainer component={Paper} >
+            <TableContainer component={Paper}>
                 <Table stickyHeader aria-label="customized table">
                     <StyledTableHead>
                         <StyledTableRow>
@@ -229,7 +249,7 @@ const ModificationFilConducteur = (formation) => {
                                             temporairePartie.plan = event.target.value;
                                         }
                                     }
-                                    onKeyPress={e => e.key === 'Enter' && handleAjoutPartie() }
+                                    onKeyPress={e => e.key === 'Enter' && handleAjoutPartie()}
                                 >
                                 </TextField>
                             </StyledTableCell>
@@ -244,7 +264,7 @@ const ModificationFilConducteur = (formation) => {
                                             temporairePartie.timing = event.target.value;
                                         }
                                     }
-                                    onKeyPress={e => e.key === 'Enter' && handleAjoutPartie() }
+                                    onKeyPress={e => e.key === 'Enter' && handleAjoutPartie()}
                                 >
                                 </TextField>
                             </StyledTableCell>
@@ -259,7 +279,7 @@ const ModificationFilConducteur = (formation) => {
                                             temporairePartie.contenu = event.target.value;
                                         }
                                     }
-                                    onKeyPress={e => e.key === 'Enter' && handleAjoutPartie() }
+                                    onKeyPress={e => e.key === 'Enter' && handleAjoutPartie()}
                                 >
                                 </TextField>
                             </StyledTableCell>
@@ -274,20 +294,24 @@ const ModificationFilConducteur = (formation) => {
                                             temporairePartie.methodologie = event.target.value;
                                         }
                                     }
-                                    onKeyPress={e => e.key === 'Enter' && handleAjoutPartie() }
+                                    onKeyPress={e => e.key === 'Enter' && handleAjoutPartie()}
                                 >
                                 </TextField>
                             </StyledTableCell>
 
-                            <StyledTableCell>
+                            <TableCell
+                                align="center">
                                 <a onClick={() => handleAjoutPartie()}>
                                     <AddBoxIcon className="Icones"/>
                                 </a>
-                            </StyledTableCell>
+                            </TableCell>
                         </StyledTableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
+            <button type="button" className="btn btn-mc"
+                    onClick={handleSubmit}>Sauvegarder
+            </button>
         </Grid>
     )
 }
