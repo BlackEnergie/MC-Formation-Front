@@ -148,7 +148,7 @@ const DemandeFormation = () => {
                                 value={sujet}
                                 onChange={event => setSujet(event.target.value)}
                                 className="form-control"
-                                placeholder="Ex : Trésorie"
+                                placeholder="Ex : Trésorerie"
                                 id="email"/>
                             <div className="text-danger">{hasUnfilled.sujet}</div>
                         </div>
