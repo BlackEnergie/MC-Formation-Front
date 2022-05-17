@@ -58,33 +58,6 @@ const InformationsGeneralesFormation = (props) => {
         )
     }
 
-    const AfficherDataDomaines = () => {
-        return !props.loading ?
-            formation.domaines.map(
-                (info) => {
-                    return (
-                        <StyledTableRow key={info.code} title={info.description}>
-                            <StyledTableCell>
-                                {info.code}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                                {info.libelle}
-                            </StyledTableCell>
-                        </StyledTableRow>
-                    )
-                }
-            ) :
-            <StyledTableRow>
-                <StyledTableCell>
-                    <Skeleton sx={{width: 'auto'}}/>
-                </StyledTableCell>
-                <StyledTableCell>
-                    <Skeleton sx={{width: 'auto'}}/>
-                </StyledTableCell>
-            </StyledTableRow>
-            ;
-    }
-
     const AfficherDataFormateur = () => {
         return !props.loading ?
             formation.formateurs?.length > 0 ?
@@ -173,28 +146,6 @@ const InformationsGeneralesFormation = (props) => {
                             </StyledTableHead>
                             <TableBody>
                                 {AfficherDataInfoGenerales()}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography
-                        sx={{flex: '1 1 100%', p: 1}}
-                        variant="h5"
-                        color="primary"
-                        id="tableTitle"
-                        component="div">Domaine(s)
-                    </Typography>
-                    <TableContainer component={Paper} sx={{maxHeight: 350}}>
-                        <Table stickyHeader aria-label="customized table">
-                            <StyledTableHead>
-                                <StyledTableRow>
-                                    <StyledTableCell sx={{width: 100}}>Code</StyledTableCell>
-                                    <StyledTableCell>Nom</StyledTableCell>
-                                </StyledTableRow>
-                            </StyledTableHead>
-                            <TableBody>
-                                {AfficherDataDomaines()}
                             </TableBody>
                         </Table>
                     </TableContainer>
