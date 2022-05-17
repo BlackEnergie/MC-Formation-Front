@@ -26,6 +26,7 @@ import {
   Grid,
   IconButton,
   Paper,
+  Skeleton,
   Stack,
   Table,
   TableBody,
@@ -69,7 +70,7 @@ export interface formation {
   nom?: string;
   sujet: string;
   detail: string;
-  date?: Date;
+  date?: string;
   id: number;
 }
 
@@ -84,10 +85,10 @@ interface TablePaginationActionsProps {
 }
 
 interface UserInfo {
-  acronyme?: string,
-  demandesFavorables?: number[],
-  nom?: string,
-  prenom?: string,
+  acronyme?: string;
+  demandesFavorables?: number[];
+  nom?: string;
+  prenom?: string;
 }
 
 const INITIAL_FILTRE: filtre = {
@@ -189,11 +190,11 @@ function Filtres(data: formation[], filtre: filtre): formation[] {
 
 function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
   unFilteredData.sort((a, b) => {
-    if (a.date === undefined){
-      return 1
+    if (a.date === undefined) {
+      return 1;
     }
     if (b.date === undefined) {
-      return 0
+      return 0;
     }
     return a.date > b.date ? 0 : 1;
   });
@@ -223,8 +224,8 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
   function SetFiltre(newfiltre: filtre) {
     filtre = newfiltre;
     data = Filtres(unFilteredData, filtre);
-    if(mesDemandesSelect)setMesDemandesSelect(false);
-    if(mesFormationsSelect)setMesFormationsSelect(false);
+    if (mesDemandesSelect) setMesDemandesSelect(false);
+    if (mesFormationsSelect) setMesFormationsSelect(false);
     setLiveness(liveness + 1);
   }
 
@@ -326,32 +327,32 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
 
   function setPreFiltre(id: number) {
     let prefiltre = INITIAL_FILTRE;
-    setAssoFiltre([])
-    setFormateursFiltre([])
-    setCadreFiltre([])
-    setDomainesFiltre([])
-    setStatutFiltre([])
-    setSujetFiltre("")
+    setAssoFiltre([]);
+    setFormateursFiltre([]);
+    setCadreFiltre([]);
+    setDomainesFiltre([]);
+    setStatutFiltre([]);
+    setSujetFiltre("");
     prefiltre.asso = [];
-    prefiltre.formateurs = []
-    prefiltre.cadre = []
-    prefiltre.domaines = []
-    prefiltre.sujet = ""
-    prefiltre.statut = []
+    prefiltre.formateurs = [];
+    prefiltre.cadre = [];
+    prefiltre.domaines = [];
+    prefiltre.sujet = "";
+    prefiltre.statut = [];
     switch (id) {
       case 1:
         if (!mesDemandesSelect) {
-          prefiltre.asso = [userInfo.acronyme]
-          setAssoFiltre([userInfo.acronyme])
-          setMesDemandesSelect(true)
+          prefiltre.asso = [userInfo.acronyme];
+          setAssoFiltre([userInfo.acronyme]);
+          setMesDemandesSelect(true);
         }
         SetFiltre(prefiltre);
 
         break;
       case 2:
         if (!mesFormationsSelect) {
-          prefiltre.formateurs = [userInfo.prenom + " " + userInfo.nom]
-          setMesFormationsSelect(true)
+          prefiltre.formateurs = [userInfo.prenom + " " + userInfo.nom];
+          setMesFormationsSelect(true);
         }
         SetFiltre(prefiltre);
         break;
@@ -388,6 +389,55 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
     );
   };
 
+  const checkFormateurAttribueAFormation = (formation: formation) => {
+    return formation?.formateurs?.some(
+      (formateur) => formateur.id === token.id
+    );
+  };
+
+  const checkFormateurPeutModifierFormation = (formation: formation) => {
+    return (
+      checkFormateurAttribueAFormation(formation) &&
+      statutToString(formation.statut) === Statut.A_VENIR.toString()
+    );
+  };
+
+  const showLoadingSkeleton = () => {
+    let skeltons = [];
+    let i = 0;
+    for (i; i < rowsPerPage; i++) {
+      skeltons.push(
+        <TableRow>
+          <TableCell>
+            <Skeleton sx={{ width: "auto" }} />
+          </TableCell>
+          <TableCell>
+            <Skeleton sx={{ width: "auto" }} />
+          </TableCell>
+          <TableCell>
+            <Skeleton sx={{ width: "auto" }} />
+          </TableCell>
+          <TableCell>
+            <Skeleton sx={{ width: "auto" }} />
+          </TableCell>
+          <TableCell>
+            <Skeleton sx={{ width: "auto" }} />
+          </TableCell>
+          <TableCell>
+            <Skeleton sx={{ width: "auto" }} />
+          </TableCell>
+          <TableCell>
+            <Skeleton sx={{ width: "auto" }} />
+          </TableCell>
+          <TableCell hidden={checkRoleAsso()}>
+            <Skeleton sx={{ width: "auto" }} />
+          </TableCell>
+        </TableRow>
+      );
+    }
+    return skeltons;
+  };
+
   return (
     <>
       <Grid container spacing={2} marginTop={1}>
@@ -410,7 +460,7 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
                 1,
                 !checkRoleAsso()
               )}
-              <Divider hidden={checkRoleBn()}/>
+              <Divider hidden={checkRoleBn()} />
               <Autocomplete
                 multiple
                 id="free-solo-2-demo"
@@ -559,217 +609,232 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
                   <StyledTableCell align="center">Action</StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {data
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
-                      <TableRow key={row.id}>
-                        <TableCell
-                          align="center"
-                          style={{ color: statutToStyle(row.statut) }}
-                        >
-                          {statutToString(row.statut)}
-                        </TableCell>
-                        <TableCell align="center">
-                          {row.cadre == null ? ADeterminerText() : row.cadre}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          title={domaineLibelleList(row.domaines).join(", ")}
-                        >
-                          {domaineLibelleList(row.domaines).join(", ").length >
-                          40
-                            ? domaineLibelleList(row.domaines)
-                                .join(", ")
-                                .substring(0, 40) + "..."
-                            : domaineLibelleList(row.domaines).join(", ")}
-                        </TableCell>
-                        <TableCell align="center">
-                          {row.nom != null
-                            ? row.nom
-                            : "Provisoire : " + row.sujet}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          title={row.association.nomComplet}
-                        >
-                          {row.association.acronyme}
-                        </TableCell>
-                        <TableCell align="center" hidden={checkRoleAsso()}>
-                          {row.formateurs.length > 0
-                            ? formateurList(row.formateurs).join(", ").length >
-                              15
-                              ? formateurList(row.formateurs)
-                                  .join(", ")
-                                  .substring(0, 15) + "..."
-                              : formateurList(row.formateurs).join(", ")
-                            : ADeterminerText()}
-                        </TableCell>
-                        <TableCell align="center">
-                          {row.date == null ? ADeterminerText() : row.date}
-                        </TableCell>
-                        <TableCell align="center">
-                          {checkRoleBn() ? (
-                            <Link to={"/formation/" + row.id}>
-                              <AiOutlineZoomIn className="Icones me-2" />
-                            </Link>
-                          ) : (
-                            <AiOutlineZoomIn
-                              className="Icones me-2"
-                              onClick={() => handleOpen(row.id)}
-                            />
-                          )}
-                          <Dialog
-                            open={open === row.id}
-                            onClose={() => handleClose()}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                          >
-                            <DialogTitle
-                              id="alert-dialog-title"
-                              color="primary"
+                  {data.length > 0
+                    ? data
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map((row) => (
+                          <TableRow key={row.id}>
+                            <TableCell
+                              align="center"
+                              style={{ color: statutToStyle(row.statut) }}
                             >
-                              {row?.nom != null
-                                ? row?.nom
-                                : "Provisoire : " + row?.sujet}
-                            </DialogTitle>
-                            <DialogContent>
-                              <TableContainer>
-                                <Table>
-                                  <TableBody>
-                                    <TableRow>
-                                      <TableCell style={{ fontWeight: "bold" }}>
-                                        Statut
-                                      </TableCell>
-                                      <TableCell
-                                        style={{
-                                          color: statutToStyle(row?.statut),
-                                        }}
-                                      >
-                                        {" "}
-                                        {statutToString(row?.statut)}
-                                      </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                      <TableCell style={{ fontWeight: "bold" }}>
-                                        Cadre
-                                      </TableCell>
-                                      <TableCell>
-                                        {" "}
-                                        {row?.cadre == null
-                                          ? ADeterminerText()
-                                          : row?.cadre}
-                                      </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                      <TableCell style={{ fontWeight: "bold" }}>
-                                        Date
-                                      </TableCell>
-                                      <TableCell>{row?.date}</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                      <TableCell style={{ fontWeight: "bold" }}>
-                                        Domaine(s)
-                                      </TableCell>
-                                      <TableCell>
-                                        {domaineLibelleList(row?.domaines).join(
-                                          ", "
+                              {statutToString(row.statut)}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.cadre == null
+                                ? ADeterminerText()
+                                : row.cadre}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              title={domaineLibelleList(row.domaines).join(
+                                ", "
+                              )}
+                            >
+                              {domaineLibelleList(row.domaines).join(", ")
+                                .length > 40
+                                ? domaineLibelleList(row.domaines)
+                                    .join(", ")
+                                    .substring(0, 40) + "..."
+                                : domaineLibelleList(row.domaines).join(", ")}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.nom != null ? row.nom : row.sujet}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              title={row.association.nomComplet}
+                            >
+                              {row.association.acronyme}
+                            </TableCell>
+                            <TableCell align="center" hidden={checkRoleAsso()}>
+                              {row.formateurs.length > 0
+                                ? formateurList(row.formateurs).join(", ")
+                                    .length > 15
+                                  ? formateurList(row.formateurs)
+                                      .join(", ")
+                                      .substring(0, 15) + "..."
+                                  : formateurList(row.formateurs).join(", ")
+                                : ADeterminerText()}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.date == null ? ADeterminerText() : row.date}
+                            </TableCell>
+                            <TableCell align="center">
+                              {checkRoleBn() ||
+                              checkFormateurPeutModifierFormation(row) ? (
+                                <Link to={"/formation/" + row.id}>
+                                  <AiOutlineZoomIn className="Icones me-2" />
+                                </Link>
+                              ) : (
+                                <AiOutlineZoomIn
+                                  className="Icones me-2"
+                                  onClick={() => handleOpen(row.id)}
+                                />
+                              )}
+                              <Dialog
+                                open={open === row.id}
+                                onClose={() => handleClose()}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                              >
+                                <DialogTitle
+                                  id="alert-dialog-title"
+                                  color="primary"
+                                >
+                                  {row?.nom != null ? row?.nom : row?.sujet}
+                                </DialogTitle>
+                                <DialogContent>
+                                  <TableContainer>
+                                    <Table>
+                                      <TableBody>
+                                        <TableRow>
+                                          <TableCell
+                                            style={{ fontWeight: "bold" }}
+                                          >
+                                            Statut
+                                          </TableCell>
+                                          <TableCell
+                                            style={{
+                                              color: statutToStyle(row?.statut),
+                                            }}
+                                          >
+                                            {" "}
+                                            {statutToString(row?.statut)}
+                                          </TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                          <TableCell
+                                            style={{ fontWeight: "bold" }}
+                                          >
+                                            Cadre
+                                          </TableCell>
+                                          <TableCell>
+                                            {" "}
+                                            {row?.cadre == null
+                                              ? ADeterminerText()
+                                              : row?.cadre}
+                                          </TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                          <TableCell
+                                            style={{ fontWeight: "bold" }}
+                                          >
+                                            Date
+                                          </TableCell>
+                                          <TableCell>{row?.date}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                          <TableCell
+                                            style={{ fontWeight: "bold" }}
+                                          >
+                                            Domaine(s)
+                                          </TableCell>
+                                          <TableCell>
+                                            {domaineLibelleList(
+                                              row?.domaines
+                                            ).join(", ")}
+                                          </TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                          <TableCell
+                                            style={{ fontWeight: "bold" }}
+                                          >
+                                            Association
+                                          </TableCell>
+                                          <TableCell>
+                                            {row?.association?.nomComplet}
+                                          </TableCell>
+                                        </TableRow>
+                                        {!checkRoleAsso() ? (
+                                          <TableRow>
+                                            <TableCell
+                                              style={{ fontWeight: "bold" }}
+                                            >
+                                              Formateurs
+                                            </TableCell>
+                                            <TableCell>
+                                              {formateurList(
+                                                row?.formateurs
+                                              ).join(", ")}
+                                            </TableCell>
+                                          </TableRow>
+                                        ) : (
+                                          <></>
                                         )}
-                                      </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                      <TableCell style={{ fontWeight: "bold" }}>
-                                        Association
-                                      </TableCell>
-                                      <TableCell>
-                                        {row?.association?.nomComplet}
-                                      </TableCell>
-                                    </TableRow>
-                                    {!checkRoleAsso() ? (
-                                      <TableRow>
-                                        <TableCell
-                                          style={{ fontWeight: "bold" }}
-                                        >
-                                          Formateurs
-                                        </TableCell>
-                                        <TableCell>
-                                          {formateurList(row?.formateurs).join(
-                                            ", "
-                                          )}
-                                        </TableCell>
-                                      </TableRow>
+                                        <TableRow>
+                                          <TableCell
+                                            style={{ fontWeight: "bold" }}
+                                          >
+                                            Détails de la demande
+                                          </TableCell>
+                                          <TableCell>{row?.detail}</TableCell>
+                                        </TableRow>
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                </DialogContent>
+                                <DialogActions>
+                                  {!checkRoleAsso() ? (
+                                    row?.formateurs?.some(
+                                      (formateur) => formateur.id === token.id
+                                    ) ? (
+                                      <Button
+                                        onClick={() => postAssignFormateur(row)}
+                                        hidden={
+                                          statutToString(row?.statut) !==
+                                          "À attribuer"
+                                        }
+                                        color="warning"
+                                      >
+                                        Se retirer de la formation
+                                      </Button>
                                     ) : (
-                                      <></>
-                                    )}
-                                    <TableRow>
-                                      <TableCell style={{ fontWeight: "bold" }}>
-                                        Détails de la demande
-                                      </TableCell>
-                                      <TableCell>{row?.detail}</TableCell>
-                                    </TableRow>
-                                  </TableBody>
-                                </Table>
-                              </TableContainer>
-                            </DialogContent>
-                            <DialogActions>
-                              {!checkRoleAsso() ? (
-                                row?.formateurs?.some(
-                                  (formateur) => formateur.id === token.id
-                                ) ? (
-                                  <Button
-                                    onClick={() => postAssignFormateur(row)}
-                                    hidden={
-                                      statutToString(row?.statut) !==
-                                      "À attribuer"
-                                    }
-                                    color="warning"
-                                  >
-                                    Se retirer de la formation
+                                      <Button
+                                        onClick={() => postAssignFormateur(row)}
+                                        hidden={
+                                          statutToString(row?.statut) !==
+                                          "À attribuer"
+                                        }
+                                      >
+                                        S'affecter à la formation
+                                      </Button>
+                                    )
+                                  ) : (
+                                    <></>
+                                  )}
+                                  <Button onClick={() => handleClose()}>
+                                    Fermer
                                   </Button>
-                                ) : (
-                                  <Button
-                                    onClick={() => postAssignFormateur(row)}
-                                    hidden={
-                                      statutToString(row?.statut) !==
-                                      "À attribuer"
-                                    }
-                                  >
-                                    S'affecter à la formation
-                                  </Button>
-                                )
+                                </DialogActions>
+                              </Dialog>
+                              {checkRoleAsso() &&
+                              row.association.id !== token.id &&
+                              statutToString(row?.statut) !== "Passée" ? (
+                                <Button onClick={() => postLikeFormation(row)}>
+                                  {row?.associationsFavorables?.some(
+                                    (association) => association.id === token.id
+                                  ) ? (
+                                    <FavoriteOutlinedIcon />
+                                  ) : (
+                                    <FavoriteBorderOutlinedIcon />
+                                  )}
+                                </Button>
+                              ) : checkRoleBn() ||
+                                checkFormateurPeutModifierFormation(row) ? (
+                                <Link to={"/formation/edit/" + row.id}>
+                                  <AiOutlineEdit className="Icones me-2" />
+                                </Link>
                               ) : (
                                 <></>
                               )}
-                              <Button onClick={() => handleClose()}>
-                                Fermer
-                              </Button>
-                            </DialogActions>
-                          </Dialog>
-                          {checkRoleAsso() &&
-                          row.association.id !== token.id &&
-                          statutToString(row?.statut) !== "Passée" ? (
-                            <Button onClick={() => postLikeFormation(row)}>
-                              {row?.associationsFavorables?.some(
-                                (association) => association.id === token.id
-                              ) ? (
-                                <FavoriteOutlinedIcon />
-                              ) : (
-                                <FavoriteBorderOutlinedIcon />
-                              )}
-                            </Button>
-                          ) : checkRoleBn() ||
-                            (statutToString(row?.statut) === "À venir" &&
-                              row?.formateurs?.some(
-                                (formateur) => formateur.id === token.id
-                              )) ? (
-                            <Link to={"/formation/edit/" + row.id}>
-                              <AiOutlineEdit className="Icones me-2" />
-                            </Link>
-                          ) : (
-                            <></>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                    : showLoadingSkeleton()}
                 </TableBody>
                 <TableFooter>
                   <TableRow>
