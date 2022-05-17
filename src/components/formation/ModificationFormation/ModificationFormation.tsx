@@ -24,6 +24,11 @@ const ModificationFormation = () => {
         getFormationDetails();
     }, [])
 
+    function modificationFormation(newFormation: Formation){
+        setFormation(newFormation)
+        console.log(formation)
+    }
+
 
     const getFormationDetails = async () => {
         try {
@@ -61,7 +66,7 @@ const ModificationFormation = () => {
                     }
                     {
                         (showComponent === 3) ? (
-                            <ModificationFilConducteur formation={formation}/>
+                            <ModificationFilConducteur formation={formation} modifFormation={modificationFormation}/>
                         ) : (<></>)
                     }
                     <div className="container-fluid">
