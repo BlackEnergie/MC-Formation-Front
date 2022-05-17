@@ -10,19 +10,20 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import {Skeleton} from '@mui/material';
+import {statutToString, statutToStyle} from '../../../utils/StatutUtils';
 
 const InformationsGeneralesFormation = (props) => {
 
-    let Donnee = props.formation;
+    let formation = props.formation;
     const AfficherDataInfoGenerales = () => {
         return (
             <>
                 <StyledTableRow>
                     <StyledTableCellHead>Statut</StyledTableCellHead>
-                    <StyledTableCell>
+                    <StyledTableCell style={{color:statutToStyle(formation.statut)}}>
                         {
                             props.loading ? <Skeleton sx={{width: 'auto'}}/> :
-                                Donnee.statut
+                                statutToString(formation.statut)
                         }
                     </StyledTableCell>
                 </StyledTableRow>
@@ -31,7 +32,7 @@ const InformationsGeneralesFormation = (props) => {
                     <StyledTableCell>
                         {
                             props.loading ? <Skeleton sx={{width: 'auto'}}/> :
-                                Donnee.cadre
+                                formation.cadre
                         }
                     </StyledTableCell>
                 </StyledTableRow>
@@ -40,7 +41,7 @@ const InformationsGeneralesFormation = (props) => {
                     <StyledTableCell>
                         {
                             props.loading ? <Skeleton sx={{width: 'auto'}}/> :
-                                Donnee.type
+                                formation.type
                         }
                     </StyledTableCell>
                 </StyledTableRow>
@@ -49,16 +50,17 @@ const InformationsGeneralesFormation = (props) => {
                     <StyledTableCell>
                         {
                             props.loading ? <Skeleton sx={{width: 'auto'}}/> :
-                                Donnee.date
+                                formation.date
                         }
                     </StyledTableCell>
                 </StyledTableRow>
             </>
         )
     }
-    const AfficherDataDomaine = () => {
+
+    const AfficherDataDomaines = () => {
         return !props.loading ?
-            Donnee.domaines.map(
+            formation.domaines.map(
                 (info) => {
                     return (
                         <StyledTableRow key={info.code} title={info.description}>
@@ -80,39 +82,27 @@ const InformationsGeneralesFormation = (props) => {
                     <Skeleton sx={{width: 'auto'}}/>
                 </StyledTableCell>
             </StyledTableRow>
-        ;
+            ;
     }
 
     const AfficherDataFormateur = () => {
         return !props.loading ?
-        Donnee.formateurs.map(
-            (info) => {
-                return (
-                    <StyledTableRow key={info.id}>
-                        <StyledTableCell>{info.nom}</StyledTableCell>
-                        <StyledTableCell>{info.prenom}</StyledTableCell>
-                    </StyledTableRow>
-                )
-            }
-        ) :
-            <StyledTableRow>
-                <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
-                <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
-            </StyledTableRow>
-    }
-
-    const AfficherAssociationsInteressees = () => {
-        return !props.loading ?
-            Donnee.associationsInteressees?.map(
-                (info) => {
-                    return (
-                        <StyledTableRow key={info.id}>
-                            <StyledTableCell>{info.nomComplet}</StyledTableCell>
-                            <StyledTableCell>{info.ville}</StyledTableCell>
-                        </StyledTableRow>
-                    )
-                }
-            ) :
+            formation.formateurs?.length > 0 ?
+                formation.formateurs.map(
+                    (info) => {
+                        return (
+                            <StyledTableRow key={info.id}>
+                                <StyledTableCell>{info.nom}</StyledTableCell>
+                                <StyledTableCell>{info.prenom}</StyledTableCell>
+                            </StyledTableRow>
+                        )
+                    }
+                ) :
+                <StyledTableRow>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                </StyledTableRow>
+            :
             <StyledTableRow>
                 <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
                 <StyledTableCell><Skeleton sx={{width: 'auto'}}/></StyledTableCell>
@@ -162,94 +152,76 @@ const InformationsGeneralesFormation = (props) => {
     }));
 
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={6}>
-                <Typography
-                    sx={{flex: '1 1 100%', p: 1}}
-                    variant="h5"
-                    color="primary"
-                    id="tableTitle"
-                    component="div"> Informations Générales
-                </Typography>
-                <TableContainer component={Paper} sx={{maxHeight: 350}}>
-                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
-                        <StyledTableHead>
-                            <StyledTableRow>
-                                <StyledTableCell sx={{width: 100}}></StyledTableCell>
-                                <StyledTableCell></StyledTableCell>
-                            </StyledTableRow>
-                        </StyledTableHead>
-                        <TableBody>
-                            {AfficherDataInfoGenerales()}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+        <>
+            <Grid container spacing={2}>
+                <Grid item xs={6}>
+                    <Typography
+                        sx={{flex: '1 1 100%', p: 1}}
+                        variant="h5"
+                        color="primary"
+                        id="tableTitle"
+                        component="div">
+                        Informations Générales
+                    </Typography>
+                    <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                        <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+                            <StyledTableHead>
+                                <StyledTableRow>
+                                    <StyledTableCell sx={{width: 100}}></StyledTableCell>
+                                    <StyledTableCell></StyledTableCell>
+                                </StyledTableRow>
+                            </StyledTableHead>
+                            <TableBody>
+                                {AfficherDataInfoGenerales()}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography
+                        sx={{flex: '1 1 100%', p: 1}}
+                        variant="h5"
+                        color="primary"
+                        id="tableTitle"
+                        component="div">Domaine(s)
+                    </Typography>
+                    <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                        <Table stickyHeader aria-label="customized table">
+                            <StyledTableHead>
+                                <StyledTableRow>
+                                    <StyledTableCell sx={{width: 100}}>Code</StyledTableCell>
+                                    <StyledTableCell>Nom</StyledTableCell>
+                                </StyledTableRow>
+                            </StyledTableHead>
+                            <TableBody>
+                                {AfficherDataDomaines()}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography
+                        sx={{flex: '1 1 100%', p: 1}}
+                        variant="h5"
+                        color="primary"
+                        id="tableTitle"
+                        component="div">Formateur(s)</Typography>
+                    <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                        <Table sx={{minWidth: 100}} aria-label="customized table">
+                            <StyledTableHead>
+                                <StyledTableRow>
+                                    <StyledTableCell>Nom</StyledTableCell>
+                                    <StyledTableCell>Prenom</StyledTableCell>
+                                </StyledTableRow>
+                            </StyledTableHead>
+                            <TableBody>
+                                {AfficherDataFormateur()}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
             </Grid>
-            <Grid item xs={6}>
-                <Typography
-                    sx={{flex: '1 1 100%', p: 1}}
-                    variant="h5"
-                    color="primary"
-                    id="tableTitle"
-                    component="div">Domaine(s)
-                </Typography>
-                <TableContainer component={Paper} sx={{maxHeight: 350}}>
-                    <Table stickyHeader aria-label="customized table">
-                        <StyledTableHead>
-                            <StyledTableRow>
-                                <StyledTableCell sx={{width: 100}}>Code</StyledTableCell>
-                                <StyledTableCell>Nom</StyledTableCell>
-                            </StyledTableRow>
-                        </StyledTableHead>
-                        <TableBody>
-                            {AfficherDataDomaine()}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography
-                    sx={{flex: '1 1 100%', p: 1}}
-                    variant="h5"
-                    color="primary"
-                    id="tableTitle"
-                    component="div">Formateur(s)</Typography>
-                <TableContainer component={Paper} sx={{maxHeight: 350}}>
-                    <Table sx={{minWidth: 100}} aria-label="customized table">
-                        <StyledTableHead>
-                            <StyledTableRow>
-                                <StyledTableCell>Nom</StyledTableCell>
-                                <StyledTableCell>Prenom</StyledTableCell>
-                            </StyledTableRow>
-                        </StyledTableHead>
-                        <TableBody>
-                            {AfficherDataFormateur()}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography
-                    sx={{flex: '1 1 100%', p: 1}}
-                    variant="h5"
-                    id="tableTitle"
-                    color="primary"
-                    component="div">Association(s) intéréssée(s)</Typography>
-                <TableContainer component={Paper} sx={{maxHeight: 350}}>
-                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
-                        <StyledTableHead>
-                            <StyledTableRow>
-                                <StyledTableCell>Nom</StyledTableCell>
-                                <StyledTableCell>Ville</StyledTableCell>
-                            </StyledTableRow>
-                        </StyledTableHead>
-                        <TableBody>
-                            {AfficherAssociationsInteressees()}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-        </Grid>
+        </>
     )
 }
 export default InformationsGeneralesFormation;

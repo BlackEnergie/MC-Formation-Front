@@ -22,7 +22,7 @@ export default class Formation {
     dateDemande: string;
     statut: Statut;
     association: Association;
-    associationsInteressees: Association[];
+    associationsFavorables: Association[];
 
     constructor() {
         this.id = "";
@@ -44,6 +44,6 @@ export default class Formation {
         this.dateDemande = "";
         this.statut = undefined;
         this.association = new Association();
-        this.associationsInteressees = [];
+        this.associationsFavorables = [];
     }
 }

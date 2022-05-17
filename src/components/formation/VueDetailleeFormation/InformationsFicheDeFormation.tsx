@@ -10,33 +10,33 @@ import TableCell, {tableCellClasses} from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TableHead from "@mui/material/TableHead";
 
-const InformationsFicheDeFormation = (formation) => {
+const InformationsFicheDeFormation = (props) => {
 
-    let Donnee = formation.formation;
+    let formation = props.formation;
     const AfficherFormationDetails = () => {
         return (
             <>
             <StyledTableRow>
                 <StyledTableCellHead>Type</StyledTableCellHead>
-                <StyledTableCell>{Donnee.type}</StyledTableCell>
+                <StyledTableCell>{formation.type}</StyledTableCell>
             </StyledTableRow>
             <StyledTableRow>
                 <StyledTableCellHead>Audience</StyledTableCellHead>
-                <StyledTableCell>{Donnee.audience}</StyledTableCell>
+                <StyledTableCell>{formation.audience}</StyledTableCell>
             </StyledTableRow>
             <StyledTableRow>
                 <StyledTableCellHead>Durée</StyledTableCellHead>
-                <StyledTableCell>{Donnee.duree}</StyledTableCell>
+                <StyledTableCell>{formation.duree}</StyledTableCell>
             </StyledTableRow>
             <StyledTableRow>
                 <StyledTableCellHead>Prérequis</StyledTableCellHead>
-                <StyledTableCell>{Donnee.prerequis}</StyledTableCell>
+                <StyledTableCell>{formation.prerequis}</StyledTableCell>
             </StyledTableRow>
             </>
         )
     }
 
-    const AfficherBesoinsMaterielsFormation = () => Donnee.materiels?.map(
+    const AfficherBesoinsMaterielsFormation = () => formation.materiels?.map(
         (info) => {
             return (
                 <StyledTableRow>
@@ -45,7 +45,7 @@ const InformationsFicheDeFormation = (formation) => {
             )
         }
     )
-    const AfficherObjetsPedagogiques = () => Donnee.objectifs?.map(
+    const AfficherObjetsPedagogiques = () => formation.objectifs?.map(
         (info) => {
             return (
                 <StyledTableRow>
@@ -54,7 +54,7 @@ const InformationsFicheDeFormation = (formation) => {
             )
         }
     )
-    const AfficherDataDomaine = () => Donnee.domaines?.map(
+    const AfficherDataDomaine = () => formation.domaines?.map(
         (info) => {
             return (
                 <StyledTableRow key={info.code} title={info.description}>

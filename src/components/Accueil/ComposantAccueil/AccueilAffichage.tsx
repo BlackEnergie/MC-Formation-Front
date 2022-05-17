@@ -311,7 +311,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
 
     return (
         <>
-            <Grid container spacing={2} marginTop={1}>
+            <Grid container spacing={2} marginTop={0}>
                 <Grid xs={2} >
                     <Grid marginLeft={3} marginRight={2}>
                         <Typography color="primary" variant="h4">Filtres</Typography>
@@ -437,7 +437,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
                 </Grid>
                 <Grid xs={10}>
                     <div className="container-fluid" id="accueil">
-                        <Typography color="primary" variant="h4" style={{width:'fit-content'}}>Formations <Divider style={{marginBottom:6}} /></Typography>
+                        <Typography color="primary" variant="h4" style={{width:'fit-content'}}>Formations <Divider sx={{color: 'black'}} style={{marginBottom:6}} /></Typography>
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
