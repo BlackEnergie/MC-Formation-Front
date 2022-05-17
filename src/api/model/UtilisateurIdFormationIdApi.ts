@@ -1,4 +1,4 @@
-export default class InteresserFormation {
+export default class UtilisateurIdFormationIdApi {
 
     idUtilisateur: number;
     idFormation: number;

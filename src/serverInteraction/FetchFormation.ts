@@ -1,7 +1,6 @@
 import { AxiosInstance } from "axios";
 import { EntryPoint, headersTemplate } from "./common";
-import AffectationFormation from "../api/model/AffectationFormation";
-import InteresserFormation from "../api/model/InteresserFormation";
+import UtilisateurIdFormationIdApi from "../api/model/UtilisateurIdFormationIdApi";
 
 
 export function FetchAllFormation ( axios:AxiosInstance ) {
@@ -16,13 +15,13 @@ export function FetchFormationById(axios:AxiosInstance, id: String){
     }); 
 }
 
-export function FetchAssignFormateur(axios:AxiosInstance,affectation:AffectationFormation){
+export function FetchAssignFormateur(axios:AxiosInstance,affectation:UtilisateurIdFormationIdApi){
     return axios.post(EntryPoint.FORMATION_ASSIGN_FORMATEUR, JSON.stringify(affectation), {
         headers: headersTemplate
     });
 }
 
-export function FetchLikeFormation(axios:AxiosInstance,interesser:InteresserFormation){
+export function FetchLikeFormation(axios:AxiosInstance,interesser:UtilisateurIdFormationIdApi){
     return axios.post(EntryPoint.FORMATION_LIKE_FORMATION, JSON.stringify(interesser), {
         headers: headersTemplate
     });

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {AiOutlineEdit, AiOutlineZoomIn} from 'react-icons/ai';
 import {Link} from 'react-router-dom';
-import AffectationFormation from '../../../api/model/AffectationFormation';
 import {FetchAssignFormateur, FetchLikeFormation} from '../../../serverInteraction/FetchFormation';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import toast from 'react-hot-toast';
@@ -37,9 +36,7 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import {tableCellClasses} from '@mui/material/TableCell';
 import {styled} from '@mui/material/styles';
-import Association from '../../../api/model/Association';
-import InteresserFormation from '../../../api/model/InteresserFormation';
-import Formation from '../../../api/model/Formation';
+import UtilisateurIdFormationIdApi from '../../../api/model/UtilisateurIdFormationIdApi';
 
 export interface formation {
     association: {
@@ -246,17 +243,12 @@ function AccueilAffichage(unFilteredData: formation[]) {
 
     const postAssignFormateur = async (row: formation) => {
         try {
-            
-            let affectation = new AffectationFormation();
+            let affectation = new UtilisateurIdFormationIdApi();
             affectation.idFormation = row.id;
-            affectation.nomUtilisateur = token.sub;
+            affectation.idUtilisateur = token.id;
             const response = await FetchAssignFormateur(axiosPrivate, affectation);
             if (response.data.code == 200) {
-                var json = JSON.parse(response.data.data);
-                if(json.date!=null){
-                    json.date= new Date(json.date).toLocaleDateString("fr-CA");
-                }
-                unFilteredData[unFilteredData.indexOf(row)] = json;
+                unFilteredData[unFilteredData.indexOf(row)] = response.data.formation;
                 data = Filtres(unFilteredData, filtre);
                 setLiveness(liveness + 1);
                 toast.success(response.data.message);
@@ -269,16 +261,12 @@ function AccueilAffichage(unFilteredData: formation[]) {
 
     const postLikeFormation = async (row: formation) => {
         try {
-            let interesser = new InteresserFormation();
+            let interesser = new UtilisateurIdFormationIdApi();
             interesser.idFormation = row.id;
             interesser.idUtilisateur = token.id;
             const response = await FetchLikeFormation(axiosPrivate, interesser);
             if (response.data.code == 200) {
-                var json = JSON.parse(response.data.data);
-                if(json.date!=null){
-                    json.date= new Date(json.date).toLocaleDateString("fr-CA");
-                }
-                unFilteredData[unFilteredData.indexOf(row)] = json;
+                unFilteredData[unFilteredData.indexOf(row)] = response.data.formation;
                 data = Filtres(unFilteredData, filtre);
                 setLiveness(liveness + 1);
             }
