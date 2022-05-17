@@ -6,10 +6,12 @@ import NavFormation from "../NavigationFormation/NavFormation";
 import {useParams} from "react-router-dom";
 import { FetchFormationById } from '../../../serverInteraction/FetchFormation';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
+import Formation from '../../../api/model/Formation';
 
 const ModificationFormation = () => {
+    const INITIAL_FORMATION : Formation = new Formation()
 
-    const [formation, setFormation] = useState(null);
+    const [formation, setFormation] = useState(INITIAL_FORMATION);
     const [showComponent, setShowComponent] = useState(0);
     /*const [itemsPartie, setItemsParties] = useState(formation.parties);*/
 
