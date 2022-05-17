@@ -37,8 +37,9 @@ const VueDetailleeFormation = () => {
             setFormation(response?.data);
             setLoading(false);
         } catch (err) {
-            toast.error(err.response.data.message);
-            if (err.response.data.code === 403){
+            console.log(err)
+            toast.error(err.response?.data?.message);
+            if (err.response?.data?.code === 403){
                 navigate('/')
             }
         }
@@ -110,7 +111,7 @@ const VueDetailleeFormation = () => {
                                 color="primary"
                                 component="h1"
                                 variant="h5">
-                                Informations {formation.type.toLowerCase()}
+                                Informations {formation.type? formation.type.toLowerCase(): 'formation'}
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
