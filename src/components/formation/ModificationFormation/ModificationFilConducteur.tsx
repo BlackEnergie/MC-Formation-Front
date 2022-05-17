@@ -15,11 +15,17 @@ import {TextField, textFieldClasses} from '@mui/material';
 import toast from "react-hot-toast";
 import {PostFormation} from "../../../serverInteraction/PostFormation";
 import useAxiosPrivate from "../../../auth/hooks/useAxiosPrivate";
+import Formation from '../../../api/model/Formation';
 
-const ModificationFilConducteur = (formation) => {
+interface Props{
+    formation: Formation
+}
+
+const ModificationFilConducteur = (props: Props) => {
 
     const axiosPrivate = useAxiosPrivate();
 
+    console.log(props.formation)
 
     const handleSubmit = async () => {
         try {
@@ -39,7 +45,7 @@ const ModificationFilConducteur = (formation) => {
         methodologie: "",
     }
     let temporairePartie = INITIAL_PARTIE;
-    const [filConducteur, setFilConducteur] = useState(JSON.parse(formation.formation.parties));
+    const [filConducteur, setFilConducteur] = useState(props.formation.parties ? JSON.parse(props.formation.parties) : undefined);
 
 
     const handleChange = (i, s) => {
