@@ -5,6 +5,7 @@ import Connexion from './components/auth/Connexion/Connexion';
 import Layout from './Layout';
 import DemandeFormation from './components/formation/DemandeFormation/DemandeFormation';
 import Accueil from "./components/Accueil/AccueilFormations";
+import MonCompte from "./components/Utilisateur/MonCompte";
 import ModificationFormation from "./components/formation/ModificationFormation/ModificationFormation";
 import Missing from './components/defaults/Missing';
 import VueDetailleeFormation from './components/formation/VueDetailleeFormation/VueDetailleeFormation'
@@ -56,6 +57,13 @@ function App() {
               <DemandeFormation />
             </ProtectedRoute>}
         />
+            <Route
+                path="moncompte"
+                element={
+                    <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
+                        <MonCompte />
+                    </ProtectedRoute>}
+            />
         <Route
           path="admin"
           element={

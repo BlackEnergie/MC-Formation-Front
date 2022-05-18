@@ -36,13 +36,11 @@ function AffichageMonCompte() {
         nom : information?.formateurApi?.nom,
         prenom : information?.formateurApi?.prenom,
         email : information?.email,
-        mdp : "mdp",
         poste : information?.membreBureauNationalApi?.poste,
         ville : information?.associationApi?.ville,
         college : information?.associationApi?.college,
         acronyme : information?.associationApi?.acronyme,
         nomComplet : information?.associationApi?.nomComplet
-
     }
 
     return(
@@ -117,12 +115,6 @@ function AffichageMonCompte() {
                             style={{backgroundColor:"#0085f2",borderRadius:10, color:'white'}}
                             hidden={data.email==undefined?true:false}>
                             Email : {data.email}
-                        </Typography>
-                        <Typography
-                            align="center"
-                            style={{backgroundColor:"#0085f2",borderRadius:10, color:'white'}}
-                            hidden={data.mdp==undefined?true:false}>
-                            Mot de passe : {data.mdp}
                         </Typography>
                     </Grid>
                 <Grid item xs>
