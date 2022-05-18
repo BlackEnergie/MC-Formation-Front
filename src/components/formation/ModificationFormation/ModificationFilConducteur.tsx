@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Grid from '@mui/material/Grid';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -15,6 +15,7 @@ import {TextField, textFieldClasses} from '@mui/material';
 
 const ModificationFilConducteur = (props) => {
 
+    const [liveness, setLiveness] = useState(0);
     const INITIAL_PARTIE: Partie = {
         id: 0,
         plan: "",
@@ -25,7 +26,7 @@ const ModificationFilConducteur = (props) => {
     let temporairePartie = INITIAL_PARTIE;
 
     const handleChange = (i, s) => {
-        let items = props.filConducteur;
+        let items = props.formation.parties;
         switch (s) {
             case 'plan' :
                 items[i].plan = temporairePartie.plan;
@@ -44,28 +45,31 @@ const ModificationFilConducteur = (props) => {
                 temporairePartie.methodologie = "";
                 break;
         }
-
-        props.majFilConducteur(items);
+        let newFormation = props.formation;
+        newFormation.parties = items;
+        props.majFormation(newFormation);
     };
-
     const handleItemDeletedPartie = (i) => {
-        props.majFilConducteur(props.filConducteur.filter((item, index) => index !== i));
+        let newFormation = props.formation;
+        newFormation.parties = props.formation.parties.filter((item, index) => index !== i);
+        props.majFormation(newFormation);
+        setLiveness(liveness+1);
     }
     const handleAjoutPartie = () => {
-        props.majFilConducteur(
-            filConducteur => [...filConducteur,
-                {
-                    id: getMax(filConducteur),
-                    plan: temporairePartie.plan,
-                    timing: temporairePartie.timing,
-                    contenu: temporairePartie.contenu,
-                    methodologie: temporairePartie.methodologie
-                }
-            ]
-        );
+        let newFormation = props.formation;
+        const newPartie: Partie = {
+            id: getMax(props.formation.parties),
+            plan: temporairePartie.plan,
+            timing: temporairePartie.timing,
+            contenu: temporairePartie.contenu,
+            methodologie: temporairePartie.methodologie
+        }
+        newFormation.parties.push(newPartie);
+        props.majFormation(newFormation);
+        setLiveness(liveness+1);
     }
 
-    const AfficherDataFilConducteur = () => props.filConducteur?.map(
+    const AfficherDataFilConducteur = () => props.formation.parties?.map(
         (partie, i) => {
             return (
                 <StyledTableRow key={partie.id}>
@@ -215,11 +219,12 @@ const ModificationFilConducteur = (props) => {
                         {/* INPUT NOUVELLE LIGNE*/}
                         <StyledTableRow key={10000}>
                             <StyledTableCell>
-                                <TextField
+                                <StyledTextField
                                     fullWidth={true}
-                                    size="small"
                                     variant="standard"
-                                    type="text"
+                                    inputProps={{style: {fontSize: 12}}}
+                                    size="small"
+                                    multiline={true}
                                     onChange={
                                         (event) => {
                                             temporairePartie.plan = event.target.value;
@@ -227,14 +232,15 @@ const ModificationFilConducteur = (props) => {
                                     }
                                     onKeyPress={e => e.key === 'Enter' && handleAjoutPartie()}
                                 >
-                                </TextField>
+                                </StyledTextField>
                             </StyledTableCell>
                             <StyledTableCell>
                                 <TextField
                                     fullWidth={true}
-                                    size="small"
                                     variant="standard"
-                                    type="text"
+                                    inputProps={{style: {fontSize: 12}}}
+                                    size="small"
+                                    multiline={true}
                                     onChange={
                                         (event) => {
                                             temporairePartie.timing = event.target.value;
@@ -247,9 +253,10 @@ const ModificationFilConducteur = (props) => {
                             <StyledTableCell>
                                 <TextField
                                     fullWidth={true}
-                                    size="small"
                                     variant="standard"
-                                    type="text"
+                                    inputProps={{style: {fontSize: 12}}}
+                                    size="small"
+                                    multiline={true}
                                     onChange={
                                         (event) => {
                                             temporairePartie.contenu = event.target.value;
@@ -262,9 +269,10 @@ const ModificationFilConducteur = (props) => {
                             <StyledTableCell>
                                 <TextField
                                     fullWidth={true}
-                                    size="small"
                                     variant="standard"
-                                    type="text"
+                                    inputProps={{style: {fontSize: 12}}}
+                                    size="small"
+                                    multiline={true}
                                     onChange={
                                         (event) => {
                                             temporairePartie.methodologie = event.target.value;
