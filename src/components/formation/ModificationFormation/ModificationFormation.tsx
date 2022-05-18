@@ -1,12 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import ModificationFormationInformationGenerales from "./ModificationInformationsGenerales";
 import ModificationFicheDeFormation from "./ModificationFicheDeFormation";
 import ModificationFilConducteur from "./ModificationFilConducteur";
-import NavFormation from "../NavigationFormation/NavFormation";
 import {useParams} from "react-router-dom";
 import {FetchFormationById} from '../../../serverInteraction/FetchFormation';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import Formation from '../../../api/model/Formation';
+import {Accordion, AccordionDetails, AccordionSummary, Container, Typography } from '@mui/material';
+import toast from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
+import NavFormation from "../NavigationFormation/NavFormation";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
 
 const ModificationFormation = () => {
     const INITIAL_FORMATION: Formation = new Formation()
@@ -26,7 +30,6 @@ const ModificationFormation = () => {
     const getFormationDetails = async () => {
         try {
             const response = await FetchFormationById(axiosPrivate, id);
-            response.data.parties = JSON.parse(response?.data.parties);
             setFormation(response?.data);
             setShowComponent(1);
         } catch (err) {
@@ -41,39 +44,69 @@ const ModificationFormation = () => {
         // TODO: Save
     }
 
+    console.log(formation);
     return (
-        <div className="container-fluid main">
-            <div className="row">
-                <NavFormation updateState={majShowComponent}/>
 
-                <div className="col" id="modificaitionFormation">
+        <Container maxWidth={"xl"}>
+            <Accordion defaultExpanded={true}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon/>}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header">
+                    <Typography
+                        fontWeight="bold"
+                        color="primary"
+                        component="h1"
+                        variant="h5">
+                        Informations demande
+                    </Typography>
+                </AccordionSummary>
+                {/*
+<AccordionDetails>
+<InformationsDemande formation={formation} loading={loading} setLoading={setLoading}/>
+</AccordionDetails>
+*/}
+            </Accordion>
+            <Accordion>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon/>}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header">
+                    <Typography
+                        fontWeight="bold"
+                        color="primary"
+                        component="h1"
+                        variant="h5">
+                        Informations {formation.type? formation.type.toLowerCase(): 'formation'}
+                    </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <ModificationInformationsGenerales formation={formation}  majFormation={majFormation}/>
+                </AccordionDetails>
+            </Accordion>
+            <Accordion>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon/>}
+                    aria-controls="panel2a-content"
+                    id="panel2a-header">
+                    {/*
+                    <Typography
+                        fontWeight="bold"
+                        color="primary"
+                        component="h1"
+                        variant="h5">
+                        {nomFiche}
+                    </Typography>
+                    */}
+                </AccordionSummary>
+                <AccordionDetails>
 
-                    {
-                        (showComponent === 1) ? (
-                            <ModificationFormationInformationGenerales formation={formation}/>
-                        ) : (<></>)
-                    }
-                    {
-                        (showComponent === 2) ? (
-                            <ModificationFicheDeFormation/>
-                        ) : (<></>)
-                    }
-                    {
-                        (showComponent === 3) ? (
-                            <ModificationFilConducteur formation={formation} majFormation={majFormation}/>
-                        ) : (<></>)
-                    }
-                    <div className="container-fluid">
-                        <div className="container shadow p-3 mb-3 bg-white rounded  d-flex justify-content-center">
-                            <button type="button" className="btn btn-mc"
-                                    onClick={sauvegarderTout}>Sauvegarder
-                            </button>
-                        </div>
-                    </div>
+                    <ModificationFilConducteur formation={formation} majFormation={majFormation}/>
+                </AccordionDetails>
+            </Accordion>
 
-                </div>
-            </div>
-        </div>
+        </Container>
+
 
     )
 }
