@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Grid from '@mui/material/Grid';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -12,30 +12,8 @@ import Partie from '../../../api/model/Partie';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import {TextField, textFieldClasses} from '@mui/material';
-import toast from "react-hot-toast";
-import {PostFormation} from "../../../serverInteraction/PostFormation";
-import useAxiosPrivate from "../../../auth/hooks/useAxiosPrivate";
-import Formation from '../../../api/model/Formation';
 
-interface Props{
-    formation: Formation
-    modifFormation: (
-        newFormation: Formation
-    ) => void
-}
-
-const ModificationFilConducteur = (props: Props) => {
-
-    const axiosPrivate = useAxiosPrivate();
-    let newformation = props.formation
-
-    console.log(props.formation)
-
-    const handleSubmit = () => {
-        newformation.parties = JSON.stringify(filConducteur)
-        props.modifFormation(newformation)
-    };
-
+const ModificationFilConducteur = (props) => {
 
     const INITIAL_PARTIE: Partie = {
         id: 0,
@@ -45,12 +23,9 @@ const ModificationFilConducteur = (props: Props) => {
         methodologie: "",
     }
     let temporairePartie = INITIAL_PARTIE;
-    const [filConducteur, setFilConducteur] = useState(props.formation.parties ? JSON.parse(props.formation.parties) : undefined);
-
 
     const handleChange = (i, s) => {
-
-        let items = filConducteur;
+        let items = props.filConducteur;
         switch (s) {
             case 'plan' :
                 items[i].plan = temporairePartie.plan;
@@ -69,12 +44,28 @@ const ModificationFilConducteur = (props: Props) => {
                 temporairePartie.methodologie = "";
                 break;
         }
-        ;
-        setFilConducteur(items);
+
+        props.majFilConducteur(items);
     };
 
+    const handleItemDeletedPartie = (i) => {
+        props.majFilConducteur(props.filConducteur.filter((item, index) => index !== i));
+    }
+    const handleAjoutPartie = () => {
+        props.majFilConducteur(
+            filConducteur => [...filConducteur,
+                {
+                    id: getMax(filConducteur),
+                    plan: temporairePartie.plan,
+                    timing: temporairePartie.timing,
+                    contenu: temporairePartie.contenu,
+                    methodologie: temporairePartie.methodologie
+                }
+            ]
+        );
+    }
 
-    const AfficherDataFilConducteur = () => filConducteur?.map(
+    const AfficherDataFilConducteur = () => props.filConducteur?.map(
         (partie, i) => {
             return (
                 <StyledTableRow key={partie.id}>
@@ -156,23 +147,6 @@ const ModificationFilConducteur = (props: Props) => {
         }
     )
 
-    const handleItemDeletedPartie = (i) => {
-        setFilConducteur(filConducteur.filter((item, index) => index !== i));
-    }
-    const handleAjoutPartie = () => {
-        setFilConducteur(
-            filConducteur => [...filConducteur,
-                {
-                    id: getMax(filConducteur),
-                    plan: temporairePartie.plan,
-                    timing: temporairePartie.timing,
-                    contenu: temporairePartie.contenu,
-                    methodologie: temporairePartie.methodologie
-                }
-            ]
-        );
-    }
-
     function getMax(list) {
         let cpt = 1;
         list.forEach(val => {
@@ -184,7 +158,6 @@ const ModificationFilConducteur = (props: Props) => {
         return cpt;
     }
 
-
     const StyledTableCell = styled(TableCell)(({theme}) => ({
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
@@ -195,7 +168,6 @@ const ModificationFilConducteur = (props: Props) => {
             verticalAlign: 'bottom',
         },
     }));
-
     const StyledTextField = styled(TextField)(({theme}) => ({
         [`&.${textFieldClasses}`]: {
             backgroundColor: theme.palette.primary.main,
@@ -203,7 +175,6 @@ const ModificationFilConducteur = (props: Props) => {
             fontSize: 20,
         },
     }));
-
     const StyledTableRow = styled(TableRow)(({theme}) => ({
         '&:nth-of-type(odd)': {
             backgroundColor: theme.palette.action.hover,
@@ -213,7 +184,6 @@ const ModificationFilConducteur = (props: Props) => {
             border: 0,
         },
     }));
-
     const StyledTableHead = styled(TableHead)(({theme}) => ({
         '&:nth-of-type(odd)': {
             fontWeight: "bold",
@@ -315,9 +285,6 @@ const ModificationFilConducteur = (props: Props) => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <button type="button" className="btn btn-mc"
-                    onClick={handleSubmit}>Sauvegarder
-            </button>
         </Grid>
     )
 }
