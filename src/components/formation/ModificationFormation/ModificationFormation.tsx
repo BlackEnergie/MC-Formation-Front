@@ -5,22 +5,23 @@ import {useParams} from "react-router-dom";
 import {FetchFormationById} from '../../../serverInteraction/FetchFormation';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import Formation from '../../../api/model/Formation';
-import {Accordion, AccordionDetails, AccordionSummary, Container, Typography } from '@mui/material';
-import toast from 'react-hot-toast';
-import { useNavigate } from "react-router-dom";
+import {Accordion, AccordionDetails, AccordionSummary, Container, Skeleton, Typography} from '@mui/material';
 import NavFormation from "../NavigationFormation/NavFormation";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
+import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 const ModificationFormation = () => {
-    const INITIAL_FORMATION: Formation = new Formation()
+    const INITIAL_FORMATION: Formation = new Formation();
     let {id} = useParams();
-    const axiosPrivate = useAxiosPrivate()
+    const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
     const [formation, setFormation] = useState(INITIAL_FORMATION);
-    const [showComponent, setShowComponent] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getFormationDetails();
+        getFormationDetails().then(data => setFormation(data));
     }, [])
 
     const majFormation = (newFormation) => {
@@ -31,82 +32,82 @@ const ModificationFormation = () => {
         try {
             const response = await FetchFormationById(axiosPrivate, id);
             setFormation(response?.data);
-            setShowComponent(1);
+            let data = response.data;
+            setLoading(false);
+            return data;
         } catch (err) {
-            console.error(err);
+            console.log(err)
+            toast.error(err.response?.data?.message);
+            if (err.response?.data?.code === 403){
+                navigate('/')
+            }
         }
     }
-    const majShowComponent = (val) => {
-        setShowComponent(val);
-    }
 
-    const sauvegarderTout = () => {
-        // TODO: Save
+    let nomFiche = 'FDF';
+    if (formation && formation.type === 'Atelier') {
+        nomFiche = 'FDA'
     }
-
-    console.log(formation);
     return (
-
         <Container maxWidth={"xl"}>
-            <Accordion defaultExpanded={true}>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon/>}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header">
+            {loading ?
+                <Skeleton sx={{width: 'auto'}}/> :
+                <>
                     <Typography
-                        fontWeight="bold"
+                        mb="10px"
                         color="primary"
-                        component="h1"
-                        variant="h5">
-                        Informations demande
+                        variant="h4"
+                        id="tableTitle"
+                        component="div">
+                        <span color="primary">
+                            {formation.nom ? formation.nom : formation.sujet}
+                        </span>
                     </Typography>
-                </AccordionSummary>
-                {/*
-<AccordionDetails>
-<InformationsDemande formation={formation} loading={loading} setLoading={setLoading}/>
-</AccordionDetails>
-*/}
-            </Accordion>
-            <Accordion>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon/>}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header">
-                    <Typography
-                        fontWeight="bold"
-                        color="primary"
-                        component="h1"
-                        variant="h5">
-                        Informations {formation.type? formation.type.toLowerCase(): 'formation'}
-                    </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <ModificationInformationsGenerales formation={formation}  majFormation={majFormation}/>
-                </AccordionDetails>
-            </Accordion>
-            <Accordion>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon/>}
-                    aria-controls="panel2a-content"
-                    id="panel2a-header">
-                    {/*
-                    <Typography
-                        fontWeight="bold"
-                        color="primary"
-                        component="h1"
-                        variant="h5">
-                        {nomFiche}
-                    </Typography>
-                    */}
-                </AccordionSummary>
-                <AccordionDetails>
+                </>
+            }
+            {!loading ?
+                <>
+                    <Accordion defaultExpanded={true}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header">
+                            <Typography
+                                fontWeight="bold"
+                                color="primary"
+                                component="h1"
+                                variant="h5">
+                                Informations {formation.type ? formation.type.toLowerCase() : 'formation'}
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <ModificationInformationsGenerales/>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel2a-content"
+                            id="panel2a-header">
 
-                    <ModificationFilConducteur formation={formation} majFormation={majFormation}/>
-                </AccordionDetails>
-            </Accordion>
-
+                            <Typography
+                                fontWeight="bold"
+                                color="primary"
+                                component="h1"
+                                variant="h5">
+                                {nomFiche}
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <ModificationFicheDeFormation/>
+                            <ModificationFilConducteur formation={formation}
+                                                       majFormation={majFormation}/>
+                        </AccordionDetails>
+                    </Accordion>
+                </>
+                : <></>
+            }
         </Container>
-
 
     )
 }
