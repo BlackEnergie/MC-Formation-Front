@@ -14,6 +14,7 @@ const ModificationFormation = () => {
     const [formation, setFormation] = useState(INITIAL_FORMATION);
     const [showComponent, setShowComponent] = useState(0);
     /*const [itemsPartie, setItemsParties] = useState(formation.parties);*/
+    const [filConducteur, setFilConducteur] = useState();
 
 
     let { id } = useParams();
@@ -29,12 +30,18 @@ const ModificationFormation = () => {
         console.log(formation)
     }
 
+    const majFilConducteur = (newFilConducteur) => {
+        setFilConducteur(newFilConducteur);
+    }
+    console.log(filConducteur);
+
 
     const getFormationDetails = async () => {
         try {
             const response = await FetchFormationById(axiosPrivate, id)
             setFormation(response?.data);
             setShowComponent(1);
+            setFilConducteur(JSON.parse(response?.data.parties));
         } catch (err) {
             console.error(err);
         }
@@ -66,7 +73,7 @@ const ModificationFormation = () => {
                     }
                     {
                         (showComponent === 3) ? (
-                            <ModificationFilConducteur formation={formation} modifFormation={modificationFormation}/>
+                            <ModificationFilConducteur filConducteur={filConducteur} majFilConducteur={majFilConducteur}/>
                         ) : (<></>)
                     }
                     <div className="container-fluid">
