@@ -1,153 +1,542 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {InputLabel, MenuItem, Select, TextField, textFieldClasses} from "@mui/material";
+import {styled} from "@mui/material/styles";
+import TableCell, {tableCellClasses} from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableHead from "@mui/material/TableHead";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import Partie from "../../../api/model/Partie";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import {animatedScrollTo} from "react-select/dist/declarations/src/utils";
+import Domaine from "../../../api/model/Domaine";
+import Formation from "../../../api/model/Formation";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Association from "../../../api/model/Association";
 
-const ModificationInformationsGenerales = (formation) => {
-    let Donnee = formation.formation;
+const ModificationInformationsGenerales = (props) => {
+
+    const [liveness, setLiveness] = useState(0);
+
+
+   let temporaireDonnee = props.formation;
+
+
+    const StyledTextField = styled(TextField)(({theme}) => ({
+        [`&.${textFieldClasses}`]: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+            fontSize: 20,
+        },
+    }));
+
+    const StyledTableCell = styled(TableCell)(({theme}) => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+            height: 55
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+            verticalAlign: 'bottom',
+
+        },
+    }));
+
+    const StyledTableCellHead = styled(TableCell)(({theme}) => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+            fontWeight: 'bold',
+        },
+    }));
+
+    const StyledTableRow = styled(TableRow)(({theme}) => ({
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover,
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+        },
+    }));
+
+    const StyledTableHead = styled(TableHead)(({theme}) => ({
+        '&:nth-of-type(odd)': {
+            fontWeight: 'bold',
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+        },
+    }));
+
+
+    const handleChange = (s) => {
+        let items = props.formation;
+        switch (s) {
+            case 'Statut' :
+                items.statut = temporaireDonnee.statut;
+                temporaireDonnee.statut = "";
+                break;
+            case "cadre" :
+                items.cadre = temporaireDonnee.cadre;
+                temporaireDonnee.cadre = "";
+                break;
+            case "type" :
+                items.type = temporaireDonnee.type;
+                temporaireDonnee.type = "";
+                break;
+            case "date" :
+                items.date = temporaireDonnee.date;
+                temporaireDonnee.date = "";
+                break;
+        }
+        let newFormation = props.formation.formation;
+        newFormation = items;
+        props.formation.majFormation(newFormation);
+    };
+
+
+    const handleItemDelete = (i,s) => {
+        let newFormation = props.formation;
+
+        switch (s) {
+            case 'Domaine' :
+                newFormation.domaine = props.formation.domaine.filter((item, index) => index !== i);
+                props.majFormation(newFormation);
+                break;
+            case 'Formateurs':
+                newFormation.formateur = props.formation.formateur.filter((item, index) => index !== i);
+                props.majFormation(newFormation);
+                break;
+            case 'Asso':
+                newFormation.association = props.formation.association.filter((item, index) => index !== i);
+                props.majFormation(newFormation);
+                break;
+        }
+        setLiveness(liveness+1);
+        console.log(props.formation)
+    }
+
+
+    const handleAjout = (s) => {
+        let newFormation = props.formation;
+        switch (s) {
+            case 'Domaine' :
+                const newdomaine = {
+                    id: getMax(props.formation.domaines),
+                    code: temporaireDonnee.domaine.code,
+                    nom: temporaireDonnee.domaine.nom,
+                }
+                newFormation.domaine.push(newdomaine);
+                break;
+            case 'Formateurs':
+                const newformateur = {
+                    id: getMax(props.formation.domaines),
+                    nom: temporaireDonnee.formateur.nom,
+                    prenom: temporaireDonnee.formateur.prenom,
+                }
+                newFormation.formateur.push(newformateur);
+                break;
+            case 'Asso':
+                const newassociation = {
+                    nomComplet: temporaireDonnee.associationsInteressees.association.nomComplet,
+                    ville: temporaireDonnee.associationsInteressees.association.ville,
+                }
+                newFormation.associationsInteressees.push(newassociation);
+
+                break;
+        }
+        props.majFormation(newFormation);
+        setLiveness(liveness+1);
+        console.log(props.formation)
+
+    }
+
+
+
+    function getMax(list) {
+        let cpt = 1;
+        list.forEach(val => {
+            if (val.id > cpt) {
+                cpt = val.id
+            }
+        })
+        cpt++;
+        return cpt;
+    }
 
     const AfficherDataInfoGenerales = () => {
         return (
             <>
-                <tr>
-                    <th>Statut</th>
-                    <td>{Donnee?.statut}</td>
-                </tr>
-                <tr>
-                    <th>Cadre</th>
-                    <td>{Donnee?.cadre}</td>
-                </tr>
-                <tr>
-                    <th>Type</th>
-                    <td>{Donnee?.type}</td>
-                </tr>
-                <tr>
-                    <th>Date</th>
-                    <td>{Donnee?.date}</td>
-                </tr>
+            <StyledTableRow>
+                <StyledTableCell>Statut</StyledTableCell>
+                <StyledTableCell>
+                    <StyledTextField
+                        fullWidth={true}
+                        defaultValue={props.formation.statut}
+                        variant="standard"
+                        inputProps={{style: {fontSize: 12}}}
+                        size="small"
+                        multiline={true}
+                        onChange={
+                            (event) => {
+                                temporaireDonnee.statut = event.target.value;
+                                handleChange("statut")
+                            }
+                        }
+                    >
+                    </StyledTextField>
+                </StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow>
+                <StyledTableCell>Cadre</StyledTableCell>
+                <StyledTableCell>
+                    <StyledTextField
+                        fullWidth={true}
+                        defaultValue={props.formation.cadre}
+                        variant="standard"
+                        inputProps={{style: {fontSize: 12}}}
+                        size="small"
+                        multiline={true}
+                        onChange={
+                            (event) => {
+                                temporaireDonnee.cadre = event.target.value;
+                                handleChange("cadre");
+                            }
+                        }>
+                    </StyledTextField>
+                </StyledTableCell>
+            </StyledTableRow>
+        <StyledTableRow>
+            <StyledTableCell>Type</StyledTableCell>
+            <StyledTableCell>
+                    <StyledTextField
+                        fullWidth={true}
+                        defaultValue={props.formation.type}
+                        variant="standard"
+                        inputProps={{style: {fontSize: 12}}}
+                        size="small"
+                        multiline={true}
+                        onChange={
+                            (event) => {
+                                temporaireDonnee.type = event.target.value;
+                                handleChange("type");
+                            }
+                        }>
+                    </StyledTextField>
+                </StyledTableCell>
+        </StyledTableRow>
+        <StyledTableRow>
+            <StyledTableCell>Date</StyledTableCell>
+            <StyledTableCell>
+                    <StyledTextField
+                        fullWidth={true}
+                        defaultValue={props.formation.date}
+                        variant="standard"
+                        inputProps={{style: {fontSize: 12}}}
+                        size="small"
+                        multiline={true}
+                        onChange={
+                            (event) => {
+                                temporaireDonnee.date = event.target.value;
+                                handleChange("date")
+                            }}>
+                    </StyledTextField>
+                </StyledTableCell>
+            </StyledTableRow>
             </>
         )
     }
-    const AfficherDataDomaine = () => Donnee?.domaines?.map(
-        (info) => {
-            return (
-                <tr key={info.code} title={info.description}>
-                    <td>{info.code}</td>
-                    <td>{info.libelle}</td>
-                </tr>
-            )
-        }
-    )
-    const AfficherDataFormateur = () => Donnee?.formateurs?.map(
-        (info) => {
-            return (
-                <tr key={info.id}>
-                    <td>{info.nom}</td>
-                    <td>{info.prenom}</td>
-                </tr>
-            )
-        }
+
+
+    const AfficherDataDomaine = () => {
+        return props.formation.domaines?.map(
+            (info, i) => {
+                return (
+                    <StyledTableRow key={info.code} title={info.description}>
+                        <StyledTableCell>
+                            {info.code}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                            {info.libelle}
+                        </StyledTableCell>
+                        <TableCell
+                            align="center">
+                            <a onClick={() => handleItemDelete(i,"Domaine")}>
+                                <DeleteIcon className="Icones"/>
+                            </a>
+                        </TableCell>
+                    </StyledTableRow>
+                )
+            }
+        )
+    }
+
+
+    const AfficherDataFormateur = props.formation.formateurs?.map(
+            (info, i) => {
+                console.log(info)
+                return (
+                    <StyledTableRow key={info.id}>
+                        <StyledTableCell>
+                            {info.nom}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                            {info.prenom}
+                        </StyledTableCell>
+                        <TableCell
+                            align="center">
+                            <a onClick={() => handleItemDelete(i, "Formateur")}>
+                                <DeleteIcon className="Icones"/>
+                            </a>
+                        </TableCell>
+                    </StyledTableRow>
+                )
+            }
     )
 
+    /*
+    const AfficherAssociationsInteressees = () => {
+
+        return props.formation.associationciationsInteressees?.map(
+            (info, i) => {
+                return (
+                    <StyledTableRow key={info.id}>
+                        <StyledTableCell>{info.nomComplet}</StyledTableCell>
+                        <StyledTableCell>{info.ville}</StyledTableCell>
+                        <TableCell
+                            align="center">
+                            <a onClick={() => handleItemDelete(i, "Asso")}>
+                                <DeleteIcon className="Icones"/>
+                            </a>
+                        </TableCell>
+                    </StyledTableRow>
+                )
+            }
+        )
+    }
+*/
 
     return (
-        <div className="col">
-
-            {/* Conteneur Info Domaines */}
-            <div className="container shadow p-4 mb-3 bg-white rounded">
-                <div className="row">
-                    {/* Conteneur Informations générales */}
-                    <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3>Informations Générales</h3>
-                        </div>
-                        <div className="container">
-                            <table className="table table-striped mt-2">
-                                <tbody>
-                                {AfficherDataInfoGenerales()}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    {/* Conteneur Domaines */}
-                    <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3>
-                                Domaine(s)
-                            </h3>
-                        </div>
-
-                        {/* Table Domaine */}
-                        <div className="container">
-                            <div className="table-wrapper">
-                                <table className="table table-striped mt-2">
-                                    <thead>
-                                    <tr>
-                                        <th>Code</th>
-                                        <th>Nom</th>
-                                    </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    {AfficherDataDomaine()}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            {/* Conteneur Formateur Association */}
-            <div className="container shadow p-4 mb-3 bg-white rounded">
-                <div className="row">
-
-                    {/* Conteneur Formateur */}
-                    <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3>Formateur(s)</h3>
-                        </div>
-
-                        {/* Table Formateur */}
-                        <div className="container">
-                            <div className="table-wrapper">
-                                <table className="table table-striped mt-2">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nom</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {AfficherDataFormateur()}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Conteneur Association */}
-                    <div className="col-6">
-                        <div className="row d-flex justify-content-between">
-                            <h3>Association(s) intéréssée(s)</h3>
-                        </div>
-
-                        {/* Table Association */}
-                        <div className="container">
-                            <div className="table-wrapper tableFixHead">
-                                <table className="table table-striped mt-2">
-                                    <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Ville</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Grid container spacing={2}>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div"> Informations Générales
+                </Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell sx={{width: 100}}></StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherDataInfoGenerales()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Domaine(s)
+                </Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell sx={{width: 100}}>Code</StyledTableCell>
+                                <StyledTableCell>Nom</StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherDataDomaine()}
+                            <StyledTableRow key={10000}>
+                                <StyledTableCell>
+                                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={props.formation.domaine}
+                                        label="Age"
+                                        onChange={handleChange}
+                                        >
+                                        <MenuItem value={10}>Ten</MenuItem>
+                                        <MenuItem value={20}>Twenty</MenuItem>
+                                        <MenuItem value={30}>Thirty</MenuItem>
+                                    </Select>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={props.formation.domaine}
+                                        label="Age"
+                                        onChange={handleChange}
+                                        >
+                                        <MenuItem value={10}>Ten</MenuItem>
+                                        <MenuItem value={20}>Twenty</MenuItem>
+                                        <MenuItem value={30}>Thirty</MenuItem>
+                                    </Select>
+                                </StyledTableCell>
+                                <TableCell
+                                    align="center">
+                                    <a onClick={() => handleAjout("Domaine")}>
+                                        <AddBoxIcon className="Icones"/>
+                                    </a>
+                                </TableCell>
+                            </StyledTableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            <Grid item xs={6}>
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    color="primary"
+                    id="tableTitle"
+                    component="div">Formateur(s)</Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell>Nom</StyledTableCell>
+                                <StyledTableCell>Prenom</StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherDataFormateur}
+                            <StyledTableRow key={10000}>
+                                <StyledTableCell>
+                                    <StyledTextField
+                                        fullWidth={true}
+                                        variant="standard"
+                                        inputProps={{style: {fontSize: 12}}}
+                                        size="small"
+                                        multiline={true}
+                                        onChange={
+                                            (event) => {
+                                                temporaireDonnee.formateurs.nom = event.target.value;
+                                            }
+                                        }
+                                        onKeyPress={e => e.key === 'Enter' && handleAjout("Formateur")}
+                                    >
+                                    </StyledTextField>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                    <TextField
+                                        fullWidth={true}
+                                        variant="standard"
+                                        inputProps={{style: {fontSize: 12}}}
+                                        size="small"
+                                        multiline={true}
+                                        onChange={
+                                            (event) => {
+                                                temporaireDonnee.formateurs.prenom = event.target.value;
+                                            }
+                                        }
+                                        onKeyPress={e => e.key === 'Enter' && handleAjout("Formateur")}
+                                    >
+                                    </TextField>
+                                </StyledTableCell>
+                                <TableCell
+                                    align="center">
+                                    <a onClick={() => handleAjout("Formateur")}>
+                                        <AddBoxIcon className="Icones"/>
+                                    </a>
+                                </TableCell>
+                            </StyledTableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            { /*
+            <Grid item xs={6}>
+                <Typography
+                    sx={{flex: '1 1 100%', p: 1}}
+                    variant="h5"
+                    id="tableTitle"
+                    color="primary"
+                    component="div">Association(s) intéréssée(s)</Typography>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+                        <StyledTableHead>
+                            <StyledTableRow>
+                                <StyledTableCell>Nom</StyledTableCell>
+                                <StyledTableCell>Ville</StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                        </StyledTableHead>
+                        <TableBody>
+                            {AfficherAssociationsInteressees()}
+                            <StyledTableRow key={10000}>
+                                <StyledTableCell>
+                                    <StyledTextField
+                                        fullWidth={true}
+                                        variant="standard"
+                                        inputProps={{style: {fontSize: 12}}}
+                                        size="small"
+                                        multiline={true}
+                                        onChange={
+                                            (event, i=0) => {
+                                                temporaireDonnee.associationsInteressees.association[i].nomComplet = event.target.value;
+                                            }
+                                        }
+                                        onKeyPress={e => e.key === 'Enter' && handleAjout('Asso')}
+                                    >
+                                    </StyledTextField>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                    <TextField
+                                        fullWidth={true}
+                                        variant="standard"
+                                        inputProps={{style: {fontSize: 12}}}
+                                        size="small"
+                                        multiline={true}
+                                        onChange={
+                                            (event, i=0) => {
+                                                temporaireDonnee.associationsInteressees.association[i].ville = event.target.value;
+                                            }
+                                        }
+                                        onKeyPress={e => e.key === 'Enter' && handleAjout('Asso')}
+                                    >
+                                    </TextField>
+                                </StyledTableCell>
+                                <TableCell
+                                    align="center">
+                                    <a onClick={() => handleAjout('Asso')}>
+                                        <AddBoxIcon className="Icones"/>
+                                    </a>
+                                </TableCell>
+                                </StyledTableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            */
+            }
+        </Grid>
     )
 }
 
