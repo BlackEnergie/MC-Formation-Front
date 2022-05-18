@@ -50,6 +50,7 @@ const ModificationFormation = () => {
     }
     return (
         <Container maxWidth={"xl"}>
+            {console.log(formation)}
             {loading ?
                 <Skeleton sx={{width: 'auto'}}/> :
                 <>
@@ -81,7 +82,8 @@ const ModificationFormation = () => {
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <ModificationInformationsGenerales/>
+                            <ModificationInformationsGenerales formation={formation}
+                                                               majFormation={majFormation}/>
                         </AccordionDetails>
                     </Accordion>
                     <Accordion>
