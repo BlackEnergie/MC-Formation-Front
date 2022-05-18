@@ -4,44 +4,31 @@ import ModificationFicheDeFormation from "./ModificationFicheDeFormation";
 import ModificationFilConducteur from "./ModificationFilConducteur";
 import NavFormation from "../NavigationFormation/NavFormation";
 import {useParams} from "react-router-dom";
-import { FetchFormationById } from '../../../serverInteraction/FetchFormation';
+import {FetchFormationById} from '../../../serverInteraction/FetchFormation';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import Formation from '../../../api/model/Formation';
 
 const ModificationFormation = () => {
-    const INITIAL_FORMATION : Formation = new Formation()
-
+    const INITIAL_FORMATION: Formation = new Formation()
+    let {id} = useParams();
+    const axiosPrivate = useAxiosPrivate()
     const [formation, setFormation] = useState(INITIAL_FORMATION);
     const [showComponent, setShowComponent] = useState(0);
-    /*const [itemsPartie, setItemsParties] = useState(formation.parties);*/
-    const [filConducteur, setFilConducteur] = useState();
-
-
-    let { id } = useParams();
-
-    const axiosPrivate = useAxiosPrivate()
 
     useEffect(() => {
         getFormationDetails();
     }, [])
 
-    function modificationFormation(newFormation: Formation){
-        setFormation(newFormation)
-        console.log(formation)
+    const majFormation = (newFormation) => {
+        setFormation(newFormation);
     }
-
-    const majFilConducteur = (newFilConducteur) => {
-        setFilConducteur(newFilConducteur);
-    }
-    console.log(filConducteur);
-
 
     const getFormationDetails = async () => {
         try {
-            const response = await FetchFormationById(axiosPrivate, id)
+            const response = await FetchFormationById(axiosPrivate, id);
+            response.data.parties = JSON.parse(response?.data.parties);
             setFormation(response?.data);
             setShowComponent(1);
-            setFilConducteur(JSON.parse(response?.data.parties));
         } catch (err) {
             console.error(err);
         }
@@ -73,7 +60,7 @@ const ModificationFormation = () => {
                     }
                     {
                         (showComponent === 3) ? (
-                            <ModificationFilConducteur filConducteur={filConducteur} majFilConducteur={majFilConducteur}/>
+                            <ModificationFilConducteur formation={formation} majFormation={majFormation}/>
                         ) : (<></>)
                     }
                     <div className="container-fluid">
