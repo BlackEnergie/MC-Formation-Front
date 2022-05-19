@@ -1,4 +1,5 @@
 export const BASE_URL = "http://mcformation.eu-west-3.elasticbeanstalk.com/";
+export const MAIN_URL = "/MC-Formation-Front"
 
 export enum EntryPoint {
     ALL_FORMATION = '/formations',
