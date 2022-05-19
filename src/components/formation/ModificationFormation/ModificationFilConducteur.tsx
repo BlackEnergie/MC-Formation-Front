@@ -11,7 +11,7 @@ import TableHead from '@mui/material/TableHead';
 import Partie from '../../../api/model/Partie';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import {TextField, textFieldClasses} from '@mui/material';
+import {TextField, textFieldClasses, Typography} from '@mui/material';
 
 const ModificationFilConducteur = (props) => {
 
@@ -201,6 +201,13 @@ const ModificationFilConducteur = (props) => {
 
     return (
         <Grid marginBottom={4}>
+            <Typography
+                sx={{flex: '1 1 100%', p: 1}}
+                variant="h5"
+                color="primary"
+                id="tableTitle"
+                component="div">Fil Conducteur
+            </Typography>
             <TableContainer component={Paper}>
                 <Table stickyHeader aria-label="customized table">
                     <StyledTableHead>
