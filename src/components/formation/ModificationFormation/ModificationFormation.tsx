@@ -33,17 +33,6 @@ const ModificationFormation = () => {
         setFormation(newFormation);
     }
 
-    const getDomaineList = async () => {
-
-        try {
-            const controller = new AbortController();
-            const response = await FetchDomaines(axiosPrivate,controller);
-            setDomaine(response?.data);
-        }catch (err){
-            console.log(err)
-        }
-    }
-
     const getFormationDetails = async () => {
         try {
             const response = await FetchFormationById(axiosPrivate, id);
@@ -60,13 +49,33 @@ const ModificationFormation = () => {
         }
     }
 
+
+    const getDomaineList = async () => {
+
+        try {
+            const controller = new AbortController();
+            const response = await FetchDomaines(axiosPrivate,controller);
+            setDomaine(response?.data);
+        }catch (err){
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        getDomaineList();
+    },[])
+
     let nomFiche = 'FDF';
     if (formation && formation.type === 'Atelier') {
         nomFiche = 'FDA'
     }
+
+    console.log(formation);
+    console.log(domaine);
+
     return (
         <Container maxWidth={"xl"}>
-            {console.log(formation)}
+
             {loading ?
                 <Skeleton sx={{width: 'auto'}}/> :
                 <>
@@ -99,7 +108,7 @@ const ModificationFormation = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <ModificationInformationsGenerales formation={formation}
-                                                               majFormation={majFormation}/>
+                                                               majFormation={majFormation} domaine={domaine}/>
                         </AccordionDetails>
                     </Accordion>
                     <Accordion>
