@@ -6,6 +6,9 @@ import {useParams} from "react-router-dom";
 import {Grid} from "@mui/material";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import {PutUpdateUser} from '../../serverInteraction/PostDataUpdateUser';
+import toast from "react-hot-toast";
+import UtilisateurInfo from "../../api/model/UtilisateurInfo";
 
 
 
@@ -13,7 +16,7 @@ import Box from "@mui/material/Box";
 function AffichageModificationMonCompte() {
 
     const [information, setInformation] = useState(null);
-    const initialUtilisateur : utilisateur = null;
+    const initialUtilisateur : UtilisateurInfo = null;
     const [utilisateur, setUtilisateur] = useState(initialUtilisateur);
     const axiosPrivate = useAxiosPrivate()
     const [liveness, setLiveness] = useState(0);
@@ -34,24 +37,21 @@ function AffichageModificationMonCompte() {
         }
     }
 
-     interface utilisateur {
-        nomUtilisateur : string;
-        email : string;
-        formateur : {
-            nom : string;
-            prenom : string
-        }
-        association : {
-            ville : string;
-            college : string;
-            acronyme : string;
-            nomComplet : string;
-        }
-        membreBureauNational : {
-            poste : string;
+
+    const handleSubmit = async () => {
+        console.log(utilisateur);
+        try {
+            const response = await PutUpdateUser(axiosPrivate, utilisateur);
+            if (response.data.code == 201) {
+                toast.success(response.data.message);
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (err) {
+            toast.error('Une erreur est survenu');
+            console.error(err);
         }
     }
-
 
 
     return(
@@ -206,7 +206,9 @@ function AffichageModificationMonCompte() {
                         size="medium"
                         style={{
                             marginTop: 15,
-                        }}>
+                        }}
+                        onClick={handleSubmit}
+                        >
                         Valider
                     </Button>
                 </Box>
