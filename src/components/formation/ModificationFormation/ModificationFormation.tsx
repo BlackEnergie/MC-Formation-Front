@@ -11,14 +11,18 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
+import {FetchDomaines} from "../../../serverInteraction/FetchData";
+import {domaines} from "../../Accueil/ComposantAccueil/FiltreAccueil";
 
 const ModificationFormation = () => {
     const INITIAL_FORMATION: Formation = new Formation();
+    const INITIAL_DOMAINE : domaines[] = [];
     let {id} = useParams();
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const [formation, setFormation] = useState(INITIAL_FORMATION);
     const [loading, setLoading] = useState(true);
+    const [domaine, setDomaine] = useState(INITIAL_DOMAINE);
 
     useEffect(() => {
         getFormationDetails().then(data => setFormation(data));
@@ -27,6 +31,7 @@ const ModificationFormation = () => {
     const majFormation = (newFormation) => {
         setFormation(newFormation);
     }
+
 
     const getFormationDetails = async () => {
         try {
@@ -44,13 +49,33 @@ const ModificationFormation = () => {
         }
     }
 
+
+    const getDomaineList = async () => {
+
+        try {
+            const controller = new AbortController();
+            const response = await FetchDomaines(axiosPrivate,controller);
+            setDomaine(response?.data);
+        }catch (err){
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        getDomaineList();
+    },[])
+
     let nomFiche = 'FDF';
     if (formation && formation.type === 'Atelier') {
         nomFiche = 'FDA'
     }
+
+    console.log(formation);
+    console.log(domaine);
+
     return (
         <Container maxWidth={"xl"}>
-            {console.log(formation)}
+
             {loading ?
                 <Skeleton sx={{width: 'auto'}}/> :
                 <>
@@ -83,7 +108,7 @@ const ModificationFormation = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <ModificationInformationsGenerales formation={formation}
-                                                               majFormation={majFormation}/>
+                                                               majFormation={majFormation} domaine={domaine}/>
                         </AccordionDetails>
                     </Accordion>
                     <Accordion>

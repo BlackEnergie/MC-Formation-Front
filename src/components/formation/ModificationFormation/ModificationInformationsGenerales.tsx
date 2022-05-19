@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {InputLabel, MenuItem, Select, TextField, textFieldClasses} from "@mui/material";
+import {Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField, textFieldClasses} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import TableCell, {tableCellClasses} from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -17,6 +17,7 @@ import Domaine from "../../../api/model/Domaine";
 import Formation from "../../../api/model/Formation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Association from "../../../api/model/Association";
+import {formation} from "../../Accueil/ComposantAccueil/AccueilAffichage";
 
 const ModificationInformationsGenerales = (props) => {
 
@@ -24,6 +25,18 @@ const ModificationInformationsGenerales = (props) => {
 
 
    let temporaireDonnee = props.formation;
+
+   let libelleDomaine = props.domaine.map( (item, index) => {
+
+       return {
+           label : item.libelle,
+           value : item.libelle,
+           key: item.code,
+
+       }
+    });
+
+   console.log(libelleDomaine[1].libelle);
 
 
     const StyledTextField = styled(TextField)(({theme}) => ({
@@ -162,7 +175,6 @@ const ModificationInformationsGenerales = (props) => {
     }
 
 
-
     function getMax(list) {
         let cpt = 1;
         list.forEach(val => {
@@ -173,6 +185,8 @@ const ModificationInformationsGenerales = (props) => {
         cpt++;
         return cpt;
     }
+
+
 
     const AfficherDataInfoGenerales = () => {
         return (
@@ -370,33 +384,27 @@ const ModificationInformationsGenerales = (props) => {
                         <TableBody>
                             {AfficherDataDomaine()}
                             <StyledTableRow key={10000}>
+                                <StyledTableCell></StyledTableCell>
                                 <StyledTableCell>
-                                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={props.formation.domaine}
-                                        label="Age"
-                                        onChange={handleChange}
-                                        >
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
-                                    </Select>
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={props.formation.domaine}
-                                        label="Age"
-                                        onChange={handleChange}
-                                        >
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
-                                    </Select>
+                                    <Autocomplete
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        options={libelleDomaine}
+                                        onChange={(event, value) => {
+                                            temporaireDonnee.domaine.libelle = value;
+                                            handleAjout("Domaine");
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Domaine"
+                                                InputProps={{
+                                                    ...params?.InputProps,
+                                                    type: 'search',
+                                                }}
+                                            />
+                                        )}
+                                    />
                                 </StyledTableCell>
                                 <TableCell
                                     align="center">
@@ -428,22 +436,27 @@ const ModificationInformationsGenerales = (props) => {
                         <TableBody>
                             {AfficherDataFormateur}
                             <StyledTableRow key={10000}>
-                                <StyledTableCell>
-                                    <StyledTextField
-                                        fullWidth={true}
-                                        variant="standard"
-                                        inputProps={{style: {fontSize: 12}}}
-                                        size="small"
-                                        multiline={true}
-                                        onChange={
-                                            (event) => {
-                                                temporaireDonnee.formateurs.nom = event.target.value;
-                                            }
-                                        }
-                                        onKeyPress={e => e.key === 'Enter' && handleAjout("Formateur")}
-                                    >
-                                    </StyledTextField>
-                                </StyledTableCell>
+                                        <StyledTableCell>
+                                            <Autocomplete
+                                                disablePortal
+                                                id="combo-box-demo"
+                                                options = {libelleDomaine.libelle}
+                                                onChange={(event, value) => {
+                                                    temporaireDonnee.domaines.libelle = value;
+                                                    handleAjout("Domaine");
+                                                }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        label="Domaine"
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            type: 'search',
+                                                        }}
+                                                    />
+                                                )}
+                                            />
+                                        </StyledTableCell>
                                 <StyledTableCell>
                                     <TextField
                                         fullWidth={true}
