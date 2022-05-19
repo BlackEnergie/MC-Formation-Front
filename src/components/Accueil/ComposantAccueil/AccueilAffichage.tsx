@@ -69,7 +69,7 @@ export interface formation {
   nom?: string;
   sujet: string;
   detail: string;
-  date?: string;
+  date?: Date;
   id: number;
 }
 
@@ -81,6 +81,13 @@ interface TablePaginationActionsProps {
     event: React.MouseEvent<HTMLButtonElement>,
     newPage: number
   ) => void;
+}
+
+interface UserInfo {
+  acronyme?: string,
+  demandesFavorables?: number[],
+  nom?: string,
+  prenom?: string,
 }
 
 const INITIAL_FILTRE: filtre = {
@@ -180,7 +187,16 @@ function Filtres(data: formation[], filtre: filtre): formation[] {
   return newdata;
 }
 
-function AccueilAffichage(unFilteredData: formation[]) {
+function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
+  unFilteredData.sort((a, b) => {
+    if (a.date === undefined){
+      return 1
+    }
+    if (b.date === undefined) {
+      return 0
+    }
+    return a.date > b.date ? 0 : 1;
+  });
   const fullFiltre = GetFullFilter(unFilteredData);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -188,7 +204,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
   const [open, setOpen] = useState(0);
 
   const [mesDemandesSelect, setMesDemandesSelect] = useState(false);
-  const [monFiltreSelect, setMonFiltreSelect] = useState(false);
+  const [mesFormationsSelect, setMesFormationsSelect] = useState(false);
 
   const [sujetFiltre, setSujetFiltre] = useState("");
   const [statutFiltre, setStatutFiltre] = useState([]);
@@ -207,6 +223,8 @@ function AccueilAffichage(unFilteredData: formation[]) {
   function SetFiltre(newfiltre: filtre) {
     filtre = newfiltre;
     data = Filtres(unFilteredData, filtre);
+    if(mesDemandesSelect)setMesDemandesSelect(false);
+    if(mesFormationsSelect)setMesFormationsSelect(false);
     setLiveness(liveness + 1);
   }
 
@@ -308,17 +326,34 @@ function AccueilAffichage(unFilteredData: formation[]) {
 
   function setPreFiltre(id: number) {
     let prefiltre = INITIAL_FILTRE;
+    setAssoFiltre([])
+    setFormateursFiltre([])
+    setCadreFiltre([])
+    setDomainesFiltre([])
+    setStatutFiltre([])
+    setSujetFiltre("")
+    prefiltre.asso = [];
+    prefiltre.formateurs = []
+    prefiltre.cadre = []
+    prefiltre.domaines = []
+    prefiltre.sujet = ""
+    prefiltre.statut = []
     switch (id) {
       case 1:
-        prefiltre.statut = [];
-        setMesDemandesSelect(!mesDemandesSelect);
         if (!mesDemandesSelect) {
-          prefiltre.statut = [Statut.DEMANDE];
+          prefiltre.asso = [userInfo.acronyme]
+          setAssoFiltre([userInfo.acronyme])
+          setMesDemandesSelect(true)
         }
         SetFiltre(prefiltre);
 
         break;
       case 2:
+        if (!mesFormationsSelect) {
+          prefiltre.formateurs = [userInfo.prenom + " " + userInfo.nom]
+          setMesFormationsSelect(true)
+        }
+        SetFiltre(prefiltre);
         break;
     }
   }
@@ -364,8 +399,8 @@ function AccueilAffichage(unFilteredData: formation[]) {
             <Stack spacing={1}>
               <Divider />
               {StyledToggleButton(
-                "Mon filtre",
-                monFiltreSelect,
+                "Mes formations",
+                mesFormationsSelect,
                 2,
                 !checkRoleFormateur()
               )}
@@ -375,7 +410,7 @@ function AccueilAffichage(unFilteredData: formation[]) {
                 1,
                 !checkRoleAsso()
               )}
-              <Divider />
+              <Divider hidden={checkRoleBn()}/>
               <Autocomplete
                 multiple
                 id="free-solo-2-demo"

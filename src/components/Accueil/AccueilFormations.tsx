@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { FetchAllFormation } from "../../serverInteraction/FetchFormation";
 import useAxiosPrivate from "../../auth/hooks/useAxiosPrivate";
 import AccueilAffichage from "./ComposantAccueil/AccueilAffichage";
+import decodeToken from "../../auth/decodeToken";
+import { FetchDemandesFavorables, FetchFormateur } from "../../serverInteraction/FetchData";
 
 function Accueil() {
   const [data, setData] = useState([]);
+  const [userInfo, setUserInfo] = useState(undefined)
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -17,11 +20,31 @@ function Accueil() {
     }
   };
 
+  const getUserDetail = async () => {
+    try {
+      const role = decodeToken(localStorage.getItem("accessToken")).decoded.role
+      if (role === "ROLE_ASSO"){
+        const response = await FetchDemandesFavorables(axiosPrivate)
+        setUserInfo(response.data)
+      }
+      if (role === "ROLE_FORMATEUR"){
+        const response = await FetchFormateur(axiosPrivate)
+        setUserInfo(response.data)
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
   useEffect(() => {
     getFormationsAccueil();
   }, []);
 
-  return AccueilAffichage(data);
+  useEffect(() => {
+    getUserDetail();
+  }, [])
+
+  return AccueilAffichage(data, userInfo);
 }
 
 export default Accueil;

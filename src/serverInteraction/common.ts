@@ -14,7 +14,9 @@ export enum EntryPoint {
     DEMANDE = '/demande/creer',
     RESET_PASSWORD_MAIL_URL='/auth/resetPassword/invite',
     RESET_PASSWORD_NEW_PASSWORD = '/auth/resetPassword/save',
-    RESET_PASSWORD_CHECK_TOKEN = '/auth/resetPassword/checkToken'
+    RESET_PASSWORD_CHECK_TOKEN = '/auth/resetPassword/checkToken',
+    DEMANDE_FAVORABLE = '/utilisateur/demandesFavorables',
+    FORMATEUR_DETAIL = '/utilisateur/formateur'
 
 } 
 
