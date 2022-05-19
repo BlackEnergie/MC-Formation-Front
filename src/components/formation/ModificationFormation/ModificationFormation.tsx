@@ -12,7 +12,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
-import {FetchDomaines} from "../../../serverInteraction/FetchData";
 import {domaines} from "../../Accueil/ComposantAccueil/FiltreAccueil";
 
 const ModificationFormation = () => {
@@ -34,16 +33,6 @@ const ModificationFormation = () => {
         setFormation(newFormation);
     }
 
-    const getDomaineList = async () => {
-
-        try {
-            const controller = new AbortController();
-            const response = await FetchDomaines(axiosPrivate,controller);
-            setDomaine(response?.data);
-        }catch (err){
-            console.log(err)
-        }
-    }
 
     const getFormationDetails = async () => {
         try {
