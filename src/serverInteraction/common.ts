@@ -1,4 +1,4 @@
-export const BASE_URL = "http://" + window.location.hostname + ":8080";
+export const BASE_URL = "http://mcformation.eu-west-3.elasticbeanstalk.com/";
 
 export enum EntryPoint {
     ALL_FORMATION = '/formations',
