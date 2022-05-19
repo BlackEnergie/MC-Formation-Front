@@ -18,25 +18,30 @@ import Formation from "../../../api/model/Formation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Association from "../../../api/model/Association";
 import {formation} from "../../Accueil/ComposantAccueil/AccueilAffichage";
+import {Statut, statutToString} from "../../../utils/StatutUtils";
 
 const ModificationInformationsGenerales = (props) => {
 
     const [liveness, setLiveness] = useState(0);
 
+    let stat = [Statut.DEMANDE, Statut.A_ATTRIBUER, Statut.A_VENIR, Statut.PASSEE];
+    console.log(stat);
 
+
+    let valueDomaine ;
    let temporaireDonnee = props.formation;
 
    let libelleDomaine = props.domaine.map( (item, index) => {
 
        return {
            label : item.libelle,
-           value : item.libelle,
+           value : item,
            key: item.code,
 
        }
     });
 
-   console.log(libelleDomaine[1].libelle);
+
 
 
     const StyledTextField = styled(TextField)(({theme}) => ({
@@ -92,64 +97,59 @@ const ModificationInformationsGenerales = (props) => {
     }));
 
 
+
     const handleChange = (s) => {
         let items = props.formation;
         switch (s) {
             case 'Statut' :
                 items.statut = temporaireDonnee.statut;
-                temporaireDonnee.statut = "";
                 break;
             case "cadre" :
                 items.cadre = temporaireDonnee.cadre;
-                temporaireDonnee.cadre = "";
                 break;
             case "type" :
                 items.type = temporaireDonnee.type;
-                temporaireDonnee.type = "";
                 break;
             case "date" :
                 items.date = temporaireDonnee.date;
-                temporaireDonnee.date = "";
                 break;
         }
-        let newFormation = props.formation.formation;
-        newFormation = items;
-        props.formation.majFormation(newFormation);
+        props.majFormation(items);
+        console.log(props.formation)
     };
 
 
     const handleItemDelete = (i,s) => {
-        let newFormation = props.formation;
 
+        let newFormation = props.formation;
         switch (s) {
             case 'Domaine' :
-                newFormation.domaine = props.formation.domaine.filter((item, index) => index !== i);
-                props.majFormation(newFormation);
+                newFormation.domaines = props.formation.domaines.filter((item, index) => index !== i);
                 break;
-            case 'Formateurs':
-                newFormation.formateur = props.formation.formateur.filter((item, index) => index !== i);
-                props.majFormation(newFormation);
+            case 'Formateur':
+                newFormation.formateurs = props.formation.formateurs.filter((item, index) => index !== i);
                 break;
             case 'Asso':
                 newFormation.association = props.formation.association.filter((item, index) => index !== i);
-                props.majFormation(newFormation);
                 break;
         }
+        props.majFormation(newFormation);
         setLiveness(liveness+1);
         console.log(props.formation)
     }
 
 
-    const handleAjout = (s) => {
+    const handleAjout = (s, v) => {
         let newFormation = props.formation;
         switch (s) {
             case 'Domaine' :
                 const newdomaine = {
                     id: getMax(props.formation.domaines),
-                    code: temporaireDonnee.domaine.code,
-                    nom: temporaireDonnee.domaine.nom,
+                    code: v.key,
+                    libelle: v.value.libelle,
+                    description: v.value.description,
                 }
-                newFormation.domaine.push(newdomaine);
+                newFormation.domaines.push(newdomaine);
                 break;
             case 'Formateurs':
                 const newformateur = {
@@ -186,7 +186,14 @@ const ModificationInformationsGenerales = (props) => {
         return cpt;
     }
 
+    function isFormateurVide() {
 
+        if(!props.formation.formateur){
+            return true
+        }else {
+            return false
+        }
+    }
 
     const AfficherDataInfoGenerales = () => {
         return (
@@ -194,21 +201,25 @@ const ModificationInformationsGenerales = (props) => {
             <StyledTableRow>
                 <StyledTableCell>Statut</StyledTableCell>
                 <StyledTableCell>
-                    <StyledTextField
-                        fullWidth={true}
-                        defaultValue={props.formation.statut}
-                        variant="standard"
-                        inputProps={{style: {fontSize: 12}}}
-                        size="small"
-                        multiline={true}
-                        onChange={
-                            (event) => {
-                                temporaireDonnee.statut = event.target.value;
-                                handleChange("statut")
-                            }
-                        }
-                    >
-                    </StyledTextField>
+                    <Autocomplete
+                        disablePortal
+                        id="combo-box-demo"
+                        options = {stat}
+                        onChange={(event, value) => {
+                            temporaireDonnee.statut = value;
+                            handleChange("statut")
+                        }}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Domaine"
+                                InputProps={{
+                                    ...params?.InputProps,
+                                    type: 'search',
+                                }}
+                            />
+                        )}
+                    />
                 </StyledTableCell>
             </StyledTableRow>
             <StyledTableRow>
@@ -243,6 +254,7 @@ const ModificationInformationsGenerales = (props) => {
                         onChange={
                             (event) => {
                                 temporaireDonnee.type = event.target.value;
+                                console.log(temporaireDonnee.type)
                                 handleChange("type");
                             }
                         }>
@@ -389,10 +401,9 @@ const ModificationInformationsGenerales = (props) => {
                                     <Autocomplete
                                         disablePortal
                                         id="combo-box-demo"
-                                        options={libelleDomaine}
+                                        options = {libelleDomaine}
                                         onChange={(event, value) => {
-                                            temporaireDonnee.domaine.libelle = value;
-                                            handleAjout("Domaine");
+                                             valueDomaine = value;
                                         }}
                                         renderInput={(params) => (
                                             <TextField
@@ -408,7 +419,7 @@ const ModificationInformationsGenerales = (props) => {
                                 </StyledTableCell>
                                 <TableCell
                                     align="center">
-                                    <a onClick={() => handleAjout("Domaine")}>
+                                    <a onClick={() => handleAjout("Domaine", valueDomaine)}>
                                         <AddBoxIcon className="Icones"/>
                                     </a>
                                 </TableCell>
@@ -435,51 +446,6 @@ const ModificationInformationsGenerales = (props) => {
                         </StyledTableHead>
                         <TableBody>
                             {AfficherDataFormateur}
-                            <StyledTableRow key={10000}>
-                                        <StyledTableCell>
-                                            <Autocomplete
-                                                disablePortal
-                                                id="combo-box-demo"
-                                                options = {libelleDomaine.libelle}
-                                                onChange={(event, value) => {
-                                                    temporaireDonnee.domaines.libelle = value;
-                                                    handleAjout("Domaine");
-                                                }}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                        label="Domaine"
-                                                        InputProps={{
-                                                            ...params.InputProps,
-                                                            type: 'search',
-                                                        }}
-                                                    />
-                                                )}
-                                            />
-                                        </StyledTableCell>
-                                <StyledTableCell>
-                                    <TextField
-                                        fullWidth={true}
-                                        variant="standard"
-                                        inputProps={{style: {fontSize: 12}}}
-                                        size="small"
-                                        multiline={true}
-                                        onChange={
-                                            (event) => {
-                                                temporaireDonnee.formateurs.prenom = event.target.value;
-                                            }
-                                        }
-                                        onKeyPress={e => e.key === 'Enter' && handleAjout("Formateur")}
-                                    >
-                                    </TextField>
-                                </StyledTableCell>
-                                <TableCell
-                                    align="center">
-                                    <a onClick={() => handleAjout("Formateur")}>
-                                        <AddBoxIcon className="Icones"/>
-                                    </a>
-                                </TableCell>
-                            </StyledTableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
