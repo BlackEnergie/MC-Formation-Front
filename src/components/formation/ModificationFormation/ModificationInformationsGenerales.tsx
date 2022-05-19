@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField, textFieldClasses} from "@mui/material";
+import {Autocomplete, TextField, textFieldClasses} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import TableCell, {tableCellClasses} from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -10,38 +10,29 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import Partie from "../../../api/model/Partie";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import {animatedScrollTo} from "react-select/dist/declarations/src/utils";
 import Domaine from "../../../api/model/Domaine";
-import Formation from "../../../api/model/Formation";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Association from "../../../api/model/Association";
-import {formation} from "../../Accueil/ComposantAccueil/AccueilAffichage";
-import {Statut, statutToString} from "../../../utils/StatutUtils";
+import {Statut} from "../../../utils/StatutUtils";
 
 const ModificationInformationsGenerales = (props) => {
 
     const [liveness, setLiveness] = useState(0);
 
     let stat = [Statut.DEMANDE, Statut.A_ATTRIBUER, Statut.A_VENIR, Statut.PASSEE];
-    console.log(stat);
 
+    let valueDomaine;
+    let temporaireDonnee = props.formation;
 
-    let valueDomaine ;
-   let temporaireDonnee = props.formation;
+    let libelleDomaine = props.domaine.map((item, index) => {
 
-   let libelleDomaine = props.domaine.map( (item, index) => {
+        return {
+            label: item.libelle,
+            value: item,
+            key: item.code,
 
-       return {
-           label : item.libelle,
-           value : item,
-           key: item.code,
-
-       }
+        }
     });
-
-
 
 
     const StyledTextField = styled(TextField)(({theme}) => ({
@@ -97,7 +88,6 @@ const ModificationInformationsGenerales = (props) => {
     }));
 
 
-
     const handleChange = (s) => {
         let items = props.formation;
         switch (s) {
@@ -115,11 +105,10 @@ const ModificationInformationsGenerales = (props) => {
                 break;
         }
         props.majFormation(items);
-        console.log(props.formation)
     };
 
 
-    const handleItemDelete = (i,s) => {
+    const handleItemDelete = (i, s) => {
 
         let newFormation = props.formation;
         switch (s) {
@@ -134,8 +123,7 @@ const ModificationInformationsGenerales = (props) => {
                 break;
         }
         props.majFormation(newFormation);
-        setLiveness(liveness+1);
-        console.log(props.formation)
+        setLiveness(liveness + 1);
     }
 
 
@@ -169,9 +157,7 @@ const ModificationInformationsGenerales = (props) => {
                 break;
         }
         props.majFormation(newFormation);
-        setLiveness(liveness+1);
-        console.log(props.formation)
-
+        setLiveness(liveness + 1);
     }
 
 
@@ -188,9 +174,9 @@ const ModificationInformationsGenerales = (props) => {
 
     function isFormateurVide() {
 
-        if(!props.formation.formateur){
+        if (!props.formation.formateur) {
             return true
-        }else {
+        } else {
             return false
         }
     }
@@ -198,87 +184,87 @@ const ModificationInformationsGenerales = (props) => {
     const AfficherDataInfoGenerales = () => {
         return (
             <>
-            <StyledTableRow>
-                <StyledTableCell>Statut</StyledTableCell>
-                <StyledTableCell>
-                    <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        options = {stat}
-                        onChange={(event, value) => {
-                            temporaireDonnee.statut = value;
-                            handleChange("statut")
-                        }}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Domaine"
-                                InputProps={{
-                                    ...params?.InputProps,
-                                    type: 'search',
-                                }}
-                            />
-                        )}
-                    />
-                </StyledTableCell>
-            </StyledTableRow>
-            <StyledTableRow>
-                <StyledTableCell>Cadre</StyledTableCell>
-                <StyledTableCell>
-                    <StyledTextField
-                        fullWidth={true}
-                        defaultValue={props.formation.cadre}
-                        variant="standard"
-                        inputProps={{style: {fontSize: 12}}}
-                        size="small"
-                        multiline={true}
-                        onChange={
-                            (event) => {
-                                temporaireDonnee.cadre = event.target.value;
-                                handleChange("cadre");
-                            }
-                        }>
-                    </StyledTextField>
-                </StyledTableCell>
-            </StyledTableRow>
-        <StyledTableRow>
-            <StyledTableCell>Type</StyledTableCell>
-            <StyledTableCell>
-                    <StyledTextField
-                        fullWidth={true}
-                        defaultValue={props.formation.type}
-                        variant="standard"
-                        inputProps={{style: {fontSize: 12}}}
-                        size="small"
-                        multiline={true}
-                        onChange={
-                            (event) => {
-                                temporaireDonnee.type = event.target.value;
-                                console.log(temporaireDonnee.type)
-                                handleChange("type");
-                            }
-                        }>
-                    </StyledTextField>
-                </StyledTableCell>
-        </StyledTableRow>
-        <StyledTableRow>
-            <StyledTableCell>Date</StyledTableCell>
-            <StyledTableCell>
-                    <StyledTextField
-                        fullWidth={true}
-                        defaultValue={props.formation.date}
-                        variant="standard"
-                        inputProps={{style: {fontSize: 12}}}
-                        size="small"
-                        multiline={true}
-                        onChange={
-                            (event) => {
-                                temporaireDonnee.date = event.target.value;
-                                handleChange("date")
-                            }}>
-                    </StyledTextField>
-                </StyledTableCell>
-            </StyledTableRow>
+                <StyledTableRow>
+                    <StyledTableCell>Statut</StyledTableCell>
+                    <StyledTableCell>
+                        <Autocomplete
+                            disablePortal
+                            id="combo-box-demo"
+                            options={stat}
+                            onChange={(event, value) => {
+                                temporaireDonnee.statut = value;
+                                handleChange("statut")
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Domaine"
+                                    InputProps={{
+                                        ...params?.InputProps,
+                                        type: 'search',
+                                    }}
+                                />
+                            )}
+                        />
+                    </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                    <StyledTableCell>Cadre</StyledTableCell>
+                    <StyledTableCell>
+                        <StyledTextField
+                            fullWidth={true}
+                            defaultValue={props.formation.cadre}
+                            variant="standard"
+                            inputProps={{style: {fontSize: 12}}}
+                            size="small"
+                            multiline={true}
+                            onChange={
+                                (event) => {
+                                    temporaireDonnee.cadre = event.target.value;
+                                    handleChange("cadre");
+                                }
+                            }>
+                        </StyledTextField>
+                    </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                    <StyledTableCell>Type</StyledTableCell>
+                    <StyledTableCell>
+                        <StyledTextField
+                            fullWidth={true}
+                            defaultValue={props.formation.type}
+                            variant="standard"
+                            inputProps={{style: {fontSize: 12}}}
+                            size="small"
+                            multiline={true}
+                            onChange={
+                                (event) => {
+                                    temporaireDonnee.type = event.target.value;
+                                    console.log(temporaireDonnee.type)
+                                    handleChange("type");
+                                }
+                            }>
+                        </StyledTextField>
+                    </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                    <StyledTableCell>Date</StyledTableCell>
+                    <StyledTableCell>
+                        <StyledTextField
+                            fullWidth={true}
+                            defaultValue={props.formation.date}
+                            variant="standard"
+                            inputProps={{style: {fontSize: 12}}}
+                            size="small"
+                            multiline={true}
+                            onChange={
+                                (event) => {
+                                    temporaireDonnee.date = event.target.value;
+                                    handleChange("date")
+                                }}>
+                        </StyledTextField>
+                    </StyledTableCell>
+                </StyledTableRow>
             </>
         )
     }
@@ -297,7 +283,7 @@ const ModificationInformationsGenerales = (props) => {
                         </StyledTableCell>
                         <TableCell
                             align="center">
-                            <a onClick={() => handleItemDelete(i,"Domaine")}>
+                            <a onClick={() => handleItemDelete(i, "Domaine")}>
                                 <DeleteIcon className="Icones"/>
                             </a>
                         </TableCell>
@@ -309,25 +295,25 @@ const ModificationInformationsGenerales = (props) => {
 
 
     const AfficherDataFormateur = props.formation.formateurs?.map(
-            (info, i) => {
-                console.log(info)
-                return (
-                    <StyledTableRow key={info.id}>
-                        <StyledTableCell>
-                            {info.nom}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                            {info.prenom}
-                        </StyledTableCell>
-                        <TableCell
-                            align="center">
-                            <a onClick={() => handleItemDelete(i, "Formateur")}>
-                                <DeleteIcon className="Icones"/>
-                            </a>
-                        </TableCell>
-                    </StyledTableRow>
-                )
-            }
+        (info, i) => {
+            console.log(info)
+            return (
+                <StyledTableRow key={info.id}>
+                    <StyledTableCell>
+                        {info.nom}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                        {info.prenom}
+                    </StyledTableCell>
+                    <TableCell
+                        align="center">
+                        <a onClick={() => handleItemDelete(i, "Formateur")}>
+                            <DeleteIcon className="Icones"/>
+                        </a>
+                    </TableCell>
+                </StyledTableRow>
+            )
+        }
     )
 
     /*
@@ -401,9 +387,9 @@ const ModificationInformationsGenerales = (props) => {
                                     <Autocomplete
                                         disablePortal
                                         id="combo-box-demo"
-                                        options = {libelleDomaine}
+                                        options={libelleDomaine}
                                         onChange={(event, value) => {
-                                             valueDomaine = value;
+                                            valueDomaine = value;
                                         }}
                                         renderInput={(params) => (
                                             <TextField
