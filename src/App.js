@@ -15,6 +15,8 @@ import Admin from './components/Admin/Admin';
 import MotDePasseOublie from './components/auth/MotDePasseOublie/MotDePasseOublie';
 import ReinitialisationMotDePasse from "./components/auth/MotDePasseOublie/ReinitialisationMotDePasse";
 import decodeToken from './auth/decodeToken';
+import MonCompte from "./components/Utilisateur/MonCompte";
+import ModificationMonCompte from "./components/Utilisateur/ModificationMonCompte";
 import toast from "react-hot-toast";
 
 function App() {
@@ -56,6 +58,20 @@ function App() {
               <DemandeFormation />
             </ProtectedRoute>}
         />
+            <Route
+            path="moncompte"
+            element={
+                <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
+                    <MonCompte />
+                </ProtectedRoute>}
+        />
+            <Route
+                path="modificationmoncompte"
+                element={
+                    <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
+                        <ModificationMonCompte />
+                    </ProtectedRoute>}
+            />
         <Route
           path="admin"
           element={
