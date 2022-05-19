@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {InputLabel, MenuItem, Select, TextField, textFieldClasses} from "@mui/material";
+import {Autocomplete, TextField, textFieldClasses} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import TableCell, {tableCellClasses} from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -10,20 +10,29 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import Partie from "../../../api/model/Partie";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import {animatedScrollTo} from "react-select/dist/declarations/src/utils";
 import Domaine from "../../../api/model/Domaine";
-import Formation from "../../../api/model/Formation";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Association from "../../../api/model/Association";
+import {Statut} from "../../../utils/StatutUtils";
 
 const ModificationInformationsGenerales = (props) => {
 
     const [liveness, setLiveness] = useState(0);
 
+    let stat = [Statut.DEMANDE, Statut.A_ATTRIBUER, Statut.A_VENIR, Statut.PASSEE];
 
-   let temporaireDonnee = props.formation;
+    let valueDomaine;
+    let temporaireDonnee = props.formation;
+
+    let libelleDomaine = props.domaine.map((item, index) => {
+
+        return {
+            label: item.libelle,
+            value: item,
+            key: item.code,
+
+        }
+    });
 
 
     const StyledTextField = styled(TextField)(({theme}) => ({
@@ -84,59 +93,51 @@ const ModificationInformationsGenerales = (props) => {
         switch (s) {
             case 'Statut' :
                 items.statut = temporaireDonnee.statut;
-                temporaireDonnee.statut = "";
                 break;
             case "cadre" :
                 items.cadre = temporaireDonnee.cadre;
-                temporaireDonnee.cadre = "";
                 break;
             case "type" :
                 items.type = temporaireDonnee.type;
-                temporaireDonnee.type = "";
                 break;
             case "date" :
                 items.date = temporaireDonnee.date;
-                temporaireDonnee.date = "";
                 break;
         }
-        let newFormation = props.formation.formation;
-        newFormation = items;
-        props.formation.majFormation(newFormation);
+        props.majFormation(items);
     };
 
 
-    const handleItemDelete = (i,s) => {
-        let newFormation = props.formation;
+    const handleItemDelete = (i, s) => {
 
+        let newFormation = props.formation;
         switch (s) {
             case 'Domaine' :
-                newFormation.domaine = props.formation.domaine.filter((item, index) => index !== i);
-                props.majFormation(newFormation);
+                newFormation.domaines = props.formation.domaines.filter((item, index) => index !== i);
                 break;
-            case 'Formateurs':
-                newFormation.formateur = props.formation.formateur.filter((item, index) => index !== i);
-                props.majFormation(newFormation);
+            case 'Formateur':
+                newFormation.formateurs = props.formation.formateurs.filter((item, index) => index !== i);
                 break;
             case 'Asso':
                 newFormation.association = props.formation.association.filter((item, index) => index !== i);
-                props.majFormation(newFormation);
                 break;
         }
-        setLiveness(liveness+1);
-        console.log(props.formation)
+        props.majFormation(newFormation);
+        setLiveness(liveness + 1);
     }
 
 
-    const handleAjout = (s) => {
+    const handleAjout = (s, v) => {
         let newFormation = props.formation;
         switch (s) {
             case 'Domaine' :
                 const newdomaine = {
                     id: getMax(props.formation.domaines),
-                    code: temporaireDonnee.domaine.code,
-                    nom: temporaireDonnee.domaine.nom,
+                    code: v.key,
+                    libelle: v.value.libelle,
+                    description: v.value.description,
                 }
-                newFormation.domaine.push(newdomaine);
+                newFormation.domaines.push(newdomaine);
                 break;
             case 'Formateurs':
                 const newformateur = {
@@ -156,11 +157,8 @@ const ModificationInformationsGenerales = (props) => {
                 break;
         }
         props.majFormation(newFormation);
-        setLiveness(liveness+1);
-        console.log(props.formation)
-
+        setLiveness(liveness + 1);
     }
-
 
 
     function getMax(list) {
@@ -174,85 +172,100 @@ const ModificationInformationsGenerales = (props) => {
         return cpt;
     }
 
+    function isFormateurVide() {
+
+        if (!props.formation.formateur) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     const AfficherDataInfoGenerales = () => {
         return (
             <>
-            <StyledTableRow>
-                <StyledTableCell>Statut</StyledTableCell>
-                <StyledTableCell>
-                    <StyledTextField
-                        fullWidth={true}
-                        defaultValue={props.formation.statut}
-                        variant="standard"
-                        inputProps={{style: {fontSize: 12}}}
-                        size="small"
-                        multiline={true}
-                        onChange={
-                            (event) => {
-                                temporaireDonnee.statut = event.target.value;
+                <StyledTableRow>
+                    <StyledTableCell>Statut</StyledTableCell>
+                    <StyledTableCell>
+                        <Autocomplete
+                            disablePortal
+                            id="combo-box-demo"
+                            options={stat}
+                            defaultValue={props.formation.statut}
+                            onChange={(event, value) => {
+                                temporaireDonnee.statut = value;
                                 handleChange("statut")
-                            }
-                        }
-                    >
-                    </StyledTextField>
-                </StyledTableCell>
-            </StyledTableRow>
-            <StyledTableRow>
-                <StyledTableCell>Cadre</StyledTableCell>
-                <StyledTableCell>
-                    <StyledTextField
-                        fullWidth={true}
-                        defaultValue={props.formation.cadre}
-                        variant="standard"
-                        inputProps={{style: {fontSize: 12}}}
-                        size="small"
-                        multiline={true}
-                        onChange={
-                            (event) => {
-                                temporaireDonnee.cadre = event.target.value;
-                                handleChange("cadre");
-                            }
-                        }>
-                    </StyledTextField>
-                </StyledTableCell>
-            </StyledTableRow>
-        <StyledTableRow>
-            <StyledTableCell>Type</StyledTableCell>
-            <StyledTableCell>
-                    <StyledTextField
-                        fullWidth={true}
-                        defaultValue={props.formation.type}
-                        variant="standard"
-                        inputProps={{style: {fontSize: 12}}}
-                        size="small"
-                        multiline={true}
-                        onChange={
-                            (event) => {
-                                temporaireDonnee.type = event.target.value;
-                                handleChange("type");
-                            }
-                        }>
-                    </StyledTextField>
-                </StyledTableCell>
-        </StyledTableRow>
-        <StyledTableRow>
-            <StyledTableCell>Date</StyledTableCell>
-            <StyledTableCell>
-                    <StyledTextField
-                        fullWidth={true}
-                        defaultValue={props.formation.date}
-                        variant="standard"
-                        inputProps={{style: {fontSize: 12}}}
-                        size="small"
-                        multiline={true}
-                        onChange={
-                            (event) => {
-                                temporaireDonnee.date = event.target.value;
-                                handleChange("date")
-                            }}>
-                    </StyledTextField>
-                </StyledTableCell>
-            </StyledTableRow>
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Statut"
+                                    InputProps={{
+                                        ...params?.InputProps,
+                                        type: 'search',
+                                    }}
+                                />
+                            )}
+                        />
+                    </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                    <StyledTableCell>Cadre</StyledTableCell>
+                    <StyledTableCell>
+                        <StyledTextField
+                            fullWidth={true}
+                            defaultValue={props.formation.cadre}
+                            variant="standard"
+                            inputProps={{style: {fontSize: 12}}}
+                            size="small"
+                            multiline={true}
+                            onChange={
+                                (event) => {
+                                    temporaireDonnee.cadre = event.target.value;
+                                    handleChange("cadre");
+                                }
+                            }>
+                        </StyledTextField>
+                    </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                    <StyledTableCell>Type</StyledTableCell>
+                    <StyledTableCell>
+                        <StyledTextField
+                            fullWidth={true}
+                            defaultValue={props.formation.type}
+                            variant="standard"
+                            inputProps={{style: {fontSize: 12}}}
+                            size="small"
+                            multiline={true}
+                            onChange={
+                                (event) => {
+                                    temporaireDonnee.type = event.target.value;
+                                    console.log(temporaireDonnee.type)
+                                    handleChange("type");
+                                }
+                            }>
+                        </StyledTextField>
+                    </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                    <StyledTableCell>Date</StyledTableCell>
+                    <StyledTableCell>
+                        <StyledTextField
+                            fullWidth={true}
+                            defaultValue={props.formation.date}
+                            variant="standard"
+                            inputProps={{style: {fontSize: 12}}}
+                            size="small"
+                            multiline={true}
+                            onChange={
+                                (event) => {
+                                    temporaireDonnee.date = event.target.value;
+                                    handleChange("date")
+                                }}>
+                        </StyledTextField>
+                    </StyledTableCell>
+                </StyledTableRow>
             </>
         )
     }
@@ -271,7 +284,7 @@ const ModificationInformationsGenerales = (props) => {
                         </StyledTableCell>
                         <TableCell
                             align="center">
-                            <a onClick={() => handleItemDelete(i,"Domaine")}>
+                            <a onClick={() => handleItemDelete(i, "Domaine")}>
                                 <DeleteIcon className="Icones"/>
                             </a>
                         </TableCell>
@@ -283,25 +296,25 @@ const ModificationInformationsGenerales = (props) => {
 
 
     const AfficherDataFormateur = props.formation.formateurs?.map(
-            (info, i) => {
-                console.log(info)
-                return (
-                    <StyledTableRow key={info.id}>
-                        <StyledTableCell>
-                            {info.nom}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                            {info.prenom}
-                        </StyledTableCell>
-                        <TableCell
-                            align="center">
-                            <a onClick={() => handleItemDelete(i, "Formateur")}>
-                                <DeleteIcon className="Icones"/>
-                            </a>
-                        </TableCell>
-                    </StyledTableRow>
-                )
-            }
+        (info, i) => {
+            console.log(info)
+            return (
+                <StyledTableRow key={info.id}>
+                    <StyledTableCell>
+                        {info.nom}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                        {info.prenom}
+                    </StyledTableCell>
+                    <TableCell
+                        align="center">
+                        <a onClick={() => handleItemDelete(i, "Formateur")}>
+                            <DeleteIcon className="Icones"/>
+                        </a>
+                    </TableCell>
+                </StyledTableRow>
+            )
+        }
     )
 
     /*
@@ -370,37 +383,30 @@ const ModificationInformationsGenerales = (props) => {
                         <TableBody>
                             {AfficherDataDomaine()}
                             <StyledTableRow key={10000}>
+                                <StyledTableCell></StyledTableCell>
                                 <StyledTableCell>
-                                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={props.formation.domaine}
-                                        label="Age"
-                                        onChange={handleChange}
-                                        >
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
-                                    </Select>
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={props.formation.domaine}
-                                        label="Age"
-                                        onChange={handleChange}
-                                        >
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
-                                    </Select>
+                                    <Autocomplete
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        options={libelleDomaine}
+                                        onChange={(event, value) => {
+                                            valueDomaine = value;
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Domaine"
+                                                InputProps={{
+                                                    ...params?.InputProps,
+                                                    type: 'search',
+                                                }}
+                                            />
+                                        )}
+                                    />
                                 </StyledTableCell>
                                 <TableCell
                                     align="center">
-                                    <a onClick={() => handleAjout("Domaine")}>
+                                    <a onClick={() => handleAjout("Domaine", valueDomaine)}>
                                         <AddBoxIcon className="Icones"/>
                                     </a>
                                 </TableCell>
@@ -427,46 +433,6 @@ const ModificationInformationsGenerales = (props) => {
                         </StyledTableHead>
                         <TableBody>
                             {AfficherDataFormateur}
-                            <StyledTableRow key={10000}>
-                                <StyledTableCell>
-                                    <StyledTextField
-                                        fullWidth={true}
-                                        variant="standard"
-                                        inputProps={{style: {fontSize: 12}}}
-                                        size="small"
-                                        multiline={true}
-                                        onChange={
-                                            (event) => {
-                                                temporaireDonnee.formateurs.nom = event.target.value;
-                                            }
-                                        }
-                                        onKeyPress={e => e.key === 'Enter' && handleAjout("Formateur")}
-                                    >
-                                    </StyledTextField>
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    <TextField
-                                        fullWidth={true}
-                                        variant="standard"
-                                        inputProps={{style: {fontSize: 12}}}
-                                        size="small"
-                                        multiline={true}
-                                        onChange={
-                                            (event) => {
-                                                temporaireDonnee.formateurs.prenom = event.target.value;
-                                            }
-                                        }
-                                        onKeyPress={e => e.key === 'Enter' && handleAjout("Formateur")}
-                                    >
-                                    </TextField>
-                                </StyledTableCell>
-                                <TableCell
-                                    align="center">
-                                    <a onClick={() => handleAjout("Formateur")}>
-                                        <AddBoxIcon className="Icones"/>
-                                    </a>
-                                </TableCell>
-                            </StyledTableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>

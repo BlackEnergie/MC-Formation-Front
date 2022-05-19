@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
+import {FetchDomaines} from "../../../serverInteraction/FetchData";
 import {domaines} from "../../Accueil/ComposantAccueil/FiltreAccueil";
 
 const ModificationFormation = () => {
@@ -60,13 +61,33 @@ const ModificationFormation = () => {
         }
     }
 
+
+    const getDomaineList = async () => {
+
+        try {
+            const controller = new AbortController();
+            const response = await FetchDomaines(axiosPrivate,controller);
+            setDomaine(response?.data);
+        }catch (err){
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        getDomaineList();
+    },[])
+
     let nomFiche = 'FDF';
     if (formation && formation.type === 'Atelier') {
         nomFiche = 'FDA'
     }
+
+    console.log(formation);
+    console.log(domaine);
+
     return (
         <Container maxWidth={"xl"}>
-            {console.log(formation)}
+
             {loading ?
                 <Skeleton sx={{width: 'auto'}}/> :
                 <>
@@ -99,7 +120,7 @@ const ModificationFormation = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <ModificationInformationsGenerales formation={formation}
-                                                               majFormation={majFormation}/>
+                                                               majFormation={majFormation} domaine={domaine}/>
                         </AccordionDetails>
                     </Accordion>
                     <Accordion>
