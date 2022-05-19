@@ -32,9 +32,9 @@ const FormulaireInscriptionBN = () => {
 
     const mapFormToMembreBureauNational = () => {
         let membreBureauNational = new MembreBureauNational()
-        membreBureauNational.poste = poste;
+        membreBureauNational.poste = poste.trim();
         let signup = new SignupRequest()
-        signup.nomUtilisateur = nomUtilisateur;
+        signup.nomUtilisateur = nomUtilisateur.trim();
         signup.password = hashPassword(mdp);
         signup.membreBureauNational = membreBureauNational;
         return signup;

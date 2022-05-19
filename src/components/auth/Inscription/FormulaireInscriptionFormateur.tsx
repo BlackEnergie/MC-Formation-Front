@@ -35,10 +35,10 @@ const FormulaireInscriptionFormateur = () => {
     const mapFormToFormateur = () => {
         let formateur = new Formateur()
         let signup = new SignupRequest()
-        signup.nomUtilisateur = nomUtilisateur;
+        signup.nomUtilisateur = nomUtilisateur.trim();
         signup.password = hashPassword(mdp);
-        formateur.nom = nom;
-        formateur.prenom = prenom;
+        formateur.nom = nom.trim();
+        formateur.prenom = prenom.trim()
         signup.formateur = formateur;
         return signup;
     }
