@@ -191,6 +191,7 @@ const ModificationInformationsGenerales = (props) => {
                             disablePortal
                             id="combo-box-demo"
                             options={stat}
+                            defaultValue={props.formation.statut}
                             onChange={(event, value) => {
                                 temporaireDonnee.statut = value;
                                 handleChange("statut")
@@ -198,7 +199,7 @@ const ModificationInformationsGenerales = (props) => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Domaine"
+                                    label="Statut"
                                     InputProps={{
                                         ...params?.InputProps,
                                         type: 'search',
