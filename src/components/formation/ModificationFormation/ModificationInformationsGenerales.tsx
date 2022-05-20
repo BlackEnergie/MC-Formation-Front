@@ -10,10 +10,10 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import Domaine from "../../../api/model/Domaine";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {Statut} from "../../../utils/StatutUtils";
+import Button from "@mui/material/Button";
 
 const ModificationInformationsGenerales = (props) => {
 
@@ -96,9 +96,6 @@ const ModificationInformationsGenerales = (props) => {
                 break;
             case "cadre" :
                 items.cadre = temporaireDonnee.cadre;
-                break;
-            case "type" :
-                items.type = temporaireDonnee.type;
                 break;
             case "date" :
                 items.date = temporaireDonnee.date;
@@ -185,10 +182,11 @@ const ModificationInformationsGenerales = (props) => {
         return (
             <>
                 <StyledTableRow>
-                    <StyledTableCell>Statut</StyledTableCell>
+                    <StyledTableCellHead>Statut</StyledTableCellHead>
                     <StyledTableCell>
                         <Autocomplete
                             disablePortal
+                            size="small"
                             id="combo-box-demo"
                             options={stat}
                             defaultValue={props.formation.statut}
@@ -210,7 +208,7 @@ const ModificationInformationsGenerales = (props) => {
                     </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
-                    <StyledTableCell>Cadre</StyledTableCell>
+                    <StyledTableCellHead>Cadre</StyledTableCellHead>
                     <StyledTableCell>
                         <StyledTextField
                             fullWidth={true}
@@ -229,27 +227,7 @@ const ModificationInformationsGenerales = (props) => {
                     </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
-                    <StyledTableCell>Type</StyledTableCell>
-                    <StyledTableCell>
-                        <StyledTextField
-                            fullWidth={true}
-                            defaultValue={props.formation.type}
-                            variant="standard"
-                            inputProps={{style: {fontSize: 12}}}
-                            size="small"
-                            multiline={true}
-                            onChange={
-                                (event) => {
-                                    temporaireDonnee.type = event.target.value;
-                                    console.log(temporaireDonnee.type)
-                                    handleChange("type");
-                                }
-                            }>
-                        </StyledTextField>
-                    </StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow>
-                    <StyledTableCell>Date</StyledTableCell>
+                    <StyledTableCellHead>Date</StyledTableCellHead>
                     <StyledTableCell>
                         <StyledTextField
                             fullWidth={true}
@@ -270,30 +248,30 @@ const ModificationInformationsGenerales = (props) => {
         )
     }
 
-
-    const AfficherDataDomaine = () => {
-        return props.formation.domaines?.map(
-            (info, i) => {
-                return (
-                    <StyledTableRow key={info.code} title={info.description}>
-                        <StyledTableCell>
-                            {info.code}
-                        </StyledTableCell>
-                        <StyledTableCell>
-                            {info.libelle}
-                        </StyledTableCell>
-                        <TableCell
-                            align="center">
-                            <a onClick={() => handleItemDelete(i, "Domaine")}>
-                                <DeleteIcon className="Icones"/>
-                            </a>
-                        </TableCell>
-                    </StyledTableRow>
-                )
-            }
-        )
-    }
-
+    /*
+        const AfficherDataDomaine = () => {
+            return props.formation.domaines?.map(
+                (info, i) => {
+                    return (
+                        <StyledTableRow key={info.code} title={info.description}>
+                            <StyledTableCell>
+                                {info.code}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                                {info.libelle}
+                            </StyledTableCell>
+                            <TableCell
+                                align="center">
+                                <a onClick={() => handleItemDelete(i, "Domaine")}>
+                                    <DeleteIcon className="Icones"/>
+                                </a>
+                            </TableCell>
+                        </StyledTableRow>
+                    )
+                }
+            )
+        }
+    */
 
     const AfficherDataFormateur = props.formation.formateurs?.map(
         (info, i) => {
@@ -306,38 +284,15 @@ const ModificationInformationsGenerales = (props) => {
                     <StyledTableCell>
                         {info.prenom}
                     </StyledTableCell>
-                    <TableCell
-                        align="center">
-                        <a onClick={() => handleItemDelete(i, "Formateur")}>
+                    <StyledTableCell align="right">
+                        <Button onClick={() => handleItemDelete(i, "Formateur")}>
                             <DeleteIcon className="Icones"/>
-                        </a>
-                    </TableCell>
+                        </Button>
+                    </StyledTableCell>
                 </StyledTableRow>
             )
         }
     )
-
-    /*
-    const AfficherAssociationsInteressees = () => {
-
-        return props.formation.associationciationsInteressees?.map(
-            (info, i) => {
-                return (
-                    <StyledTableRow key={info.id}>
-                        <StyledTableCell>{info.nomComplet}</StyledTableCell>
-                        <StyledTableCell>{info.ville}</StyledTableCell>
-                        <TableCell
-                            align="center">
-                            <a onClick={() => handleItemDelete(i, "Asso")}>
-                                <DeleteIcon className="Icones"/>
-                            </a>
-                        </TableCell>
-                    </StyledTableRow>
-                )
-            }
-        )
-    }
-*/
 
     return (
         <Grid container spacing={2}>
@@ -363,6 +318,7 @@ const ModificationInformationsGenerales = (props) => {
                     </Table>
                 </TableContainer>
             </Grid>
+            {/*
             <Grid item xs={6}>
                 <Typography
                     sx={{flex: '1 1 100%', p: 1}}
@@ -415,6 +371,7 @@ const ModificationInformationsGenerales = (props) => {
                     </Table>
                 </TableContainer>
             </Grid>
+            */}
             <Grid item xs={6}>
                 <Typography
                     sx={{flex: '1 1 100%', p: 1}}
@@ -437,71 +394,6 @@ const ModificationInformationsGenerales = (props) => {
                     </Table>
                 </TableContainer>
             </Grid>
-            { /*
-            <Grid item xs={6}>
-                <Typography
-                    sx={{flex: '1 1 100%', p: 1}}
-                    variant="h5"
-                    id="tableTitle"
-                    color="primary"
-                    component="div">Association(s) intéréssée(s)</Typography>
-                <TableContainer component={Paper} sx={{maxHeight: 350}}>
-                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
-                        <StyledTableHead>
-                            <StyledTableRow>
-                                <StyledTableCell>Nom</StyledTableCell>
-                                <StyledTableCell>Ville</StyledTableCell>
-                                <StyledTableCell></StyledTableCell>
-                            </StyledTableRow>
-                        </StyledTableHead>
-                        <TableBody>
-                            {AfficherAssociationsInteressees()}
-                            <StyledTableRow key={10000}>
-                                <StyledTableCell>
-                                    <StyledTextField
-                                        fullWidth={true}
-                                        variant="standard"
-                                        inputProps={{style: {fontSize: 12}}}
-                                        size="small"
-                                        multiline={true}
-                                        onChange={
-                                            (event, i=0) => {
-                                                temporaireDonnee.associationsInteressees.association[i].nomComplet = event.target.value;
-                                            }
-                                        }
-                                        onKeyPress={e => e.key === 'Enter' && handleAjout('Asso')}
-                                    >
-                                    </StyledTextField>
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    <TextField
-                                        fullWidth={true}
-                                        variant="standard"
-                                        inputProps={{style: {fontSize: 12}}}
-                                        size="small"
-                                        multiline={true}
-                                        onChange={
-                                            (event, i=0) => {
-                                                temporaireDonnee.associationsInteressees.association[i].ville = event.target.value;
-                                            }
-                                        }
-                                        onKeyPress={e => e.key === 'Enter' && handleAjout('Asso')}
-                                    >
-                                    </TextField>
-                                </StyledTableCell>
-                                <TableCell
-                                    align="center">
-                                    <a onClick={() => handleAjout('Asso')}>
-                                        <AddBoxIcon className="Icones"/>
-                                    </a>
-                                </TableCell>
-                                </StyledTableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-            */
-            }
         </Grid>
     )
 }
