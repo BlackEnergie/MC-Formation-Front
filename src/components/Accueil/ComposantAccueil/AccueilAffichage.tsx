@@ -352,6 +352,7 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
       case 2:
         if (!mesFormationsSelect) {
           prefiltre.formateurs = [userInfo.prenom + " " + userInfo.nom];
+          setFormateursFiltre([userInfo.prenom + " " + userInfo.nom]);
           setMesFormationsSelect(true);
         }
         SetFiltre(prefiltre);
