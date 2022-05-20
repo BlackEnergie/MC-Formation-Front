@@ -5,22 +5,34 @@ import Typography from "@mui/material/Typography";
 import {Grid} from "@mui/material";
 import { FetchInformationUserById } from '../../serverInteraction/FetchUtilisateur';
 import {useParams} from "react-router-dom";
-import decodeToken from "../../auth/decodeToken";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Nav from 'react-bootstrap/Nav';
 import {Link, useNavigate} from 'react-router-dom';
+import UtilisateurInfo from "../../api/model/UtilisateurInfo";
 
 
 
+
+export function AfficherDataDomaines (domaines : [])  {
+    let listedomaines = "";
+    if(domaines!==undefined) {
+        domaines.map(
+            (domaine) => {
+                listedomaines += domaine?.['libelle'] + ", ";
+            }
+        )
+        listedomaines = listedomaines.replace(/,\s*$/, "");
+        return listedomaines;
+    }
+}
 
 
 function AffichageMonCompte() {
 
     const [information, setInformation] = useState(null);
-
+    const initialUtilisateur : UtilisateurInfo = null;
     const axiosPrivate = useAxiosPrivate()
-    let id = decodeToken(localStorage.getItem("accessToken")).decoded.id;
 
     useEffect(() => {
         getInfoUser();
@@ -30,11 +42,11 @@ function AffichageMonCompte() {
             const response = await FetchInformationUserById(axiosPrivate)
             setInformation(response?.data);
 
+
         } catch (err) {
             console.error(err);
         }
     }
-
     const data = {
         nomutilisateur : information?.nomUtilisateur,
         nom : information?.formateur?.nom,
@@ -44,8 +56,12 @@ function AffichageMonCompte() {
         ville : information?.association?.ville,
         college : information?.association?.college,
         acronyme : information?.association?.acronyme,
-        nomComplet : information?.association?.nomComplet
+        nomComplet : information?.association?.nomComplet,
+        domaines : information?.formateur?.domaines
     }
+
+
+
 
     return(
 
@@ -95,6 +111,12 @@ function AffichageMonCompte() {
                             style={{backgroundColor:"#0085f2",borderRadius:10, color:'white'}}
                             hidden={data.prenom==undefined?true:false}>
                             Prénom : {data.prenom}
+                        </Typography>
+                        <Typography
+                            align="center"
+                            style={{backgroundColor:"#0085f2",borderRadius:10, color:'white'}}
+                            hidden={data.domaines==undefined?true:false}>
+                            Domaine(s) : {AfficherDataDomaines(data.domaines)}
                         </Typography>
                         <Typography
                             align="center"
