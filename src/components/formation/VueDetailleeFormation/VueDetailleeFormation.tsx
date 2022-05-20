@@ -27,10 +27,6 @@ const VueDetailleeFormation = () => {
     const axiosPrivate = useAxiosPrivate()
     const navigate = useNavigate();
 
-    useEffect(() => {
-        getFormationDetails();
-    }, [])
-
     const getFormationDetails = async () => {
         try {
             const response = await FetchFormationById(axiosPrivate, id)
@@ -44,6 +40,10 @@ const VueDetailleeFormation = () => {
             }
         }
     }
+
+    useEffect(() => {
+        getFormationDetails();
+    }, [getFormationDetails])
 
     let nomFiche = 'FDF';
     if (formation && formation.type === 'Atelier') {
