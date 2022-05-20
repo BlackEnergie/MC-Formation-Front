@@ -1,6 +1,4 @@
-import Utilisateur from "./Utilisateur";
-
-export default class Formateur{
-    nom: String;
-    prenom: String;
+export default class Formateur {
+    nom: string;
+    prenom: string;
 }
