@@ -37,12 +37,12 @@ const FormulaireInscriptionAsso = () => {
     const mapFormToAssociation = () => {
         let association = new Association()
         let signup = new SignupRequest()
-        signup.nomUtilisateur = nomUtilisateur;
+        signup.nomUtilisateur = nomUtilisateur.trim();
         signup.password = hashPassword(mdp);
-        association.acronyme = acronyme;
-        association.college = college;
-        association.nomComplet = nomComplet;
-        association.ville = ville;
+        association.acronyme = acronyme.trim();
+        association.college = college.trim();
+        association.nomComplet = nomComplet.trim();
+        association.ville = ville.trim();
         signup.association = association;
         return signup;
     }
