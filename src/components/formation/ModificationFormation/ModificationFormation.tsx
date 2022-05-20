@@ -1,20 +1,31 @@
 import React, {useEffect, useState} from 'react';
+import {useParams} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
+
 import ModificationFicheDeFormation from "./ModificationFicheDeFormation";
 import ModificationFilConducteur from "./ModificationFilConducteur";
-import {useParams} from "react-router-dom";
+import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
+
 import {FetchFormationById} from '../../../serverInteraction/FetchFormation';
 import {FetchDomaines} from "../../../serverInteraction/FetchData";
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import Formation from '../../../api/model/Formation';
-import {Accordion, AccordionDetails, AccordionSummary, Container, Skeleton, Typography} from '@mui/material';
-import NavFormation from "../NavigationFormation/NavFormation";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
-import { useNavigate } from "react-router-dom";
-import toast from 'react-hot-toast';
 import {domaines} from "../../Accueil/ComposantAccueil/FiltreAccueil";
 
+import {Accordion, AccordionDetails, AccordionSummary, Container, Fab, Link, Skeleton, Typography} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import SaveIcon from '@mui/icons-material/Save';
+
 const ModificationFormation = () => {
+    const FabStyle = {
+        margin: 0,
+        top: 'auto',
+        right: 40,
+        bottom: 40,
+        left: 'auto',
+        position: 'fixed',
+    }
     const INITIAL_FORMATION: Formation = new Formation();
     const INITIAL_DOMAINE : domaines[] = [];
     let {id} = useParams();
@@ -49,7 +60,6 @@ const ModificationFormation = () => {
         }
     }
 
-
     const getDomaineList = async () => {
 
         try {
@@ -70,12 +80,14 @@ const ModificationFormation = () => {
         nomFiche = 'FDA'
     }
 
-    console.log(formation);
-    console.log(domaine);
-
     return (
         <Container maxWidth={"xl"}>
-
+            <Link className="text-decoration-none" //to={'/formation/edit/' + formation.id}
+                  title="Modifier la formation">
+                <Fab sx={FabStyle} color="primary" aria-label="edit">
+                    <SaveIcon/>
+                </Fab>
+            </Link>
             {loading ?
                 <Skeleton sx={{width: 'auto'}}/> :
                 <>
@@ -126,7 +138,7 @@ const ModificationFormation = () => {
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <ModificationFicheDeFormation formation={formation} majFormation={majFormation} domaine={domaine} />
+                            <ModificationFicheDeFormation formation={formation} majFormation={majFormation} domaine={domaine} setFormation={setFormation}/>
                             <ModificationFilConducteur formation={formation} majFormation={majFormation}/>
                         </AccordionDetails>
                     </Accordion>

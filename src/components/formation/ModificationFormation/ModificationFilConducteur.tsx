@@ -25,6 +25,7 @@ const ModificationFilConducteur = (props) => {
         methodologie: "",
     }
     let temporairePartie = INITIAL_PARTIE;
+    let temporaireAjoutPartie = INITIAL_PARTIE;
 
     const handleChange = (i, s) => {
         let items = props.formation.parties;
@@ -60,10 +61,10 @@ const ModificationFilConducteur = (props) => {
         let newFormation = props.formation;
         const newPartie: Partie = {
             id: getMax(props.formation.parties),
-            plan: temporairePartie.plan,
-            timing: temporairePartie.timing,
-            contenu: temporairePartie.contenu,
-            methodologie: temporairePartie.methodologie
+            plan: temporaireAjoutPartie.plan,
+            timing: temporaireAjoutPartie.timing,
+            contenu: temporaireAjoutPartie.contenu,
+            methodologie: temporaireAjoutPartie.methodologie
         }
         newFormation.parties.push(newPartie);
         props.majFormation(newFormation);
@@ -235,7 +236,7 @@ const ModificationFilConducteur = (props) => {
                                     multiline={true}
                                     onChange={
                                         (event) => {
-                                            temporairePartie.plan = event.target.value;
+                                            temporaireAjoutPartie.plan = event.target.value;
                                         }
                                     }
                                     onKeyPress={e => e.key === 'Enter' && handleAjoutPartie()}
@@ -251,7 +252,7 @@ const ModificationFilConducteur = (props) => {
                                     multiline={true}
                                     onChange={
                                         (event) => {
-                                            temporairePartie.timing = event.target.value;
+                                            temporaireAjoutPartie.timing = event.target.value;
                                         }
                                     }
                                     onKeyPress={e => e.key === 'Enter' && handleAjoutPartie()}
@@ -267,7 +268,7 @@ const ModificationFilConducteur = (props) => {
                                     multiline={true}
                                     onChange={
                                         (event) => {
-                                            temporairePartie.contenu = event.target.value;
+                                            temporaireAjoutPartie.contenu = event.target.value;
                                         }
                                     }
                                     onKeyPress={e => e.key === 'Enter' && handleAjoutPartie()}
@@ -283,7 +284,7 @@ const ModificationFilConducteur = (props) => {
                                     multiline={true}
                                     onChange={
                                         (event) => {
-                                            temporairePartie.methodologie = event.target.value;
+                                            temporaireAjoutPartie.methodologie = event.target.value;
                                         }
                                     }
                                     onKeyPress={e => e.key === 'Enter' && handleAjoutPartie()}

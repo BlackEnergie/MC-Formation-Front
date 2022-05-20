@@ -1,6 +1,7 @@
 import {
     Autocomplete,
     Grid,
+    Input,
     Paper,
     Table,
     TableBody,
@@ -26,7 +27,6 @@ const optionsType = [
     {value: 'Atelier', label: 'Atelier'}
 ];
 let valueDomaine;
-
 
 function ModificationFicheDeFormation(props) {
     const StyledTableCell = styled(TableCell)(({theme}) => ({
@@ -66,8 +66,10 @@ function ModificationFicheDeFormation(props) {
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
             fontWeight: 'bold',
+            height:68.8,
         },
     }));
+    const [test, setTest] = useState(props.formation.duree);
     let tempObj = "";
     let tempMateriels = "";
     let tempFormation = props.formation;
@@ -82,6 +84,12 @@ function ModificationFicheDeFormation(props) {
         }
     });
 
+    const [value, setValue] = useState(0);
+
+    const handleInputChange = (event) => {
+        tempFormation.duree = event.target.value === ''  ? 0 : Number(event.target.value) ;
+
+    };
     /*            PARTIE D'AFFICHAGE          */
     const AfficherFormationDetails = () => {
         return (
@@ -121,22 +129,26 @@ function ModificationFicheDeFormation(props) {
                     </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow key={104}>
-                    <StyledTableCellHead>Durée</StyledTableCellHead>
-                    <StyledTableCell>
-                        <TextField
-                            fullWidth={true}
-                            defaultValue={props.formation.duree}
-                            variant="standard"
+                    <StyledTableCellHead key={"DONTMOVEIT3"}>Durée</StyledTableCellHead>
+                    <StyledTableCell key={"DONTMOVEIT2"}>
+                       <TextField key={"DONTMOVEIT"}
+                            type="text"
+                            placeholder="Durée de la formation (en minutes)"
+                            value={props.formation.duree}
                             inputProps={{style: {fontSize: 12}}}
+                            onChange={(event) => {
+                                tempFormation.duree = event.target.value;
+                                tempFormation.duree = tempFormation.duree.replace(/\D+/g, '');
+                                props.majFormation(tempFormation);
+                                setLiveness(liveness+1);
+                                console.log(tempFormation.duree);
+                                console.log(props.formation.duree);
+                            }}
+
+                            fullWidth={true}
+                            variant="standard"
                             size="small"
-                            multiline={true}
-                            onChange={
-                                (event) => {
-                                    tempFormation.duree = event.target.value;
-                                    handleChange("duree");
-                                }
-                            }>
-                        </TextField>
+                            />
                     </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow key={105}>
@@ -152,7 +164,7 @@ function ModificationFicheDeFormation(props) {
                             onChange={
                                 (event) => {
                                     tempFormation.prerequis = event.target.value;
-                                    handleChange("audience");
+                                    handleChange("prerequis");
                                 }
                             }>
                         </TextField>
@@ -179,7 +191,6 @@ function ModificationFicheDeFormation(props) {
                     )
                 }
             ) : <StyledTableRow key={301}>
-                <StyledTableCell></StyledTableCell>
             </StyledTableRow>
 
 
@@ -205,7 +216,6 @@ function ModificationFicheDeFormation(props) {
                     )
                 }
             ) : <StyledTableRow key={310}>
-                <StyledTableCell></StyledTableCell>
             </StyledTableRow>
 
 
@@ -225,7 +235,6 @@ function ModificationFicheDeFormation(props) {
                     )
                 }
             ) : <StyledTableRow key={315}>
-                <StyledTableCell></StyledTableCell>
             </StyledTableRow>
 
     /*             PARTIE D'AJOUT            */
@@ -289,7 +298,7 @@ function ModificationFicheDeFormation(props) {
                 newFormation.audience = tempFormation.audience;
                 break;
             case "duree" :
-                newFormation.duree = tempFormation.duree;
+                newFormation.duree = tempFormation.duree.replace(/\D/g, '');
                 break;
             case "date" :
                 newFormation.prerequis = tempFormation.prerequis;
@@ -385,9 +394,11 @@ function ModificationFicheDeFormation(props) {
                         <TableBody>
                             {afficherListeDomaines()}
                             <StyledTableRow key={207}>
-                                <StyledTableCell></StyledTableCell>
-                                <StyledTableCell>
+                                <StyledTableCell sx={{width: 100}}></StyledTableCell>
+                                <StyledTableCell sx={{padding:0}}>
                                     <Autocomplete
+
+                                        fullWidth={true}
                                         size="small"
                                         disablePortal
                                         id="combo-box-demo"
@@ -408,7 +419,7 @@ function ModificationFicheDeFormation(props) {
                                     />
                                 </StyledTableCell>
 
-                                <TableCell align="center">
+                                <TableCell align="center" sx={{width: 40}}>
                                     <Button onClick={() => handleAjoutDomaines(valueDomaine)}>
                                         <AddBoxIcon className="Icones"/>
                                     </Button>
