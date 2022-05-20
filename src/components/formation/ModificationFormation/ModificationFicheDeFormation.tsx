@@ -12,7 +12,6 @@ import {
     Typography
 } from '@mui/material';
 import React, {useState} from 'react';
-import {AiFillDelete,AiOutlinePlus} from "react-icons/ai";
 import Select from 'react-select';
 import {styled} from '@mui/material/styles';
 import {tableCellClasses} from "@mui/material/TableCell";
@@ -20,11 +19,14 @@ import Formation from "../../../api/model/Formation";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 
 import DeleteIcon from "@mui/icons-material/Delete";
+import Button from "@mui/material/Button";
 
 const optionsType = [
     {value: 'Formation', label: 'Formation'},
     {value: 'Atelier', label: 'Atelier'}
 ];
+let valueDomaine;
+
 
 function ModificationFicheDeFormation(props) {
     const StyledTableCell = styled(TableCell)(({theme}) => ({
@@ -169,9 +171,9 @@ function ModificationFicheDeFormation(props) {
                         <StyledTableRow key={i}>
                             <StyledTableCell>{info}</StyledTableCell>
                             <StyledTableCell align="center">
-                                <a onClick={() => handleItemDeletedObjPedagogique(i)}>
-                                    <AiFillDelete className="Icones"/>
-                                </a>
+                                <Button onClick={() => handleItemDeletedObjPedagogique(i)}>
+                                    <DeleteIcon className="Icones"/>
+                                </Button>
                             </StyledTableCell>
                         </StyledTableRow>
                     )
@@ -179,6 +181,7 @@ function ModificationFicheDeFormation(props) {
             ) : <StyledTableRow key={301}>
                 <StyledTableCell></StyledTableCell>
             </StyledTableRow>
+
 
     const afficherListeDomaines = () =>
         props.formation.domaines?.length > 0 ?
@@ -194,9 +197,9 @@ function ModificationFicheDeFormation(props) {
                             </StyledTableCell>
                             <StyledTableCell
                                 align="center">
-                                <a onClick={() => handleItemDeletedDomaines(i)}>
+                                <Button onClick={() => handleItemDeletedDomaines(i)}>
                                     <DeleteIcon className="Icones"/>
-                                </a>
+                                </Button>
                             </StyledTableCell>
                         </StyledTableRow>
                     )
@@ -204,6 +207,7 @@ function ModificationFicheDeFormation(props) {
             ) : <StyledTableRow key={310}>
                 <StyledTableCell></StyledTableCell>
             </StyledTableRow>
+
 
     const afficherListeMateriels = () =>
         props.formation.materiels?.length > 0 ?
@@ -213,9 +217,9 @@ function ModificationFicheDeFormation(props) {
                         <StyledTableRow key={i}>
                             <StyledTableCell>{item}</StyledTableCell>
                             <StyledTableCell align="center">
-                                <a onClick={() => handleItemDeletedMateriels(i)}>
-                                    <AiFillDelete className="Icones"/>
-                                </a>
+                                <Button onClick={() => handleItemDeletedMateriels(i)}>
+                                    <DeleteIcon className="Icones"/>
+                                </Button>
                             </StyledTableCell>
                         </StyledTableRow>
                     )
@@ -243,12 +247,14 @@ function ModificationFicheDeFormation(props) {
         setLiveness(liveness + 1);
         tempMateriels = "";
     }
-    const handleAjoutDomaines = (e) => {
+    const handleAjoutDomaines = (v) => {
         let newFormation = props.formation;
-
-        newFormation.domaines.push(e.value);
-        props.majFormation(newFormation);
-
+        const newdomaine = {
+            code: v.key,
+            libelle: v.value.libelle,
+            description: v.value.description,
+        }
+        newFormation.domaines.push(newdomaine);
         setLiveness(liveness + 1);
     }
 
@@ -329,7 +335,7 @@ function ModificationFicheDeFormation(props) {
                         <StyledTableHead>
                             <StyledTableRow key={202}>
                                 <StyledTableCell></StyledTableCell>
-                                <StyledTableCell sx={{width:40}}></StyledTableCell>
+                                <StyledTableCell sx={{width: 40}}></StyledTableCell>
                             </StyledTableRow>
                         </StyledTableHead>
                         <TableBody>
@@ -351,11 +357,9 @@ function ModificationFicheDeFormation(props) {
                                     </TextField>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                    <button
-                                        type="submit" className="btn  btn-outline-mc"
-                                        onClick={handleAjoutObjPedagogique}>
-                                        <AiOutlinePlus className="Icones"/>
-                                    </button>
+                                    <Button onClick={handleAjoutObjPedagogique}>
+                                        <AddBoxIcon className="Icones"/>
+                                    </Button>
                                 </StyledTableCell>
                             </StyledTableRow>
                         </TableBody>
@@ -375,7 +379,7 @@ function ModificationFicheDeFormation(props) {
                             <StyledTableRow key={206}>
                                 <StyledTableCell sx={{width: 100}}>Code</StyledTableCell>
                                 <StyledTableCell>Nom</StyledTableCell>
-                                <StyledTableCell sx={{width:40}}></StyledTableCell>
+                                <StyledTableCell sx={{width: 40}}></StyledTableCell>
                             </StyledTableRow>
                         </StyledTableHead>
                         <TableBody>
@@ -383,19 +387,31 @@ function ModificationFicheDeFormation(props) {
                             <StyledTableRow key={207}>
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell>
-                                    <Select
-                                        isClearable
-                                        placeholder="Ex: Administratif"
-                                        onChange={handleAjoutDomaines}
+                                    <Autocomplete
+                                        size="small"
+                                        disablePortal
+                                        id="combo-box-demo"
                                         options={listeDomaines}
+                                        onChange={(event, value) => {
+                                            valueDomaine = value;
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Domaine"
+                                                InputProps={{
+                                                    ...params?.InputProps,
+                                                    type: 'search',
+                                                }}
+                                            />
+                                        )}
                                     />
                                 </StyledTableCell>
-                                <TableCell
-                                    align="center">
-                                    <a
-                                        onClick={handleAjoutDomaines}>
+
+                                <TableCell align="center">
+                                    <Button onClick={() => handleAjoutDomaines(valueDomaine)}>
                                         <AddBoxIcon className="Icones"/>
-                                    </a>
+                                    </Button>
                                 </TableCell>
                             </StyledTableRow>
                         </TableBody>
@@ -414,7 +430,7 @@ function ModificationFicheDeFormation(props) {
                         <StyledTableHead>
                             <StyledTableRow key={209}>
                                 <StyledTableCell></StyledTableCell>
-                                <StyledTableCell sx={{width:40}} ></StyledTableCell>
+                                <StyledTableCell sx={{width: 40}}></StyledTableCell>
                             </StyledTableRow>
                         </StyledTableHead>
                         <TableBody>
@@ -436,11 +452,9 @@ function ModificationFicheDeFormation(props) {
                                     </TextField>
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                    <button
-                                        type="submit" className="btn  btn-outline-mc"
-                                        onClick={handleAjoutMateriel}>
-                                        <AiOutlinePlus className="Icones"/>
-                                    </button>
+                                    <Button onClick={handleAjoutMateriel}>
+                                        <AddBoxIcon className="Icones"/>
+                                    </Button>
                                 </StyledTableCell>
                             </StyledTableRow>
                         </TableBody>
