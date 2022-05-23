@@ -16,7 +16,11 @@ export enum EntryPoint {
     RESET_PASSWORD_NEW_PASSWORD = '/auth/resetPassword/save',
     RESET_PASSWORD_CHECK_TOKEN = '/auth/resetPassword/checkToken',
     DEMANDE_FAVORABLE = '/utilisateur/demandesFavorables',
-    FORMATEUR_DETAIL = '/utilisateur/formateur'
+    FORMATEUR_DETAIL = '/utilisateur/formateur',
+    ASSOCIATIONS_USER_INFO = '/utilisateur/associations',
+    MEMBRES_BUREAU_NATIONAL_USER_INFO = '/utilisateur/membresBureauNational',
+    FORMATEURS_USER_INFO = '/utilisateur/formateurs',
+    INVITATIONS_INFO = '/utilisateur/invitations'
 
 } 
 
