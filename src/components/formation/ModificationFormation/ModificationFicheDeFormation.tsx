@@ -69,7 +69,7 @@ function ModificationFicheDeFormation(props) {
             height:68.8,
         },
     }));
-    const [test, setTest] = useState(props.formation.duree);
+
     let tempObj = "";
     let tempMateriels = "";
     let tempFormation = props.formation;
@@ -98,6 +98,7 @@ function ModificationFicheDeFormation(props) {
                     <StyledTableCellHead>Type</StyledTableCellHead>
                     <StyledTableCell>
                         <Select
+                            menuPosition="fixed"
                             isClearable
                             defaultValue={props.formation.type}
                             placeholder="Ex: Formation"
@@ -129,7 +130,7 @@ function ModificationFicheDeFormation(props) {
                     </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow key={104}>
-                    <StyledTableCellHead key={"DONTMOVEIT3"}>Durée</StyledTableCellHead>
+                    <StyledTableCellHead key={"DONTMOVEIT3"}>Durée (min)</StyledTableCellHead>
                     <StyledTableCell key={"DONTMOVEIT2"}>
                        <TextField key={"DONTMOVEIT"}
                             type="text"
@@ -349,6 +350,12 @@ function ModificationFicheDeFormation(props) {
                         </StyledTableHead>
                         <TableBody>
                             {afficherListePedagogique()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader aria-label="customized table">
+                        <TableBody>
                             <StyledTableRow key={203}>
                                 <StyledTableCell>
                                     <TextField
@@ -365,7 +372,7 @@ function ModificationFicheDeFormation(props) {
                                     >
                                     </TextField>
                                 </StyledTableCell>
-                                <StyledTableCell>
+                                <StyledTableCell width={40}>
                                     <Button onClick={handleAjoutObjPedagogique}>
                                         <AddBoxIcon className="Icones"/>
                                     </Button>
@@ -374,6 +381,7 @@ function ModificationFicheDeFormation(props) {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
             </Grid>
             <Grid item xs={6} mb={10}>
                 <Typography
@@ -382,7 +390,7 @@ function ModificationFicheDeFormation(props) {
                     color="primary"
                     id="tableTitle"
                     component="div">Domaine(s)</Typography>
-                <TableContainer component={Paper} sx={{maxHeight: 400}}>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
                     <Table stickyHeader aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow key={206}>
@@ -393,6 +401,13 @@ function ModificationFicheDeFormation(props) {
                         </StyledTableHead>
                         <TableBody>
                             {afficherListeDomaines()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TableContainer component={Paper} sx={{maxHeight: 400}}>
+                    <Table stickyHeader aria-label="customized table">
+
+                        <TableBody>
                             <StyledTableRow key={207}>
                                 <StyledTableCell sx={{width: 100}}></StyledTableCell>
                                 <StyledTableCell sx={{padding:0}}>
@@ -446,6 +461,13 @@ function ModificationFicheDeFormation(props) {
                         </StyledTableHead>
                         <TableBody>
                             {afficherListeMateriels()}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table stickyHeader aria-label="customized table">
+
+                        <TableBody>
                             <StyledTableRow key={210}>
                                 <StyledTableCell>
                                     <TextField
@@ -462,7 +484,7 @@ function ModificationFicheDeFormation(props) {
                                     >
                                     </TextField>
                                 </StyledTableCell>
-                                <StyledTableCell align="center">
+                                <StyledTableCell align="center" width={40}>
                                     <Button onClick={handleAjoutMateriel}>
                                         <AddBoxIcon className="Icones"/>
                                     </Button>

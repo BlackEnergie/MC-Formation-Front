@@ -12,27 +12,24 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import Domaine from "../../../api/model/Domaine";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {Statut} from "../../../utils/StatutUtils";
 import Button from "@mui/material/Button";
+import Select from 'react-select';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import AddBoxIcon from "@mui/icons-material/AddBox";
+
+ const optionsStatut =[
+    {value: 'DEMANDE', label:'Demande'},
+    {value: 'A_ATTRIBUER', label:'À attribuer'},
+    {value: 'A_VENIR', label:'À venir'},
+    {value: 'PASSEE', label:'Passée'},
+]
 
 const ModificationInformationsGenerales = (props) => {
-
     const [liveness, setLiveness] = useState(0);
-
-    let stat = [Statut.DEMANDE, Statut.A_ATTRIBUER, Statut.A_VENIR, Statut.PASSEE];
-
-    let valueDomaine;
     let temporaireDonnee = props.formation;
-
-    let libelleDomaine = props.domaine.map((item, index) => {
-
-        return {
-            label: item.libelle,
-            value: item,
-            key: item.code,
-
-        }
-    });
+    let tempFormateur= null;
 
 
     const StyledTextField = styled(TextField)(({theme}) => ({
@@ -42,7 +39,6 @@ const ModificationInformationsGenerales = (props) => {
             fontSize: 20,
         },
     }));
-
     const StyledTableCell = styled(TableCell)(({theme}) => ({
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
@@ -55,7 +51,6 @@ const ModificationInformationsGenerales = (props) => {
 
         },
     }));
-
     const StyledTableCellHead = styled(TableCell)(({theme}) => ({
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
@@ -66,7 +61,6 @@ const ModificationInformationsGenerales = (props) => {
             fontWeight: 'bold',
         },
     }));
-
     const StyledTableRow = styled(TableRow)(({theme}) => ({
         '&:nth-of-type(odd)': {
             backgroundColor: theme.palette.action.hover,
@@ -76,7 +70,6 @@ const ModificationInformationsGenerales = (props) => {
             border: 0,
         },
     }));
-
     const StyledTableHead = styled(TableHead)(({theme}) => ({
         '&:nth-of-type(odd)': {
             fontWeight: 'bold',
@@ -86,7 +79,6 @@ const ModificationInformationsGenerales = (props) => {
             border: 0,
         },
     }));
-
 
     const handleChange = (s) => {
         let items = props.formation;
@@ -98,13 +90,15 @@ const ModificationInformationsGenerales = (props) => {
                 items.cadre = temporaireDonnee.cadre;
                 break;
             case "date" :
-                items.date = temporaireDonnee.date;
+                let annee = temporaireDonnee.date.getFullYear();
+                let mois = temporaireDonnee.date.getMonth()+1;
+                let jour = temporaireDonnee.date.getDate();
+                items.date = annee + "-" +mois + "-" + jour;
+                setLiveness(liveness+1);
                 break;
         }
         props.majFormation(items);
     };
-
-
     const handleItemDelete = (i, s) => {
 
         let newFormation = props.formation;
@@ -123,40 +117,22 @@ const ModificationInformationsGenerales = (props) => {
         setLiveness(liveness + 1);
     }
 
-
     const handleAjout = (s, v) => {
         let newFormation = props.formation;
         switch (s) {
-            case 'Domaine' :
-                const newdomaine = {
-                    id: getMax(props.formation.domaines),
-                    code: v.key,
-                    libelle: v.value.libelle,
-                    description: v.value.description,
-                }
-                newFormation.domaines.push(newdomaine);
-                break;
             case 'Formateurs':
                 const newformateur = {
-                    id: getMax(props.formation.domaines),
+                    //TODO
+
                     nom: temporaireDonnee.formateur.nom,
                     prenom: temporaireDonnee.formateur.prenom,
                 }
                 newFormation.formateur.push(newformateur);
                 break;
-            case 'Asso':
-                const newassociation = {
-                    nomComplet: temporaireDonnee.associationsInteressees.association.nomComplet,
-                    ville: temporaireDonnee.associationsInteressees.association.ville,
-                }
-                newFormation.associationsInteressees.push(newassociation);
-
-                break;
         }
         props.majFormation(newFormation);
         setLiveness(liveness + 1);
     }
-
 
     function getMax(list) {
         let cpt = 1;
@@ -169,41 +145,23 @@ const ModificationInformationsGenerales = (props) => {
         return cpt;
     }
 
-    function isFormateurVide() {
-
-        if (!props.formation.formateur) {
-            return true
-        } else {
-            return false
-        }
-    }
-
     const AfficherDataInfoGenerales = () => {
         return (
             <>
                 <StyledTableRow>
                     <StyledTableCellHead>Statut</StyledTableCellHead>
                     <StyledTableCell>
-                        <Autocomplete
-                            disablePortal
-                            size="small"
-                            id="combo-box-demo"
-                            options={stat}
-                            defaultValue={props.formation.statut}
+                        <Select
+                            isClearable
+                            defaultValue={props.formation.type}
+                            placeholder="Ex: Formation"
                             onChange={(event, value) => {
-                                temporaireDonnee.statut = value;
-                                handleChange("statut")
+                                temporaireDonnee.statut = event.value;
+                                handleChange("type")
                             }}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Statut"
-                                    InputProps={{
-                                        ...params?.InputProps,
-                                        type: 'search',
-                                    }}
-                                />
-                            )}
+                            options={optionsStatut}
+                            menuPosition="fixed"
+
                         />
                     </StyledTableCell>
                 </StyledTableRow>
@@ -229,53 +187,28 @@ const ModificationInformationsGenerales = (props) => {
                 <StyledTableRow>
                     <StyledTableCellHead>Date</StyledTableCellHead>
                     <StyledTableCell>
-                        <StyledTextField
-                            fullWidth={true}
-                            defaultValue={props.formation.date}
-                            variant="standard"
-                            inputProps={{style: {fontSize: 12}}}
-                            size="small"
-                            multiline={true}
-                            onChange={
-                                (event) => {
-                                    temporaireDonnee.date = event.target.value;
-                                    handleChange("date")
-                                }}>
-                        </StyledTextField>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DesktopDatePicker
+                                label="Date de la formation"
+                                value={props.formation.date}
+                                inputFormat="yyyy-MM-dd"
+                                mask={"____-__-__"}
+                                onChange={
+                                    (newValue) => {
+                                        temporaireDonnee.date = newValue;
+                                        handleChange("date");
+                                    }}
+                                renderInput={(params) => <TextField size="small" {...params} />}
+                            />
+                        </LocalizationProvider>
                     </StyledTableCell>
                 </StyledTableRow>
             </>
         )
     }
 
-    /*
-        const AfficherDataDomaine = () => {
-            return props.formation.domaines?.map(
-                (info, i) => {
-                    return (
-                        <StyledTableRow key={info.code} title={info.description}>
-                            <StyledTableCell>
-                                {info.code}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                                {info.libelle}
-                            </StyledTableCell>
-                            <TableCell
-                                align="center">
-                                <a onClick={() => handleItemDelete(i, "Domaine")}>
-                                    <DeleteIcon className="Icones"/>
-                                </a>
-                            </TableCell>
-                        </StyledTableRow>
-                    )
-                }
-            )
-        }
-    */
-
     const AfficherDataFormateur = props.formation.formateurs?.map(
         (info, i) => {
-            console.log(info)
             return (
                 <StyledTableRow key={info.id}>
                     <StyledTableCell>
@@ -318,60 +251,6 @@ const ModificationInformationsGenerales = (props) => {
                     </Table>
                 </TableContainer>
             </Grid>
-            {/*
-            <Grid item xs={6}>
-                <Typography
-                    sx={{flex: '1 1 100%', p: 1}}
-                    variant="h5"
-                    color="primary"
-                    id="tableTitle"
-                    component="div">Domaine(s)
-                </Typography>
-                <TableContainer component={Paper} sx={{maxHeight: 350}}>
-                    <Table stickyHeader aria-label="customized table">
-                        <StyledTableHead>
-                            <StyledTableRow>
-                                <StyledTableCell sx={{width: 100}}>Code</StyledTableCell>
-                                <StyledTableCell>Nom</StyledTableCell>
-                                <StyledTableCell></StyledTableCell>
-                            </StyledTableRow>
-                        </StyledTableHead>
-                        <TableBody>
-                            {AfficherDataDomaine()}
-                            <StyledTableRow key={10000}>
-                                <StyledTableCell></StyledTableCell>
-                                <StyledTableCell>
-                                    <Autocomplete
-                                        disablePortal
-                                        id="combo-box-demo"
-                                        options={libelleDomaine}
-                                        onChange={(event, value) => {
-                                            valueDomaine = value;
-                                        }}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label="Domaine"
-                                                InputProps={{
-                                                    ...params?.InputProps,
-                                                    type: 'search',
-                                                }}
-                                            />
-                                        )}
-                                    />
-                                </StyledTableCell>
-                                <TableCell
-                                    align="center">
-                                    <a onClick={() => handleAjout("Domaine", valueDomaine)}>
-                                        <AddBoxIcon className="Icones"/>
-                                    </a>
-                                </TableCell>
-                            </StyledTableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-            */}
             <Grid item xs={6}>
                 <Typography
                     sx={{flex: '1 1 100%', p: 1}}
@@ -393,6 +272,42 @@ const ModificationInformationsGenerales = (props) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                    <Table sx={{minWidth: 100}} aria-label="customized table">
+                        <TableBody>
+                            <StyledTableRow>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell>
+                                    <Autocomplete
+                                        fullWidth={true}
+                                        size="small"
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        options={optionsStatut}
+                                        onChange={(event, value) => {
+                                            tempFormateur = value;
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Domaine"
+                                                InputProps={{
+                                                    ...params?.InputProps,
+                                                    type: 'search',
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                    <Button onClick={() => handleAjout("Formateurs",tempFormateur)}>
+                                        <AddBoxIcon className="Icones"/>
+                                    </Button>
+                                </StyledTableCell>
+                            </StyledTableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Grid>
         </Grid>
     )
@@ -400,3 +315,26 @@ const ModificationInformationsGenerales = (props) => {
 
 
 export default ModificationInformationsGenerales;
+
+
+ /*
+ <Autocomplete
+                            disablePortal
+                            size="small"
+                            id="combo-box-demo"
+                            options={optionsStatut}
+                            defaultValue={statutToString(props.formation.statut)}
+                            onChange={(event, value) => {
+                                temporaireDonnee.statut = value.value;
+                                handleChange("statut")
+                            }}
+                            isOptionEqualToValue={(option, value) => option.value === value.value}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Statut"
+                                    variant="standard"
+                                />
+                            )}
+                        />
+  */

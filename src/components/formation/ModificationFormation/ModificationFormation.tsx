@@ -9,6 +9,7 @@ import ModificationInformationsGenerales from "./ModificationInformationsGeneral
 
 import {FetchFormationById} from '../../../serverInteraction/FetchFormation';
 import {FetchDomaines} from "../../../serverInteraction/FetchData";
+import {PostFormation} from "../../../serverInteraction/PostFormation";
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import Formation from '../../../api/model/Formation';
 import {domaines} from "../../Accueil/ComposantAccueil/FiltreAccueil";
@@ -16,6 +17,13 @@ import {domaines} from "../../Accueil/ComposantAccueil/FiltreAccueil";
 import {Accordion, AccordionDetails, AccordionSummary, Container, Fab, Link, Skeleton, Typography} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SaveIcon from '@mui/icons-material/Save';
+const optionsStatut =[
+    {value: 'DEMANDE', label:'Demande'},
+    {value: 'A_ATTRIBUER', label:'À attribuer'},
+    {value: 'A_VENIR', label:'À venir'},
+    {value: 'PASSEE', label:'Passée'},
+]
+
 
 const ModificationFormation = () => {
     const FabStyle = {
@@ -61,7 +69,6 @@ const ModificationFormation = () => {
     }
 
     const getDomaineList = async () => {
-
         try {
             const controller = new AbortController();
             const response = await FetchDomaines(axiosPrivate,controller);
@@ -75,6 +82,16 @@ const ModificationFormation = () => {
         getDomaineList();
     },[])
 
+    const handleSubmit = async () => {
+        try {
+            const response = await PostFormation(axiosPrivate, formation);
+            toast.success("Formation enregistrée");
+        } catch (err) {
+            console.log(err);
+            toast.error("Echec de sauvegarde");
+        }
+    };
+
     let nomFiche = 'FDF';
     if (formation && formation.type === 'Atelier') {
         nomFiche = 'FDA'
@@ -84,9 +101,9 @@ const ModificationFormation = () => {
         <Container maxWidth={"xl"}>
             <Link className="text-decoration-none" //to={'/formation/edit/' + formation.id}
                   title="Modifier la formation">
-                <Fab sx={FabStyle} color="primary" aria-label="edit">
-                    <SaveIcon/>
-                </Fab>
+                    <Fab onClick={handleSubmit} sx={FabStyle} color="primary" aria-label="edit">
+                        <SaveIcon/>
+                    </Fab>
             </Link>
             {loading ?
                 <Skeleton sx={{width: 'auto'}}/> :
