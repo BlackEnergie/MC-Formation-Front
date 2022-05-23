@@ -815,7 +815,7 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
                               {checkRoleAsso() &&
                               row.association.id !== token.id &&
                               statutToString(row?.statut) !== "Passée" ? (
-                                <Button onClick={() => postLikeFormation(row)}>
+                                <Button sx={{padding:0, minWidth:'24px', maxWidth:'24px'}} onClick={() => postLikeFormation(row)}>
                                   {row?.associationsFavorables?.some(
                                     (association) => association.id === token.id
                                   ) ? (
