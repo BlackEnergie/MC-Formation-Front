@@ -16,7 +16,8 @@ export enum EntryPoint {
     RESET_PASSWORD_NEW_PASSWORD = '/auth/resetPassword/save',
     RESET_PASSWORD_CHECK_TOKEN = '/auth/resetPassword/checkToken',
     INFORMATION_USER = '/utilisateur',
-    MODIFICATION_INFORMATION_USER = '/utilisateur/modification'
+    MODIFICATION_INFORMATION_USER = '/utilisateur/modification',
+    MODIFICATION_MOTDEPASSE_USER = '/utilisateur/modification/motdepasse'
 
 } 
 

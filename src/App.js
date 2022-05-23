@@ -18,6 +18,7 @@ import decodeToken from './auth/decodeToken';
 import MonCompte from "./components/Utilisateur/MonCompte";
 import ModificationMonCompte from "./components/Utilisateur/ModificationMonCompte";
 import toast from "react-hot-toast";
+import ModificationMotDePasse from './components/Utilisateur/ModificationMotDePasse';
 
 function App() {
 
@@ -59,17 +60,24 @@ function App() {
             </ProtectedRoute>}
         />
             <Route
-            path="moncompte"
+            path="compte"
             element={
                 <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
                     <MonCompte />
                 </ProtectedRoute>}
         />
             <Route
-                path="modificationmoncompte"
+                path="compte/modification/"
                 element={
                     <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
                         <ModificationMonCompte />
+                    </ProtectedRoute>}
+            />
+            <Route
+                path="compte/modification/motdepasse"
+                element={
+                    <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={!!jwt} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
+                        <ModificationMotDePasse />
                     </ProtectedRoute>}
             />
         <Route

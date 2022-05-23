@@ -89,7 +89,7 @@ const Header = (props) => {
                                 props.login ? (
                                         <div id="right-side-navbar">
                                             <Nav.Link>
-                                                <Link to="/Moncompte">
+                                                <Link to="/compte">
                                                     <button className="btn btn-outline-mc">
                                                         <AccountCircleIcon></AccountCircleIcon>
                                                     </button>

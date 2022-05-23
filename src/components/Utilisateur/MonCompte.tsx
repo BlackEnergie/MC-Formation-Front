@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import useAxiosPrivate from '../../auth/hooks/useAxiosPrivate';
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import {Grid, Skeleton} from "@mui/material";
+import {Container, Grid, Skeleton} from "@mui/material";
 import {FetchInformationUserById} from '../../serverInteraction/FetchUtilisateur';
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -112,25 +112,17 @@ function AffichageMonCompte() {
     return (
 
         <>
-            <div className="container-fluid">
-                {/* Conteneur Info Domaines */}
-                <div className="container shadow p-4 mb-3 bg-white rounded">
-                    <div className="row">
-                        <div className="row justify-content-md-center mt-1">
-                            <div className="col col-lg-5">
-                                <h3 className="color-mc">
-                                    Mes informations
-                                </h3>
-                                <hr/>
-                            </div>
-                        </div>
-                        <Grid container spacing={3}>
-                            <Grid item xs>
-                            </Grid>
-                            <Grid item xs={4} style={{backgroundColor: "white"}}>
-
-                                <TableContainer component={Paper} sx={{maxHeight: 350}}>
-                                    <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
+            <Container>
+              <Grid id =""  style={{
+                              boxShadow:"0 .5rem 1rem rgba(0,0,0,.15)"
+                               }}
+                   >
+                    <Box textAlign={'center'}>
+                        <Typography variant="h4" color="primary">Mon Compte</Typography>
+                            
+                            <Box textAlign={'center'} sx={{minWidth: 100,maxWidth:400,margin: 'auto'}}>
+                                <TableContainer component={Paper} sx={{maxHeight: 350, marginTop:2}}>
+                                    <Table stickyHeader aria-label="customized table">
 
                                         <TableBody>
                                             <StyledTableRow>
@@ -213,26 +205,33 @@ function AffichageMonCompte() {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                                <Nav.Link>
-                                    <Link to="/modificationMonCompte">
-                                        <Box textAlign='center'>
-                                            <Button
-                                                variant="contained"
-                                                size="medium"
-                                                style={{
-                                                    marginTop: 15,
+                                </Box>
+                                <Box textAlign='center'>
+                                   <Link to="/compte/modification/motdepasse" style={{textDecoration:'none'}}>
+                                        <Button
+                                            variant="contained"
+                                            style={{
+                                                marginTop: 15,
+                                                marginBottom:15,
+                                                marginRight:20
                                                 }}>
-                                                Modifier
-                                            </Button>
-                                        </Box>
+                                           Changer de mot de passe
+                                       </Button>
                                     </Link>
-                                </Nav.Link>
-                            </Grid>
-                            <Grid item xs>
-                            </Grid>
-                        </Grid></div>
-                </div>
-            </div>
+                                    <Link to="/compte/modification" style={{textDecoration:'none'}} >
+                                        <Button
+                                            variant="contained"
+                                            style={{
+                                                marginTop: 15,
+                                                marginBottom:15
+                                            }}>
+                                            Modifier
+                                        </Button>
+                                    </Link>
+                                </Box>
+                            </Box>
+                        </Grid></Container>
+             
 
         </>
 
