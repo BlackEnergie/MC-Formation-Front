@@ -1,33 +1,44 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Table, TableBody, TableCell, TableHead, TableRow} from '@mui/material';
 import {createUserToken} from '../Admin';
+import {AccessTimeFilled, CircleNotifications} from '@mui/icons-material';
+import {getTimeBetweenDates} from '../../../utils/DateUtils';
+import {LoadingButton} from '@mui/lab';
 
 const Invitations = (props) => {
 
+    const [relanceLoading, setRelanceLoading] = useState(false)
     const invitations: createUserToken[] = props.invitations;
 
-    const getTimeBetweenDates = (expirationDate: Date) => {
-        const now = new Date();
-        const msBetweenDates = new Date(expirationDate.toString()).getTime() - now.getTime();
-        let seconds = Math.floor(msBetweenDates / 1000);
-        let minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
+    const getColoredClock = (hours: number) => {
+        if (hours > 16) return <AccessTimeFilled color="success"/>;
+        else if (hours > 8) return <AccessTimeFilled color="warning"/>;
+        return <CircleNotifications color="error"/>
+    }
 
-        seconds = seconds % 60;
-        minutes = minutes % 60;
+    const getTimeObjectFromNow = (date: Date) => {
+        return getTimeBetweenDates(date, new Date());
+    }
 
-        return (hours + " heures, " + minutes + " minutes");
+    const afficherValidite = (expiration: Date) => {
+        let timeObject = getTimeObjectFromNow(expiration);
+        return (
+            <>
+                {timeObject.hours + ' heures, ' + timeObject.minutes + ' minutes '}
+            </>
+        )
     }
 
     return (
         <>
-            <Table sx={{minWidth: 650}} aria-label="simple table">
+            <Table sx={{minWidth: 650}}>
                 <TableHead>
                     <TableRow>
                         <TableCell>Id</TableCell>
                         <TableCell>Email</TableCell>
                         <TableCell>Role</TableCell>
                         <TableCell>Validité</TableCell>
+                        <TableCell sx={{width: '100px'}}>Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -38,7 +49,15 @@ const Invitations = (props) => {
                                     <TableCell>{utilisateur.id}</TableCell>
                                     <TableCell>{utilisateur.email}</TableCell>
                                     <TableCell>{utilisateur.role}</TableCell>
-                                    <TableCell>{getTimeBetweenDates(utilisateur.expirationDate)}</TableCell>
+                                    <TableCell>{afficherValidite(utilisateur.expirationDate)}</TableCell>
+                                    <TableCell>
+                                        <LoadingButton
+                                            loading={relanceLoading}
+                                            sx={{padding:0, minWidth:'24px', maxWidth:'24px'}}
+                                            title="Prolonger et notifier">
+                                            {getColoredClock(getTimeObjectFromNow(utilisateur.expirationDate).hours)}
+                                        </LoadingButton>
+                                    </TableCell>
                                 </TableRow>
                             )
                         })

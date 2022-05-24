@@ -18,11 +18,13 @@ import Formateur from '../../api/model/Formateur';
 import Associations from './TabsAdmin/Associations';
 import Formateurs from './TabsAdmin/Formateurs';
 import Invitations from './TabsAdmin/Invitations';
+import Domaine from '../../api/model/Domaine';
 
 interface Utilisateur {
     id: number,
     email: string,
-    nomUtilisateur: string
+    nomUtilisateur: string,
+    actif: boolean
 }
 
 export interface membreBureauNationalUserInfo extends MembreBureauNational, Utilisateur {
@@ -32,7 +34,8 @@ export interface associationUserInfo extends Association, Utilisateur {
 }
 
 export interface formateurUserInfo extends Formateur, Utilisateur {
-    dateCreation: string
+    dateCreation: string,
+    domaines: Domaine[]
 }
 
 export interface createUserToken {
@@ -64,13 +67,18 @@ const Admin = () => {
     const [associations, setAssociations] = useState(undefined)
     const [formateurs, setFormateurs] = useState(undefined)
     const [invitations, setInvitations] = useState(undefined)
+
+    const [refresh, setRefresh] = useState(true)
+
+    // TODO: Replacer les infos dans l'ordre des priorités
+
     const axiosPrivate = useAxiosPrivate()
 
     useEffect(() => {
-        getMembresBN()
-        getAssociations()
-        getFormateurs()
-        getInvitations()
+        getAssociations();
+        getInvitations();
+        getFormateurs();
+        getMembresBN();
     }, [])
 
     const tabs = [
@@ -233,7 +241,7 @@ const Admin = () => {
                     {showTabs()}
                 </Tabs>
                 {
-                    valueTab === 0 ? <Formateurs formateurs={formateurs} setFormateurs={setFormateurs}/> :
+                    valueTab === 0 ? <Formateurs formateurs={formateurs} setFormateurs={setFormateurs} /> :
                         valueTab === 1 ? <Associations associations={associations} setAssociations={setAssociations}/> :
                             valueTab === 2 ?
                                 <MembresBN membresBN={membresBN} setMembresBN={setMembresBN}/>

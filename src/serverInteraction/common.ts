@@ -25,5 +25,5 @@ export enum EntryPoint {
 } 
 
 export const headersTemplate = {
-    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
 }
