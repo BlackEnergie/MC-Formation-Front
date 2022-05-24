@@ -14,6 +14,12 @@ export function FetchFormateur(axios: AxiosInstance) {
     });
 }
 
+export function FetchListeFormateurs(axios: AxiosInstance) {
+    return axios.get(EntryPoint.FORMATEUR_LISTE, {
+        headers: headersTemplate
+    });
+}
+
 export function FetchDemandesFavorables (axios: AxiosInstance) {
     return axios.get(EntryPoint.DEMANDE_FAVORABLE, {
         headers: headersTemplate
