@@ -1,20 +1,39 @@
 import React, {useEffect, useState} from 'react';
-import ModificationFicheDeFormation from "./ModificationFicheDeFormation";
-import ModificationFilConducteur from "./ModificationFilConducteur";
 import {useParams} from "react-router-dom";
-import {FetchFormationById} from '../../../serverInteraction/FetchFormation';
-import {FetchDomaines} from "../../../serverInteraction/FetchData";
-import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
-import Formation from '../../../api/model/Formation';
-import {Accordion, AccordionDetails, AccordionSummary, Container, Skeleton, Typography} from '@mui/material';
-import NavFormation from "../NavigationFormation/NavFormation";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
+
+import ModificationFicheDeFormation from "./ModificationFicheDeFormation";
+import ModificationFilConducteur from "./ModificationFilConducteur";
+import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
+
+import {FetchFormationById} from '../../../serverInteraction/FetchFormation';
+import {FetchDomaines} from "../../../serverInteraction/FetchData";
+import {PostFormation} from "../../../serverInteraction/PostFormation";
+import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
+import Formation from '../../../api/model/Formation';
 import {domaines} from "../../Accueil/ComposantAccueil/FiltreAccueil";
 
+import {Accordion, AccordionDetails, AccordionSummary, Container, Fab, Link, Skeleton, Typography} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import SaveIcon from '@mui/icons-material/Save';
+const optionsStatut =[
+    {value: 'DEMANDE', label:'Demande'},
+    {value: 'A_ATTRIBUER', label:'À attribuer'},
+    {value: 'A_VENIR', label:'À venir'},
+    {value: 'PASSEE', label:'Passée'},
+]
+
+
 const ModificationFormation = () => {
+    const FabStyle = {
+        margin: 0,
+        top: 'auto',
+        right: 40,
+        bottom: 40,
+        left: 'auto',
+        position: 'fixed',
+    }
     const INITIAL_FORMATION: Formation = new Formation();
     const INITIAL_DOMAINE : domaines[] = [];
     let {id} = useParams();
@@ -33,7 +52,6 @@ const ModificationFormation = () => {
         setFormation(newFormation);
     }
 
-
     const getFormationDetails = async () => {
         try {
             const response = await FetchFormationById(axiosPrivate, id);
@@ -50,9 +68,7 @@ const ModificationFormation = () => {
         }
     }
 
-
     const getDomaineList = async () => {
-
         try {
             const controller = new AbortController();
             const response = await FetchDomaines(axiosPrivate,controller);
@@ -66,17 +82,29 @@ const ModificationFormation = () => {
         getDomaineList();
     },[])
 
+    const handleSubmit = async () => {
+        try {
+            const response = await PostFormation(axiosPrivate, formation);
+            toast.success("Formation enregistrée");
+        } catch (err) {
+            console.log(err);
+            toast.error("Echec de sauvegarde");
+        }
+    };
+
     let nomFiche = 'FDF';
     if (formation && formation.type === 'Atelier') {
         nomFiche = 'FDA'
     }
 
-    console.log(formation);
-    console.log(domaine);
-
     return (
         <Container maxWidth={"xl"}>
-
+            <Link className="text-decoration-none" //to={'/formation/edit/' + formation.id}
+                  title="Modifier la formation">
+                    <Fab onClick={handleSubmit} sx={FabStyle} color="primary" aria-label="edit">
+                        <SaveIcon/>
+                    </Fab>
+            </Link>
             {loading ?
                 <Skeleton sx={{width: 'auto'}}/> :
                 <>
@@ -127,7 +155,7 @@ const ModificationFormation = () => {
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <ModificationFicheDeFormation formation={formation} majFormation={majFormation} domaine={domaine} />
+                            <ModificationFicheDeFormation formation={formation} majFormation={majFormation} domaine={domaine} setFormation={setFormation}/>
                             <ModificationFilConducteur formation={formation} majFormation={majFormation}/>
                         </AccordionDetails>
                     </Accordion>
