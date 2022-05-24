@@ -176,7 +176,6 @@ const ModificationFilConducteur = (props) => {
             }
         )
         let delta = sumParties-props.formation.duree;
-        console.log(props.formation.duree);
         if (props.formation.duree >=1){
             if (delta>0) {
                 return (
@@ -209,6 +208,8 @@ const ModificationFilConducteur = (props) => {
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
             verticalAlign: 'bottom',
+            paddingTop:0,
+            paddingBottom:0,
         },
     }));
     const StyledTextField = styled(TextField)(({theme}) => ({
@@ -226,7 +227,13 @@ const ModificationFilConducteur = (props) => {
         '&:last-child td, &:last-child th': {
             border: 0,
         },
+        height:65,
     }));
+    const StyledTableRowInput = styled(TableRow)(({theme}) => ({
+        backgroundColor:'rgba(211,211,211,0.04)'
+    }));
+
+
     const StyledTableHead = styled(TableHead)(({theme}) => ({
         '&:nth-of-type(odd)': {
             fontWeight: "bold",
@@ -246,7 +253,7 @@ const ModificationFilConducteur = (props) => {
                 id="tableTitle"
                 component="div">Fil Conducteur
             </Typography>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} >
                 <Table stickyHeader aria-label="customized table">
                     <StyledTableHead>
                         <StyledTableRow>
@@ -338,18 +345,18 @@ const ModificationFilConducteur = (props) => {
                         </StyledTableRow>
                     </TableBody>
                 </Table>
-            </TableContainer><TableContainer component={Paper}>
-            <Table stickyHeader aria-label="customized table">
-
+            </TableContainer>
+            <TableContainer component={Paper} sx={{padding:1}}>
+                <Table >
                     <TableBody>
-                        <StyledTableRow>
+                        <TableRow >
                             <StyledTableCell align="right" sx={{pr:4, color:"#808080"}}>
                                 <Typography>
                                     {getDureeFormation()}
                                 </Typography>
 
                             </StyledTableCell>
-                        </StyledTableRow>
+                        </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
