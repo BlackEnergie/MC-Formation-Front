@@ -8,7 +8,7 @@ import ModificationFilConducteur from "./ModificationFilConducteur";
 import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
 
 import {FetchFormationById} from '../../../serverInteraction/FetchFormation';
-import {FetchDomaines} from "../../../serverInteraction/FetchData";
+import {FetchDomaines,FetchListeFormateurs} from "../../../serverInteraction/FetchData";
 import {PostFormation} from "../../../serverInteraction/PostFormation";
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import Formation from '../../../api/model/Formation';
@@ -17,13 +17,6 @@ import {domaines} from "../../Accueil/ComposantAccueil/FiltreAccueil";
 import {Accordion, AccordionDetails, AccordionSummary, Container, Fab, Link, Skeleton, Typography} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SaveIcon from '@mui/icons-material/Save';
-const optionsStatut =[
-    {value: 'DEMANDE', label:'Demande'},
-    {value: 'A_ATTRIBUER', label:'À attribuer'},
-    {value: 'A_VENIR', label:'À venir'},
-    {value: 'PASSEE', label:'Passée'},
-]
-
 
 const ModificationFormation = () => {
     const FabStyle = {
@@ -42,10 +35,12 @@ const ModificationFormation = () => {
     const [formation, setFormation] = useState(INITIAL_FORMATION);
     const [loading, setLoading] = useState(true);
     const [domaine, setDomaine] = useState(INITIAL_DOMAINE);
+    const [formateurs, setFormateurs] = useState(INITIAL_DOMAINE);
 
     useEffect(() => {
         getFormationDetails().then(data => setFormation(data));
         getDomaineList();
+        getFormateursList();
     }, [])
 
     const majFormation = (newFormation) => {
@@ -71,16 +66,22 @@ const ModificationFormation = () => {
     const getDomaineList = async () => {
         try {
             const controller = new AbortController();
-            const response = await FetchDomaines(axiosPrivate,controller);
-            setDomaine(response?.data);
+
+            const resDomaines = await FetchDomaines(axiosPrivate,controller);
+            setDomaine(resDomaines?.data);
         }catch (err){
             console.log(err)
         }
-    }
+    };
 
-    useEffect(() => {
-        getDomaineList();
-    },[])
+    const getFormateursList = async() => {
+        try{
+            const resFormateurs = await FetchListeFormateurs(axiosPrivate);
+            setFormateurs(resFormateurs?.data);
+        } catch (err){
+            console.log(err)
+        }
+    }
 
     const handleSubmit = async () => {
         try {
@@ -136,8 +137,7 @@ const ModificationFormation = () => {
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <ModificationInformationsGenerales formation={formation}
-                                                               majFormation={majFormation} domaine={domaine}/>
+                            <ModificationInformationsGenerales formation={formation} majFormation={majFormation} domaine={domaine} formateurs={formateurs}/>
                         </AccordionDetails>
                     </Accordion>
                     <Accordion>
@@ -155,7 +155,7 @@ const ModificationFormation = () => {
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <ModificationFicheDeFormation formation={formation} majFormation={majFormation} domaine={domaine} setFormation={setFormation}/>
+                            <ModificationFicheDeFormation formation={formation} majFormation={majFormation} domaine={domaine}/>
                             <ModificationFilConducteur formation={formation} majFormation={majFormation}/>
                         </AccordionDetails>
                     </Accordion>

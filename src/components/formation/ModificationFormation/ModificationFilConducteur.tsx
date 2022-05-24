@@ -59,6 +59,10 @@ const ModificationFilConducteur = (props) => {
     }
     const handleAjoutPartie = () => {
         let newFormation = props.formation;
+
+        if (!Number.isInteger(temporaireAjoutPartie.timing)){
+            temporaireAjoutPartie.timing=0;
+        }
         const newPartie: Partie = {
             id: getMax(props.formation.parties),
             plan: temporaireAjoutPartie.plan,
@@ -162,6 +166,29 @@ const ModificationFilConducteur = (props) => {
         })
         cpt++;
         return cpt;
+    }
+
+    const getDureeFormation= () =>{
+        let sumParties = 0;
+        props.formation.parties.map(
+            (item) =>{
+                sumParties= sumParties + item.timing;
+            }
+        )
+        let delta = sumParties-props.formation.duree;
+        if (delta>0) {
+            return (
+            <Typography>
+                Vous avez {delta} minutes de trop par rapport à la durée prévue
+            </Typography>
+            )
+        }else{
+            return (
+                <Typography>
+                    Vous avez encore {Math.abs(delta)} minutes à combler dans la formation
+                </Typography>
+            )
+        }
     }
 
     const StyledTableCell = styled(TableCell)(({theme}) => ({
@@ -298,6 +325,20 @@ const ModificationFilConducteur = (props) => {
                                     <AddBoxIcon className="Icones"/>
                                 </a>
                             </TableCell>
+                        </StyledTableRow>
+                    </TableBody>
+                </Table>
+            </TableContainer><TableContainer component={Paper}>
+            <Table stickyHeader aria-label="customized table">
+
+                    <TableBody>
+                        <StyledTableRow>
+                            <StyledTableCell align="right" sx={{pr:4, color:"#808080"}}>
+                                <Typography>
+                                    {getDureeFormation()}
+                                </Typography>
+
+                            </StyledTableCell>
                         </StyledTableRow>
                     </TableBody>
                 </Table>

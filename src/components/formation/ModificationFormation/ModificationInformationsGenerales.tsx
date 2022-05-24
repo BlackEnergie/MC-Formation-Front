@@ -30,7 +30,14 @@ const ModificationInformationsGenerales = (props) => {
     const [liveness, setLiveness] = useState(0);
     let temporaireDonnee = props.formation;
     let tempFormateur= null;
+    let listeFormateurs = props.formateurs.map((item, index) => {
+        return {
+            label: item.nom + " " + item.prenom,
+            value: item,
+            key: item.id,
 
+        }
+    });
 
     const StyledTextField = styled(TextField)(({theme}) => ({
         [`&.${textFieldClasses}`]: {
@@ -92,7 +99,9 @@ const ModificationInformationsGenerales = (props) => {
             case "date" :
                 let annee = temporaireDonnee.date.getFullYear();
                 let mois = temporaireDonnee.date.getMonth()+1;
+                mois = mois.toString().padStart(2,'0');
                 let jour = temporaireDonnee.date.getDate();
+                jour = jour.toString().padStart(2,'0');
                 items.date = annee + "-" +mois + "-" + jour;
                 setLiveness(liveness+1);
                 break;
@@ -122,33 +131,21 @@ const ModificationInformationsGenerales = (props) => {
         switch (s) {
             case 'Formateurs':
                 const newformateur = {
-                    //TODO
-
-                    nom: temporaireDonnee.formateur.nom,
-                    prenom: temporaireDonnee.formateur.prenom,
+                    id : v.value.id,
+                    nom: v.value.nom,
+                    prenom: v.value.prenom,
                 }
-                newFormation.formateur.push(newformateur);
+                newFormation.formateurs.push(newformateur);
                 break;
         }
         props.majFormation(newFormation);
         setLiveness(liveness + 1);
     }
 
-    function getMax(list) {
-        let cpt = 1;
-        list.forEach(val => {
-            if (val.id > cpt) {
-                cpt = val.id
-            }
-        })
-        cpt++;
-        return cpt;
-    }
-
     const AfficherDataInfoGenerales = () => {
         return (
             <>
-                <StyledTableRow>
+                <StyledTableRow >
                     <StyledTableCellHead>Statut</StyledTableCellHead>
                     <StyledTableCell>
                         <Select
@@ -276,21 +273,19 @@ const ModificationInformationsGenerales = (props) => {
                     <Table sx={{minWidth: 100}} aria-label="customized table">
                         <TableBody>
                             <StyledTableRow>
-                                <StyledTableCell></StyledTableCell>
                                 <StyledTableCell>
                                     <Autocomplete
                                         fullWidth={true}
                                         size="small"
                                         disablePortal
-                                        id="combo-box-demo"
-                                        options={optionsStatut}
+                                        options={listeFormateurs}
                                         onChange={(event, value) => {
                                             tempFormateur = value;
                                         }}
                                         renderInput={(params) => (
                                             <TextField
                                                 {...params}
-                                                label="Domaine"
+                                                label="Nom Prénom du formateur"
                                                 InputProps={{
                                                     ...params?.InputProps,
                                                     type: 'search',
@@ -299,7 +294,7 @@ const ModificationInformationsGenerales = (props) => {
                                         )}
                                     />
                                 </StyledTableCell>
-                                <StyledTableCell>
+                                <StyledTableCell width={40}>
                                     <Button onClick={() => handleAjout("Formateurs",tempFormateur)}>
                                         <AddBoxIcon className="Icones"/>
                                     </Button>
@@ -313,28 +308,4 @@ const ModificationInformationsGenerales = (props) => {
     )
 }
 
-
 export default ModificationInformationsGenerales;
-
-
- /*
- <Autocomplete
-                            disablePortal
-                            size="small"
-                            id="combo-box-demo"
-                            options={optionsStatut}
-                            defaultValue={statutToString(props.formation.statut)}
-                            onChange={(event, value) => {
-                                temporaireDonnee.statut = value.value;
-                                handleChange("statut")
-                            }}
-                            isOptionEqualToValue={(option, value) => option.value === value.value}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Statut"
-                                    variant="standard"
-                                />
-                            )}
-                        />
-  */

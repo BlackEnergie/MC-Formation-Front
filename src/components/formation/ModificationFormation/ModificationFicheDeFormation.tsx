@@ -1,7 +1,6 @@
 import {
     Autocomplete,
     Grid,
-    Input,
     Paper,
     Table,
     TableBody,
@@ -28,7 +27,7 @@ const optionsType = [
 ];
 let valueDomaine;
 
-function ModificationFicheDeFormation(props) {
+const ModificationFicheDeFormation = (props) =>{
     const StyledTableCell = styled(TableCell)(({theme}) => ({
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
@@ -66,7 +65,7 @@ function ModificationFicheDeFormation(props) {
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
             fontWeight: 'bold',
-            height:68.8,
+            height: 68.8,
         },
     }));
 
@@ -83,13 +82,6 @@ function ModificationFicheDeFormation(props) {
 
         }
     });
-
-    const [value, setValue] = useState(0);
-
-    const handleInputChange = (event) => {
-        tempFormation.duree = event.target.value === ''  ? 0 : Number(event.target.value) ;
-
-    };
     /*            PARTIE D'AFFICHAGE          */
     const AfficherFormationDetails = () => {
         return (
@@ -132,24 +124,24 @@ function ModificationFicheDeFormation(props) {
                 <StyledTableRow key={104}>
                     <StyledTableCellHead key={"DONTMOVEIT3"}>Durée (min)</StyledTableCellHead>
                     <StyledTableCell key={"DONTMOVEIT2"}>
-                       <TextField key={"DONTMOVEIT"}
-                            type="text"
-                            placeholder="Durée de la formation (en minutes)"
-                            value={props.formation.duree}
-                            inputProps={{style: {fontSize: 12}}}
-                            onChange={(event) => {
-                                tempFormation.duree = event.target.value;
-                                tempFormation.duree = tempFormation.duree.replace(/\D+/g, '');
-                                props.majFormation(tempFormation);
-                                setLiveness(liveness+1);
-                                console.log(tempFormation.duree);
-                                console.log(props.formation.duree);
-                            }}
+                        <TextField key={"DONTMOVEIT"}
+                                   type="text"
+                                   placeholder="Durée de la formation (en minutes)"
+                                   value={props.formation.duree}
+                                   inputProps={{style: {fontSize: 12}}}
+                                   onChange={(event) => {
+                                       tempFormation.duree = event.target.value;
+                                       tempFormation.duree = tempFormation.duree.replace(/\D+/g, '');
+                                       props.majFormation(tempFormation);
+                                       setLiveness(liveness + 1);
+                                       console.log(tempFormation.duree);
+                                       console.log(props.formation.duree);
+                                   }}
 
-                            fullWidth={true}
-                            variant="standard"
-                            size="small"
-                            />
+                                   fullWidth={true}
+                                   variant="standard"
+                                   size="small"
+                        />
                     </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow key={105}>
@@ -322,7 +314,7 @@ function ModificationFicheDeFormation(props) {
                     <Table stickyHeader sx={{minWidth: 100}} aria-label="customized table">
                         <StyledTableHead>
                             <StyledTableRow key={201}>
-                                <StyledTableCell width={100}></StyledTableCell>
+                                <StyledTableCell width={120}></StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
                             </StyledTableRow>
                         </StyledTableHead>
@@ -404,13 +396,13 @@ function ModificationFicheDeFormation(props) {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TableContainer component={Paper} sx={{maxHeight: 400}}>
+                <TableContainer component={Paper} sx={{maxHeight: 350}}>
                     <Table stickyHeader aria-label="customized table">
 
                         <TableBody>
                             <StyledTableRow key={207}>
                                 <StyledTableCell sx={{width: 100}}></StyledTableCell>
-                                <StyledTableCell sx={{padding:0}}>
+                                <StyledTableCell sx={{padding: 0}}>
                                     <Autocomplete
 
                                         fullWidth={true}
