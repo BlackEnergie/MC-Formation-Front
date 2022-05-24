@@ -89,16 +89,26 @@ const ModificationFicheDeFormation = (props) =>{
                 <StyledTableRow key={102}>
                     <StyledTableCellHead>Type</StyledTableCellHead>
                     <StyledTableCell>
-                        <Select
-                            menuPosition="fixed"
-                            isClearable
+                        <Autocomplete
+                            fullWidth={true}
+                            size="small"
+                            disablePortal
                             defaultValue={props.formation.type}
-                            placeholder="Ex: Formation"
-                            onChange={(event, value) => {
-                                tempFormation.statut = value;
-                                handleChange("type")
-                            }}
                             options={optionsType}
+                            onChange={(event,value) => {
+                                tempFormation.type=value['value'];
+                                handleChange("type");
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Type de formation"
+                                    InputProps={{
+                                        ...params?.InputProps,
+                                        type: 'search',
+                                    }}
+                                />
+                            )}
                         />
                     </StyledTableCell>
                 </StyledTableRow>
@@ -134,8 +144,6 @@ const ModificationFicheDeFormation = (props) =>{
                                        tempFormation.duree = tempFormation.duree.replace(/\D+/g, '');
                                        props.majFormation(tempFormation);
                                        setLiveness(liveness + 1);
-                                       console.log(tempFormation.duree);
-                                       console.log(props.formation.duree);
                                    }}
 
                                    fullWidth={true}
@@ -233,8 +241,6 @@ const ModificationFicheDeFormation = (props) =>{
     /*             PARTIE D'AJOUT            */
     const handleAjoutObjPedagogique = () => {
         let newFormation = props.formation;
-        console.log(newFormation);
-        console.log(tempObj);
         if (tempObj !== "")
             newFormation.objectifs.push(tempObj);
         props.majFormation(newFormation);

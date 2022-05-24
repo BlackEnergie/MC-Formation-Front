@@ -176,19 +176,29 @@ const ModificationFilConducteur = (props) => {
             }
         )
         let delta = sumParties-props.formation.duree;
-        if (delta>0) {
-            return (
-            <Typography>
-                Vous avez {delta} minutes de trop par rapport à la durée prévue
-            </Typography>
-            )
+        console.log(props.formation.duree);
+        if (props.formation.duree >=1){
+            if (delta>0) {
+                return (
+                    <Typography>
+                        Vous avez {delta} minutes de trop par rapport à la durée prévue
+                    </Typography>
+                )
+            }else{
+                return (
+                    <Typography>
+                        Vous avez encore {Math.abs(delta)} minutes à combler dans la formation
+                    </Typography>
+                )
+            }
         }else{
-            return (
+            return(
                 <Typography>
-                    Vous avez encore {Math.abs(delta)} minutes à combler dans la formation
+                    Vous n'avez pas défini la durée la formation
                 </Typography>
-            )
+                )
         }
+
     }
 
     const StyledTableCell = styled(TableCell)(({theme}) => ({
