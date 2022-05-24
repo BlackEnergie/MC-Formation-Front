@@ -132,23 +132,21 @@ const ModificationFicheDeFormation = (props) =>{
                     </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow key={104}>
-                    <StyledTableCellHead key={"DONTMOVEIT3"}>Durée (min)</StyledTableCellHead>
-                    <StyledTableCell key={"DONTMOVEIT2"}>
-                        <TextField key={"DONTMOVEIT"}
-                                   type="text"
-                                   placeholder="Durée de la formation (en minutes)"
-                                   value={props.formation.duree}
-                                   inputProps={{style: {fontSize: 12}}}
-                                   onChange={(event) => {
-                                       tempFormation.duree = event.target.value;
-                                       tempFormation.duree = tempFormation.duree.replace(/\D+/g, '');
-                                       props.majFormation(tempFormation);
-                                       setLiveness(liveness + 1);
-                                   }}
-
-                                   fullWidth={true}
-                                   variant="standard"
-                                   size="small"
+                    <StyledTableCellHead>Durée (min)</StyledTableCellHead>
+                    <StyledTableCell>
+                        <TextField
+                            fullWidth={true}
+                            defaultValue={props.formation.duree}
+                            variant="standard"
+                            size="small"
+                            type="text"
+                            placeholder="Durée de la formation (en minutes)"
+                            inputProps={{style: {fontSize: 12}}}
+                            onChange={
+                                (event) => {
+                                   tempFormation.duree = event.target.value;
+                                   handleChange("duree");
+                           }}
                         />
                     </StyledTableCell>
                 </StyledTableRow>
