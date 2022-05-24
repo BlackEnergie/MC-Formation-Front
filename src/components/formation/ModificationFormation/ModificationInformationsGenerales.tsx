@@ -18,8 +18,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import {
+    Statut,
+    statutToString,
+    statutToStyle,
+} from "../../../utils/StatutUtils";
 
- const optionsStatut =[
+const optionsStatut =[
     {value: 'DEMANDE', label:'Demande'},
     {value: 'A_ATTRIBUER', label:'À attribuer'},
     {value: 'A_VENIR', label:'À venir'},
@@ -91,19 +96,25 @@ const ModificationInformationsGenerales = (props) => {
         let items = props.formation;
         switch (s) {
             case 'Statut' :
-                items.statut = temporaireDonnee.statut;
+                if (typeof(temporaireDonnee.statut != 'undefined')) {
+                    items.statut = temporaireDonnee.statut;
+                }
                 break;
             case "cadre" :
-                items.cadre = temporaireDonnee.cadre;
+                if (typeof(temporaireDonnee.cadre != 'undefined')) {
+                    items.cadre = temporaireDonnee.cadre;
+                }
                 break;
             case "date" :
-                let annee = temporaireDonnee.date.getFullYear();
-                let mois = temporaireDonnee.date.getMonth()+1;
-                mois = mois.toString().padStart(2,'0');
-                let jour = temporaireDonnee.date.getDate();
-                jour = jour.toString().padStart(2,'0');
-                items.date = annee + "-" +mois + "-" + jour;
-                setLiveness(liveness+1);
+                if (typeof(temporaireDonnee.date != 'undefined')){
+                    let annee = temporaireDonnee.date.getFullYear();
+                    let mois = temporaireDonnee.date.getMonth()+1;
+                    mois = mois.toString().padStart(2,'0');
+                    let jour = temporaireDonnee.date.getDate();
+                    jour = jour.toString().padStart(2,'0');
+                    items.date = annee + "-" +mois + "-" + jour;
+                    setLiveness(liveness+1);
+                }
                 break;
         }
         props.majFormation(items);
@@ -125,7 +136,6 @@ const ModificationInformationsGenerales = (props) => {
         props.majFormation(newFormation);
         setLiveness(liveness + 1);
     }
-
     const handleAjout = (s, v) => {
         let newFormation = props.formation;
         switch (s) {
@@ -141,23 +151,32 @@ const ModificationInformationsGenerales = (props) => {
         props.majFormation(newFormation);
         setLiveness(liveness + 1);
     }
-
     const AfficherDataInfoGenerales = () => {
         return (
             <>
                 <StyledTableRow >
                     <StyledTableCellHead>Statut</StyledTableCellHead>
                     <StyledTableCell>
-                        <Select
-                            isClearable
-                            defaultValue={props.formation.type}
-                            placeholder="Ex: Formation"
-                            onChange={(event, value) => {
-                                temporaireDonnee.statut = event.value;
-                                handleChange("type")
-                            }}
+                        <Autocomplete
+                            fullWidth={true}
+                            size="small"
+                            disablePortal
+                            defaultValue={statutToString(props.formation.statut)}
                             options={optionsStatut}
-                            menuPosition="fixed"
+                            onChange={(event, value) => {
+                                temporaireDonnee.statut = value['value'];
+                                handleChange("Statut")
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Type de formation"
+                                    InputProps={{
+                                        ...params?.InputProps,
+                                        type: 'search',
+                                    }}
+                                />
+                            )}
 
                         />
                     </StyledTableCell>
