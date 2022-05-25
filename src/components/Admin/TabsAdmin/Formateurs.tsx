@@ -7,7 +7,6 @@ import {LoadingButton} from '@mui/lab';
 
 const RowDataFormateurs = (props) => {
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [liveness, setLiveness] = useState(0);
     const utilisateur = props.utilisateur;
     return (
@@ -22,18 +21,18 @@ const RowDataFormateurs = (props) => {
                         {open ? <KeyboardArrowUp/> : <KeyboardArrowDown/>}
                     </IconButton>
                 </TableCell>
-                <TableCell>{utilisateur.id}</TableCell>
-                <TableCell>{utilisateur.nomUtilisateur}</TableCell>
-                <TableCell>{utilisateur.email}</TableCell>
-                <TableCell>{utilisateur.nom}</TableCell>
-                <TableCell>{utilisateur.prenom}</TableCell>
-                <TableCell>{utilisateur.dateCreation}</TableCell>
-                <TableCell>
+                <TableCell align="center">{utilisateur.id}</TableCell>
+                <TableCell align="center">{utilisateur.nom}</TableCell>
+                <TableCell align="center">{utilisateur.prenom}</TableCell>
+                <TableCell align="center">{utilisateur.nomUtilisateur}</TableCell>
+                <TableCell align="center">{utilisateur.email}</TableCell>
+                <TableCell align="center">{utilisateur.dateCreation}</TableCell>
+                <TableCell align="center">
                     <LoadingButton
                         title={utilisateur.actif ? "Désactiver le compte" : "Activer le compte"}
                         variant="outlined"
                         color={utilisateur.actif ? "success" : "error"}
-                        loading={loading}
+                        loading={utilisateur.loading}
                         onClick={() => {
                             props.utilisateur.actif = !utilisateur.actif ;
                             setLiveness(liveness + 1)
@@ -48,7 +47,7 @@ const RowDataFormateurs = (props) => {
                     </LoadingButton>
                 </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Typography variant="h6" gutterBottom component="div">
@@ -98,13 +97,13 @@ const Formateurs = (props) => {
                 <TableHead>
                     <TableRow>
                         <TableCell></TableCell>
-                        <TableCell>Id</TableCell>
-                        <TableCell>Nom Utilisateur</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Nom</TableCell>
-                        <TableCell>Prénom</TableCell>
-                        <TableCell>Date création</TableCell>
-                        <TableCell>Action</TableCell>
+                        <TableCell align="center">Id</TableCell>
+                        <TableCell align="center">Nom</TableCell>
+                        <TableCell align="center">Prénom</TableCell>
+                        <TableCell align="center">Nom Utilisateur</TableCell>
+                        <TableCell align="center">Email</TableCell>
+                        <TableCell align="center">Date création</TableCell>
+                        <TableCell align="center">Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

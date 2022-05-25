@@ -1,40 +1,86 @@
-import React from 'react';
-import {Table, TableBody, TableCell, TableHead, TableRow} from '@mui/material';
-import {membreBureauNationalUserInfo} from '../Admin';
+import React, { useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import { membreBureauNationalUserInfo } from "../Admin";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {
+  CancelOutlined,
+  CheckCircleOutline,
+} from "@mui/icons-material";
 
-const MembresBN = (props) => {
+interface Props {
+  membresBN: membreBureauNationalUserInfo[];
+}
 
-    const utilisateurs: membreBureauNationalUserInfo[] = props.membresBN;
+const MembresBN = (props: Props) => {
+  const utilisateurs: membreBureauNationalUserInfo[] = props.membresBN;
+  return Render(utilisateurs)
+};
 
+const Render = (utilisateurs: membreBureauNationalUserInfo[] ) => {
+    const [liveness, setLiveness] = useState(0);
     return (
         <>
-            <Table sx={{minWidth: 650}} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Id</TableCell>
-                        <TableCell>Nom Utilisateur</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Poste</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {
-                        utilisateurs?.map((utilisateur: membreBureauNationalUserInfo) => {
-                            return (
-                                <TableRow key={utilisateur.id}>
-                                    <TableCell>{utilisateur.id}</TableCell>
-                                    <TableCell>{utilisateur.nomUtilisateur}</TableCell>
-                                    <TableCell>{utilisateur.email}</TableCell>
-                                    <TableCell>{utilisateur.poste}</TableCell>
-                                </TableRow>
-                            )
-                        })
-                    }
-                </TableBody>
-            </Table>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Id</TableCell>
+                <TableCell align="center">Poste</TableCell>
+                <TableCell align="center">Nom Utilisateur</TableCell>
+                <TableCell align="center">Email</TableCell>
+                <TableCell align="center">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {utilisateurs?.map((utilisateur: membreBureauNationalUserInfo) => {
+                return (
+                  <TableRow key={utilisateur.id}>
+                    <TableCell align="center">{utilisateur.id}</TableCell>
+                    <TableCell align="center">{utilisateur.poste}</TableCell>
+                    <TableCell align="center">
+                      {utilisateur.nomUtilisateur}
+                    </TableCell>
+                    <TableCell align="center">{utilisateur.email}</TableCell>
+                    <TableCell align="center">
+                      <LoadingButton
+                        title={
+                          utilisateur.actif
+                            ? "Désactiver le compte"
+                            : "Activer le compte"
+                        }
+                        variant="outlined"
+                        color={utilisateur.actif ? "success" : "error"}
+                        loading={utilisateur.loading}
+                        onClick={() => {
+                            utilisateur.loading = !utilisateur.loading
+                          utilisateur.actif = !utilisateur.actif;
+                          setLiveness(liveness + 1);
+                          console.log(utilisateur.nomUtilisateur)
+                          console.log(utilisateur.loading)
+                        }}
+                        endIcon={
+                          utilisateur.actif ? (
+                            <CheckCircleOutline color="success" />
+                          ) : (
+                            <CancelOutlined color="error" />
+                          )
+                        }
+                      >
+                        {utilisateur.actif ? "Activé" : "Désactivé"}
+                      </LoadingButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
         </>
-    )
-
+      );
 }
 
 export default MembresBN;

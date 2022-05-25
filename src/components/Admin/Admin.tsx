@@ -28,12 +28,15 @@ interface Utilisateur {
 }
 
 export interface membreBureauNationalUserInfo extends MembreBureauNational, Utilisateur {
+    loading: boolean
 }
 
 export interface associationUserInfo extends Association, Utilisateur {
+    loading: boolean
 }
 
 export interface formateurUserInfo extends Formateur, Utilisateur {
+    loading: boolean
     dateCreation: string,
     domaines: Domaine[]
 }
@@ -44,6 +47,10 @@ export interface createUserToken {
     expirationDate: Date,
     role: string,
 }
+
+const INITIAL_BN : membreBureauNationalUserInfo[] = []
+const INITIAL_ASSO : associationUserInfo[] = []
+const INITIAL_FORM : formateurUserInfo[] = []
 
 const Admin = () => {
 
@@ -63,10 +70,13 @@ const Admin = () => {
     const [selectRole, setSelectRole] = useState(roles[0].value);
     const [loadingInvite, setLoadingInvite] = useState(false)
     const [valueTab, setValueTab] = useState(0)
-    const [membresBN, setMembresBN] = useState(undefined)
-    const [associations, setAssociations] = useState(undefined)
-    const [formateurs, setFormateurs] = useState(undefined)
+    const [membresBN, setMembresBN] = useState(INITIAL_BN)
+    const [associations, setAssociations] = useState(INITIAL_ASSO)
+    const [formateurs, setFormateurs] = useState(INITIAL_FORM)
     const [invitations, setInvitations] = useState(undefined)
+    const [bnLoaded, setBNLoaded] = useState(false)
+    const [assoLoaded, setAssoLoaded] = useState(false)
+    const [formateursLoaded, setFormateursLoaded] = useState(false)
 
     const [refresh, setRefresh] = useState(true)
 
@@ -80,6 +90,40 @@ const Admin = () => {
         getFormateurs();
         getMembresBN();
     }, [])
+
+    useEffect(() => {
+        if(bnLoaded){
+            setMembresBN(membresBN.map(
+                (membre): membreBureauNationalUserInfo => {
+                  membre.loading = false;
+                  return membre;
+                }
+              ))
+        }
+    }, [bnLoaded])
+    
+    useEffect(() => {
+        if(assoLoaded){
+            setAssociations(associations.map(
+                (asso): associationUserInfo => {
+                  asso.loading = false;
+                  return asso;
+                }
+              ))
+        }
+    }, [assoLoaded])
+
+    useEffect(() => {
+        if(formateursLoaded){
+            setFormateurs(formateurs.map(
+                (form): formateurUserInfo => {
+                  form.loading = false;
+                  return form;
+                }
+              ))
+        }
+    }, [formateursLoaded])
+
 
     const tabs = [
         'Formateurs',
@@ -143,6 +187,7 @@ const Admin = () => {
         try {
             const response = await FetchMembresBureauNational(axiosPrivate)
             setMembresBN(response.data)
+            setBNLoaded(true)
         } catch (err) {
             console.log(err)
             toast.error(err.response?.data?.message);
@@ -153,6 +198,7 @@ const Admin = () => {
         try {
             const response = await FetchAssociations(axiosPrivate)
             setAssociations(response.data)
+            setAssoLoaded(true)
         } catch (err) {
             console.log(err)
             toast.error(err.response?.data?.message);
@@ -163,6 +209,7 @@ const Admin = () => {
         try {
             const response = await FetchFormateurs(axiosPrivate)
             setFormateurs(response.data)
+            setFormateursLoaded(true)
         } catch (err) {
             console.log(err)
             toast.error(err.response?.data?.message);
@@ -244,7 +291,7 @@ const Admin = () => {
                     valueTab === 0 ? <Formateurs formateurs={formateurs} setFormateurs={setFormateurs} /> :
                         valueTab === 1 ? <Associations associations={associations} setAssociations={setAssociations}/> :
                             valueTab === 2 ?
-                                <MembresBN membresBN={membresBN} setMembresBN={setMembresBN}/>
+                                <MembresBN membresBN={membresBN}/>
                                 : valueTab === 3 ? <Invitations invitations={invitations} setInvitations={setInvitations} />
                                     : <></>
                 }
