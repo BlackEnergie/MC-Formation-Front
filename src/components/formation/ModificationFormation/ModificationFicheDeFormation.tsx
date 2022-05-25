@@ -28,14 +28,20 @@ const optionsType = [
 let valueDomaine;
 
 const ModificationFicheDeFormation = (props) =>{
+    const StyledTableRowInput = styled(TableRow)(({theme}) => ({
+        backgroundColor:'rgba(211,211,211,0.04)',
+        height:65,
+    }));
     const StyledTableCell = styled(TableCell)(({theme}) => ({
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.common.white,
-            height: 55
+            height: 55,
         },
         [`&.${tableCellClasses.body}`]: {
-            fontSize: 14,
+            fontSize: 12,
+            paddingTop:0,
+            paddingBottom:0,
         },
     }));
     const StyledTableRow = styled(TableRow)(({theme}) => ({
@@ -46,6 +52,7 @@ const ModificationFicheDeFormation = (props) =>{
         '&:last-child td, &:last-child th': {
             border: 0,
         },
+        height:65,
     }));
     const StyledTableHead = styled(TableHead)(({theme}) => ({
         '&:nth-of-type(odd)': {
@@ -65,7 +72,8 @@ const ModificationFicheDeFormation = (props) =>{
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
             fontWeight: 'bold',
-            height: 68.8,
+            paddingTop:0,
+            paddingBottom:0,
         },
     }));
 
@@ -132,23 +140,21 @@ const ModificationFicheDeFormation = (props) =>{
                     </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow key={104}>
-                    <StyledTableCellHead key={"DONTMOVEIT3"}>Durée (min)</StyledTableCellHead>
-                    <StyledTableCell key={"DONTMOVEIT2"}>
-                        <TextField key={"DONTMOVEIT"}
-                                   type="text"
-                                   placeholder="Durée de la formation (en minutes)"
-                                   value={props.formation.duree}
-                                   inputProps={{style: {fontSize: 12}}}
-                                   onChange={(event) => {
-                                       tempFormation.duree = event.target.value;
-                                       tempFormation.duree = tempFormation.duree.replace(/\D+/g, '');
-                                       props.majFormation(tempFormation);
-                                       setLiveness(liveness + 1);
-                                   }}
-
-                                   fullWidth={true}
-                                   variant="standard"
-                                   size="small"
+                    <StyledTableCellHead>Durée (min)</StyledTableCellHead>
+                    <StyledTableCell>
+                        <TextField
+                            fullWidth={true}
+                            defaultValue={props.formation.duree}
+                            variant="standard"
+                            size="small"
+                            type="text"
+                            placeholder="Durée de la formation (en minutes)"
+                            inputProps={{style: {fontSize: 12}}}
+                            onChange={
+                                (event) => {
+                                   tempFormation.duree = event.target.value;
+                                   handleChange("duree");
+                           }}
                         />
                     </StyledTableCell>
                 </StyledTableRow>
@@ -181,7 +187,7 @@ const ModificationFicheDeFormation = (props) =>{
             props.formation.objectifs?.map(
                 (info, i) => {
                     return (
-                        <StyledTableRow key={i}>
+                        <StyledTableRow key={i} >
                             <StyledTableCell>{info}</StyledTableCell>
                             <StyledTableCell align="center">
                                 <Button onClick={() => handleItemDeletedObjPedagogique(i)}>
@@ -351,10 +357,10 @@ const ModificationFicheDeFormation = (props) =>{
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                <TableContainer component={Paper} sx={{maxHeight: 350, mt:1}}>
                     <Table stickyHeader aria-label="customized table">
                         <TableBody>
-                            <StyledTableRow key={203}>
+                            <StyledTableRowInput key={203}>
                                 <StyledTableCell>
                                     <TextField
                                         fullWidth={true}
@@ -375,7 +381,7 @@ const ModificationFicheDeFormation = (props) =>{
                                         <AddBoxIcon className="Icones"/>
                                     </Button>
                                 </StyledTableCell>
-                            </StyledTableRow>
+                            </StyledTableRowInput>
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -402,13 +408,13 @@ const ModificationFicheDeFormation = (props) =>{
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                <TableContainer component={Paper} sx={{maxHeight: 350, mt:1}}>
                     <Table stickyHeader aria-label="customized table">
 
                         <TableBody>
-                            <StyledTableRow key={207}>
+                            <StyledTableRowInput key={207}>
                                 <StyledTableCell sx={{width: 100}}></StyledTableCell>
-                                <StyledTableCell sx={{padding: 0}}>
+                                <StyledTableCell >
                                     <Autocomplete
 
                                         fullWidth={true}
@@ -432,12 +438,12 @@ const ModificationFicheDeFormation = (props) =>{
                                     />
                                 </StyledTableCell>
 
-                                <TableCell align="center" sx={{width: 40}}>
+                                <StyledTableCell align="center" sx={{width: 40}}>
                                     <Button onClick={() => handleAjoutDomaines(valueDomaine)}>
                                         <AddBoxIcon className="Icones"/>
                                     </Button>
-                                </TableCell>
-                            </StyledTableRow>
+                                </StyledTableCell>
+                            </StyledTableRowInput>
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -462,11 +468,11 @@ const ModificationFicheDeFormation = (props) =>{
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                <TableContainer component={Paper} sx={{maxHeight: 350, mt:1}}>
                     <Table stickyHeader aria-label="customized table">
 
                         <TableBody>
-                            <StyledTableRow key={210}>
+                            <StyledTableRowInput key={210}>
                                 <StyledTableCell>
                                     <TextField
                                         fullWidth={true}
@@ -487,7 +493,7 @@ const ModificationFicheDeFormation = (props) =>{
                                         <AddBoxIcon className="Icones"/>
                                     </Button>
                                 </StyledTableCell>
-                            </StyledTableRow>
+                            </StyledTableRowInput>
                         </TableBody>
                     </Table>
                 </TableContainer>

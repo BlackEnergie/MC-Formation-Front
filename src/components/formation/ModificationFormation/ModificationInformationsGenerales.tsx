@@ -55,12 +55,12 @@ const ModificationInformationsGenerales = (props) => {
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.common.white,
-            height: 55
+            height: 55,
         },
         [`&.${tableCellClasses.body}`]: {
-            fontSize: 14,
-            verticalAlign: 'bottom',
-
+            fontSize: 12,
+            paddingTop:0,
+            paddingBottom:0,
         },
     }));
     const StyledTableCellHead = styled(TableCell)(({theme}) => ({
@@ -71,6 +71,8 @@ const ModificationInformationsGenerales = (props) => {
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
             fontWeight: 'bold',
+            paddingTop:0,
+            paddingBottom:0,
         },
     }));
     const StyledTableRow = styled(TableRow)(({theme}) => ({
@@ -81,6 +83,7 @@ const ModificationInformationsGenerales = (props) => {
         '&:last-child td, &:last-child th': {
             border: 0,
         },
+        height:65,
     }));
     const StyledTableHead = styled(TableHead)(({theme}) => ({
         '&:nth-of-type(odd)': {
@@ -90,6 +93,10 @@ const ModificationInformationsGenerales = (props) => {
         '&:last-child td, &:last-child th': {
             border: 0,
         },
+    }));
+    const StyledTableRowInput = styled(TableRow)(({theme}) => ({
+        backgroundColor:'rgba(211,211,211,0.04)',
+        height:65,
     }));
 
     const handleChange = (s) => {
@@ -288,10 +295,10 @@ const ModificationInformationsGenerales = (props) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TableContainer component={Paper} sx={{maxHeight: 350}}>
+                <TableContainer component={Paper} sx={{maxHeight: 350, mt:1}}>
                     <Table sx={{minWidth: 100}} aria-label="customized table">
                         <TableBody>
-                            <StyledTableRow>
+                            <StyledTableRowInput >
                                 <StyledTableCell>
                                     <Autocomplete
                                         fullWidth={true}
@@ -318,7 +325,7 @@ const ModificationInformationsGenerales = (props) => {
                                         <AddBoxIcon className="Icones"/>
                                     </Button>
                                 </StyledTableCell>
-                            </StyledTableRow>
+                            </StyledTableRowInput>
                         </TableBody>
                     </Table>
                 </TableContainer>
