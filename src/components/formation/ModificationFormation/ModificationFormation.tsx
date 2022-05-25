@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import toast from 'react-hot-toast';
 
 import ModificationFicheDeFormation from "./ModificationFicheDeFormation";
@@ -8,7 +7,7 @@ import ModificationFilConducteur from "./ModificationFilConducteur";
 import ModificationInformationsGenerales from "./ModificationInformationsGenerales";
 
 import {FetchFormationById} from '../../../serverInteraction/FetchFormation';
-import {FetchDomaines,FetchListeFormateurs} from "../../../serverInteraction/FetchData";
+import {FetchDomaines, FetchListeFormateurs} from "../../../serverInteraction/FetchData";
 import {PostFormation} from "../../../serverInteraction/PostFormation";
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
 import Formation from '../../../api/model/Formation';
@@ -28,7 +27,7 @@ const ModificationFormation = () => {
         position: 'fixed',
     }
     const INITIAL_FORMATION: Formation = new Formation();
-    const INITIAL_DOMAINE : domaines[] = [];
+    const INITIAL_DOMAINE: domaines[] = [];
     let {id} = useParams();
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
@@ -57,7 +56,7 @@ const ModificationFormation = () => {
         } catch (err) {
             console.log(err)
             toast.error(err.response?.data?.message);
-            if (err.response?.data?.code === 403){
+            if (err.response?.data?.code === 403) {
                 navigate('/')
             }
         }
@@ -67,18 +66,18 @@ const ModificationFormation = () => {
         try {
             const controller = new AbortController();
 
-            const resDomaines = await FetchDomaines(axiosPrivate,controller);
+            const resDomaines = await FetchDomaines(axiosPrivate, controller);
             setDomaine(resDomaines?.data);
-        }catch (err){
+        } catch (err) {
             console.log(err)
         }
     };
 
-    const getFormateursList = async() => {
-        try{
+    const getFormateursList = async () => {
+        try {
             const resFormateurs = await FetchListeFormateurs(axiosPrivate);
             setFormateurs(resFormateurs?.data);
-        } catch (err){
+        } catch (err) {
             console.log(err)
         }
     }
@@ -102,9 +101,9 @@ const ModificationFormation = () => {
         <Container maxWidth={"xl"}>
             <Link className="text-decoration-none" //to={'/formation/edit/' + formation.id}
                   title="Modifier la formation">
-                    <Fab onClick={handleSubmit} sx={FabStyle} color="primary" aria-label="edit">
-                        <SaveIcon/>
-                    </Fab>
+                <Fab onClick={handleSubmit} sx={FabStyle} color="primary" aria-label="edit">
+                    <SaveIcon/>
+                </Fab>
             </Link>
             {loading ?
                 <Skeleton sx={{width: 'auto'}}/> :
@@ -137,7 +136,8 @@ const ModificationFormation = () => {
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <ModificationInformationsGenerales formation={formation} majFormation={majFormation} domaine={domaine} formateurs={formateurs}/>
+                            <ModificationInformationsGenerales formation={formation} majFormation={majFormation}
+                                                               domaine={domaine} formateurs={formateurs}/>
                         </AccordionDetails>
                     </Accordion>
                     <Accordion>
@@ -155,7 +155,8 @@ const ModificationFormation = () => {
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <ModificationFicheDeFormation formation={formation} majFormation={majFormation} domaine={domaine}/>
+                            <ModificationFicheDeFormation formation={formation} majFormation={majFormation}
+                                                          domaine={domaine}/>
                             <ModificationFilConducteur formation={formation} majFormation={majFormation}/>
                         </AccordionDetails>
                     </Accordion>

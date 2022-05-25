@@ -13,28 +13,50 @@ import TableBody from "@mui/material/TableBody";
 import Domaine from "../../../api/model/Domaine";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
-import Select from 'react-select';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import {
-    Statut,
-    statutToString,
-    statutToStyle,
-} from "../../../utils/StatutUtils";
+import {Statut, statutToString,} from "../../../utils/StatutUtils";
+import {DatePicker} from "@mui/x-date-pickers";
 
-const optionsStatut =[
-    {value: 'DEMANDE', label:'Demande'},
-    {value: 'A_ATTRIBUER', label:'À attribuer'},
-    {value: 'A_VENIR', label:'À venir'},
-    {value: 'PASSEE', label:'Passée'},
+
+const optionsStatut = [
+    {value: 'DEMANDE', label: 'Demande'},
+    {value: 'A_ATTRIBUER', label: 'À attribuer'},
+    {value: 'A_VENIR', label: 'À venir'},
+    {value: 'PASSEE', label: 'Passée'},
 ]
+
+
+const listEvenement = [
+    'SPRING', "MIC", "WINTER", "CDH", "WEF", "WEFF", "WEFàD"
+]
+
+const listVille = [
+    "Orléans",
+    "Nantes",
+    "Bordeaux",
+    "Lille",
+    "Toulouse",
+    "Paris-Descartes",
+    "Grenoble",
+    "Nancy",
+    "Paris–Nanterre",
+    "Paris–Orsay",
+    "Nice",
+    "Rennes",
+    "Aix-Marseille",
+    "Amiens",
+    "Mulhouse",
+    "Clermont-Ferrand"
+]
+
 
 const ModificationInformationsGenerales = (props) => {
     const [liveness, setLiveness] = useState(0);
     let temporaireDonnee = props.formation;
-    let tempFormateur= null;
+    let tempFormateur = null;
     let listeFormateurs = props.formateurs.map((item, index) => {
         return {
             label: item.nom + " " + item.prenom,
@@ -43,6 +65,9 @@ const ModificationInformationsGenerales = (props) => {
 
         }
     });
+    const [annee, setannee] = React.useState<Date | null>(new Date());
+
+    let cadreTemporaire = "";
 
     const StyledTextField = styled(TextField)(({theme}) => ({
         [`&.${textFieldClasses}`]: {
@@ -59,8 +84,8 @@ const ModificationInformationsGenerales = (props) => {
         },
         [`&.${tableCellClasses.body}`]: {
             fontSize: 12,
-            paddingTop:0,
-            paddingBottom:0,
+            paddingTop: 0,
+            paddingBottom: 0,
         },
     }));
     const StyledTableCellHead = styled(TableCell)(({theme}) => ({
@@ -71,8 +96,8 @@ const ModificationInformationsGenerales = (props) => {
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
             fontWeight: 'bold',
-            paddingTop:0,
-            paddingBottom:0,
+            paddingTop: 0,
+            paddingBottom: 0,
         },
     }));
     const StyledTableRow = styled(TableRow)(({theme}) => ({
@@ -83,7 +108,7 @@ const ModificationInformationsGenerales = (props) => {
         '&:last-child td, &:last-child th': {
             border: 0,
         },
-        height:65,
+        height: 65,
     }));
     const StyledTableHead = styled(TableHead)(({theme}) => ({
         '&:nth-of-type(odd)': {
@@ -95,37 +120,56 @@ const ModificationInformationsGenerales = (props) => {
         },
     }));
     const StyledTableRowInput = styled(TableRow)(({theme}) => ({
-        backgroundColor:'rgba(211,211,211,0.04)',
-        height:65,
+        backgroundColor: 'rgba(211,211,211,0.04)',
+        height: 65,
     }));
 
     const handleChange = (s) => {
         let items = props.formation;
         switch (s) {
             case 'Statut' :
-                if (typeof(temporaireDonnee.statut != 'undefined')) {
+                if (typeof (temporaireDonnee.statut != 'undefined')) {
                     items.statut = temporaireDonnee.statut;
                 }
                 break;
-            case "cadre" :
-                if (typeof(temporaireDonnee.cadre != 'undefined')) {
-                    items.cadre = temporaireDonnee.cadre;
-                }
-                break;
             case "date" :
-                if (typeof(temporaireDonnee.date != 'undefined')){
+                if (typeof (temporaireDonnee.date != 'undefined')) {
                     let annee = temporaireDonnee.date.getFullYear();
-                    let mois = temporaireDonnee.date.getMonth()+1;
-                    mois = mois.toString().padStart(2,'0');
+                    let mois = temporaireDonnee.date.getMonth() + 1;
+                    mois = mois.toString().padStart(2, '0');
                     let jour = temporaireDonnee.date.getDate();
-                    jour = jour.toString().padStart(2,'0');
-                    items.date = annee + "-" +mois + "-" + jour;
-                    setLiveness(liveness+1);
+                    jour = jour.toString().padStart(2, '0');
+                    items.date = annee + "-" + mois + "-" + jour;
+                    setLiveness(liveness + 1);
                 }
                 break;
         }
+        console.log(items.cadre)
         props.majFormation(items);
     };
+
+    const handleChangeCadre = (s, v) => {
+        let items = props.formation;
+        switch (s) {
+            case 'event' :
+                cadreTemporaire = v + " " + props.formation.cadre?.split(" ")[1] + " " +
+                    props.formation.cadre?.split(" ")[2];
+                break;
+            case 'ville' :
+                cadreTemporaire = props.formation.cadre?.split(" ")[0] + " " + v + " " +
+                    props.formation.cadre?.split(" ")[2];
+                break;
+            case 'annee' :
+                cadreTemporaire = props.formation.cadre?.split(" ")[0] + " " + props.formation.cadre?.split(" ")[1] + " " +
+                    v;
+                break;
+        }
+        items.cadre = cadreTemporaire;
+        console.log(items.cadre)
+        props.majFormation(items);
+    };
+
+
     const handleItemDelete = (i, s) => {
 
         let newFormation = props.formation;
@@ -148,7 +192,7 @@ const ModificationInformationsGenerales = (props) => {
         switch (s) {
             case 'Formateurs':
                 const newformateur = {
-                    id : v.value.id,
+                    id: v.value.id,
                     nom: v.value.nom,
                     prenom: v.value.prenom,
                 }
@@ -158,10 +202,19 @@ const ModificationInformationsGenerales = (props) => {
         props.majFormation(newFormation);
         setLiveness(liveness + 1);
     }
+
+    function checkannee() {
+        if (!props.formation.cadre?.split(" ")[2]) {
+            return annee;
+        } else {
+            return props.formation.cadre?.split(" ")[2]
+        }
+    }
+
     const AfficherDataInfoGenerales = () => {
         return (
             <>
-                <StyledTableRow >
+                <StyledTableRow>
                     <StyledTableCellHead>Statut</StyledTableCellHead>
                     <StyledTableCell>
                         <Autocomplete
@@ -191,20 +244,68 @@ const ModificationInformationsGenerales = (props) => {
                 <StyledTableRow>
                     <StyledTableCellHead>Cadre</StyledTableCellHead>
                     <StyledTableCell>
-                        <StyledTextField
-                            fullWidth={true}
-                            defaultValue={props.formation.cadre}
-                            variant="standard"
-                            inputProps={{style: {fontSize: 12}}}
+                        <Autocomplete
+                            sx={{mb: 1, mt: 1}}
                             size="small"
-                            multiline={true}
-                            onChange={
-                                (event) => {
-                                    temporaireDonnee.cadre = event.target.value;
-                                    handleChange("cadre");
-                                }
-                            }>
-                        </StyledTextField>
+                            disablePortal
+                            defaultValue={props.formation.cadre?.split(" ")[0]}
+                            options={listEvenement}
+                            onChange={(event, value) => {
+                                console.log(event);
+                                let eventTemporaire = value;
+                                handleChangeCadre("event", eventTemporaire);
+                            }}
+
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Type d'évenment"
+                                    InputProps={{
+                                        ...params?.InputProps,
+                                        type: 'search',
+                                    }}
+                                />
+                            )}
+
+                        />
+                        <Autocomplete
+                            sx={{mb: 1}}
+
+                            size="small"
+                            disablePortal
+                            defaultValue={props.formation.cadre?.split(" ")[1]}
+                            options={listVille}
+                            onChange={(event, value) => {
+                                let villeTemporaire = value;
+                                handleChangeCadre("ville", villeTemporaire);
+                            }}
+
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Ville"
+                                    InputProps={{
+                                        ...params?.InputProps,
+                                        type: 'search',
+                                    }}
+                                />
+                            )}
+
+                        />
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                views={['year']}
+                                label="Année"
+                                value={checkannee()}
+                                onChange={(value) => {
+                                    let anneeTemporaire = value.getFullYear();
+                                    handleChangeCadre("annee", anneeTemporaire);
+                                    setannee(value);
+                                }}
+                                renderInput={(params) => <TextField sx={{mb: 1}} size="small" {...params}
+                                                                    helperText={null}/>}
+                            />
+                        </LocalizationProvider>
                     </StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
@@ -295,10 +396,10 @@ const ModificationInformationsGenerales = (props) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TableContainer component={Paper} sx={{maxHeight: 350, mt:1}}>
+                <TableContainer component={Paper} sx={{maxHeight: 350, mt: 1}}>
                     <Table sx={{minWidth: 100}} aria-label="customized table">
                         <TableBody>
-                            <StyledTableRowInput >
+                            <StyledTableRowInput>
                                 <StyledTableCell>
                                     <Autocomplete
                                         fullWidth={true}
@@ -321,7 +422,7 @@ const ModificationInformationsGenerales = (props) => {
                                     />
                                 </StyledTableCell>
                                 <StyledTableCell width={40}>
-                                    <Button onClick={() => handleAjout("Formateurs",tempFormateur)}>
+                                    <Button onClick={() => handleAjout("Formateurs", tempFormateur)}>
                                         <AddBoxIcon className="Icones"/>
                                     </Button>
                                 </StyledTableCell>

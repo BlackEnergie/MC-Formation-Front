@@ -12,7 +12,6 @@ import {
     Typography
 } from '@mui/material';
 import React, {useState} from 'react';
-import Select from 'react-select';
 import {styled} from '@mui/material/styles';
 import {tableCellClasses} from "@mui/material/TableCell";
 import Formation from "../../../api/model/Formation";
@@ -27,10 +26,10 @@ const optionsType = [
 ];
 let valueDomaine;
 
-const ModificationFicheDeFormation = (props) =>{
+const ModificationFicheDeFormation = (props) => {
     const StyledTableRowInput = styled(TableRow)(({theme}) => ({
-        backgroundColor:'rgba(211,211,211,0.04)',
-        height:65,
+        backgroundColor: 'rgba(211,211,211,0.04)',
+        height: 65,
     }));
     const StyledTableCell = styled(TableCell)(({theme}) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -40,8 +39,8 @@ const ModificationFicheDeFormation = (props) =>{
         },
         [`&.${tableCellClasses.body}`]: {
             fontSize: 12,
-            paddingTop:0,
-            paddingBottom:0,
+            paddingTop: 0,
+            paddingBottom: 0,
         },
     }));
     const StyledTableRow = styled(TableRow)(({theme}) => ({
@@ -52,7 +51,7 @@ const ModificationFicheDeFormation = (props) =>{
         '&:last-child td, &:last-child th': {
             border: 0,
         },
-        height:65,
+        height: 65,
     }));
     const StyledTableHead = styled(TableHead)(({theme}) => ({
         '&:nth-of-type(odd)': {
@@ -72,8 +71,8 @@ const ModificationFicheDeFormation = (props) =>{
         [`&.${tableCellClasses.body}`]: {
             fontSize: 14,
             fontWeight: 'bold',
-            paddingTop:0,
-            paddingBottom:0,
+            paddingTop: 0,
+            paddingBottom: 0,
         },
     }));
 
@@ -103,8 +102,8 @@ const ModificationFicheDeFormation = (props) =>{
                             disablePortal
                             defaultValue={props.formation.type}
                             options={optionsType}
-                            onChange={(event,value) => {
-                                tempFormation.type=value['value'];
+                            onChange={(event, value) => {
+                                tempFormation.type = value['value'];
                                 handleChange("type");
                             }}
                             renderInput={(params) => (
@@ -152,9 +151,9 @@ const ModificationFicheDeFormation = (props) =>{
                             inputProps={{style: {fontSize: 12}}}
                             onChange={
                                 (event) => {
-                                   tempFormation.duree = event.target.value;
-                                   handleChange("duree");
-                           }}
+                                    tempFormation.duree = event.target.value;
+                                    handleChange("duree");
+                                }}
                         />
                     </StyledTableCell>
                 </StyledTableRow>
@@ -187,7 +186,7 @@ const ModificationFicheDeFormation = (props) =>{
             props.formation.objectifs?.map(
                 (info, i) => {
                     return (
-                        <StyledTableRow key={i} >
+                        <StyledTableRow key={i}>
                             <StyledTableCell>{info}</StyledTableCell>
                             <StyledTableCell align="center">
                                 <Button onClick={() => handleItemDeletedObjPedagogique(i)}>
@@ -357,7 +356,7 @@ const ModificationFicheDeFormation = (props) =>{
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TableContainer component={Paper} sx={{maxHeight: 350, mt:1}}>
+                <TableContainer component={Paper} sx={{maxHeight: 350, mt: 1}}>
                     <Table stickyHeader aria-label="customized table">
                         <TableBody>
                             <StyledTableRowInput key={203}>
@@ -408,13 +407,13 @@ const ModificationFicheDeFormation = (props) =>{
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TableContainer component={Paper} sx={{maxHeight: 350, mt:1}}>
+                <TableContainer component={Paper} sx={{maxHeight: 350, mt: 1}}>
                     <Table stickyHeader aria-label="customized table">
 
                         <TableBody>
                             <StyledTableRowInput key={207}>
                                 <StyledTableCell sx={{width: 100}}></StyledTableCell>
-                                <StyledTableCell >
+                                <StyledTableCell>
                                     <Autocomplete
 
                                         fullWidth={true}
@@ -468,7 +467,7 @@ const ModificationFicheDeFormation = (props) =>{
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TableContainer component={Paper} sx={{maxHeight: 350, mt:1}}>
+                <TableContainer component={Paper} sx={{maxHeight: 350, mt: 1}}>
                     <Table stickyHeader aria-label="customized table">
 
                         <TableBody>
