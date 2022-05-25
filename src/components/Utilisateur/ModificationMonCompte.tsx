@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import useAxiosPrivate from '../../auth/hooks/useAxiosPrivate';
 import TextField from "@mui/material/TextField";
 import {FetchInformationUserById} from '../../serverInteraction/FetchUtilisateur';
-import {useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {Autocomplete, Container, Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -280,13 +280,24 @@ function AffichageModificationMonCompte() {
 
                                 }}
                             />
-                            <Box>
+                            <Box textAlign='center'>
+                                <Link to="/compte" style={{textDecoration:'none'}}>
+                                    <Button
+                                        variant="contained"
+                                        style={{
+                                            marginTop: 15,
+                                            marginBottom:15,
+                                            marginRight:20
+                                        }}>
+                                        Retour
+                                    </Button>
+                                </Link>
                                 <Button
                                     variant="contained"
                                     size="medium"
                                     style={{
                                         marginTop: 15,
-                                        marginBottom : 15
+                                        marginBottom:15
                                     }}
                                     onClick={handleSubmit}
                                 >
