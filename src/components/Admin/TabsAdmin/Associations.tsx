@@ -13,6 +13,11 @@ import {
     CheckCircleOutline,
   } from "@mui/icons-material";
 
+  interface Props {
+    associations: associationUserInfo[];
+    isActifChange: (id: number) => boolean;
+  }
+
 const Associations = (props) => {
   const utilisateurs: associationUserInfo[] = props.associations;
 
@@ -58,10 +63,9 @@ const Associations = (props) => {
                         loading={utilisateur.loading}
                         onClick={() => {
                             utilisateur.loading = !utilisateur.loading
-                          utilisateur.actif = !utilisateur.actif;
+                          utilisateur.actif = props.isActifChange(utilisateur.id) ? utilisateur.actif : !utilisateur.actif;
                           setLiveness(liveness + 1);
-                          console.log(utilisateur.nomUtilisateur)
-                          console.log(utilisateur.loading)
+                          utilisateur.loading = !utilisateur.loading
                         }}
                         endIcon={
                           utilisateur.actif ? (

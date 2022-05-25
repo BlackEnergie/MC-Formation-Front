@@ -6,3 +6,9 @@ export function PostMailSingUp(axios: AxiosInstance ,email: String, role: String
     headers: headersTemplate
   });
 }
+
+export function PostModificationActif(axios: AxiosInstance, id: number) {
+  return axios.post(EntryPoint.MODIFICATION_ACTIF + id, {}, {
+    headers: headersTemplate
+  });
+}

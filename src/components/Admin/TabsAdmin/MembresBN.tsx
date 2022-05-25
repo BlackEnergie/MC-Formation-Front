@@ -15,15 +15,12 @@ import {
 
 interface Props {
   membresBN: membreBureauNationalUserInfo[];
+  isActifChange: (id: number) => boolean;
 }
 
 const MembresBN = (props: Props) => {
   const utilisateurs: membreBureauNationalUserInfo[] = props.membresBN;
-  return Render(utilisateurs)
-};
-
-const Render = (utilisateurs: membreBureauNationalUserInfo[] ) => {
-    const [liveness, setLiveness] = useState(0);
+  const [liveness, setLiveness] = useState(0);
     return (
         <>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -58,10 +55,9 @@ const Render = (utilisateurs: membreBureauNationalUserInfo[] ) => {
                         loading={utilisateur.loading}
                         onClick={() => {
                             utilisateur.loading = !utilisateur.loading
-                          utilisateur.actif = !utilisateur.actif;
+                          utilisateur.actif = props.isActifChange(utilisateur.id) ? utilisateur.actif : !utilisateur.actif;
                           setLiveness(liveness + 1);
-                          console.log(utilisateur.nomUtilisateur)
-                          console.log(utilisateur.loading)
+                          utilisateur.loading = !utilisateur.loading
                         }}
                         endIcon={
                           utilisateur.actif ? (
@@ -81,6 +77,7 @@ const Render = (utilisateurs: membreBureauNationalUserInfo[] ) => {
           </Table>
         </>
       );
-}
+};
 
+    
 export default MembresBN;

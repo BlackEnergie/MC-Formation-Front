@@ -20,7 +20,8 @@ export enum EntryPoint {
     ASSOCIATIONS_USER_INFO = '/utilisateur/associations',
     MEMBRES_BUREAU_NATIONAL_USER_INFO = '/utilisateur/membresBureauNational',
     FORMATEURS_USER_INFO = '/utilisateur/formateurs',
-    INVITATIONS_INFO = '/utilisateur/invitations'
+    INVITATIONS_INFO = '/utilisateur/invitations',
+    MODIFICATION_ACTIF = '/utilisateur/modification/actif/'
 
 } 
 

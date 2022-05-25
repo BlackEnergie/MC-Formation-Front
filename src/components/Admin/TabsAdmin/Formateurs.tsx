@@ -5,6 +5,11 @@ import Domaine from '../../../api/model/Domaine';
 import {CancelOutlined, CheckCircleOutline, KeyboardArrowDown, KeyboardArrowUp} from '@mui/icons-material';
 import {LoadingButton} from '@mui/lab';
 
+interface Props {
+    formateurs: formateurUserInfo[];
+    isActifChange: (id: number) => boolean;
+  }
+
 const RowDataFormateurs = (props) => {
     const [open, setOpen] = useState(false);
     const [liveness, setLiveness] = useState(0);
@@ -34,8 +39,10 @@ const RowDataFormateurs = (props) => {
                         color={utilisateur.actif ? "success" : "error"}
                         loading={utilisateur.loading}
                         onClick={() => {
-                            props.utilisateur.actif = !utilisateur.actif ;
-                            setLiveness(liveness + 1)
+                            utilisateur.loading = !utilisateur.loading
+                          props.utilisateur.actif = props.isActifChange(utilisateur.id) ? utilisateur.actif : !utilisateur.actif;
+                          setLiveness(liveness + 1);
+                          utilisateur.loading = !utilisateur.loading
                         }}
                         endIcon={
                             utilisateur.actif ?
@@ -87,7 +94,7 @@ const RowDataFormateurs = (props) => {
     )
 }
 
-const Formateurs = (props) => {
+const Formateurs = (props: Props) => {
 
     const utilisateurs: formateurUserInfo[] = props.formateurs;
 
@@ -110,7 +117,7 @@ const Formateurs = (props) => {
                     {
                         utilisateurs?.map(
                             (utilisateur: formateurUserInfo) =>
-                                <RowDataFormateurs utilisateur={utilisateur} m={1}/>
+                                <RowDataFormateurs utilisateur={utilisateur} m={1} isActifChange={props.isActifChange}/>
                         )
                     }
                 </TableBody>

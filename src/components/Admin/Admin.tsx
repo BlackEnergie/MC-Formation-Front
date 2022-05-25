@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
-import {PostMailSingUp} from '../../serverInteraction/PostAdmin';
+import {PostMailSingUp, PostModificationActif} from '../../serverInteraction/PostAdmin';
 import useAxiosPrivate from '../../auth/hooks/useAxiosPrivate';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {Box, Grid, MenuItem, Select, SelectChangeEvent, Tab, Tabs, TextField, Typography} from '@mui/material';
@@ -19,6 +19,7 @@ import Associations from './TabsAdmin/Associations';
 import Formateurs from './TabsAdmin/Formateurs';
 import Invitations from './TabsAdmin/Invitations';
 import Domaine from '../../api/model/Domaine';
+import { FaLessThanEqual } from 'react-icons/fa';
 
 interface Utilisateur {
     id: number,
@@ -226,6 +227,26 @@ const Admin = () => {
         }
     }
 
+    const changeActif = async (id: number) => {
+        try{
+            const response = await PostModificationActif(axiosPrivate, id)
+            toast.success(response?.data?.message)
+            return response.status == 200
+        }catch (err) {
+            toast.error(err.response?.data?.message)
+            return false
+        }
+    }
+
+    const isActifChange = (id: number) : boolean => {
+        let isOk = false;
+        changeActif(id).then((value) => {
+            isOk = value;
+        })
+
+        return isOk
+    }
+
     const boxStyle = {
         borderRadius: '.25rem',
         padding: '1.5rem',
@@ -288,10 +309,10 @@ const Admin = () => {
                     {showTabs()}
                 </Tabs>
                 {
-                    valueTab === 0 ? <Formateurs formateurs={formateurs} setFormateurs={setFormateurs} /> :
-                        valueTab === 1 ? <Associations associations={associations} setAssociations={setAssociations}/> :
+                    valueTab === 0 ? <Formateurs formateurs={formateurs}  isActifChange={isActifChange}/> :
+                        valueTab === 1 ? <Associations associations={associations} isActifChange={isActifChange}/> :
                             valueTab === 2 ?
-                                <MembresBN membresBN={membresBN}/>
+                                <MembresBN membresBN={membresBN} isActifChange={isActifChange}/>
                                 : valueTab === 3 ? <Invitations invitations={invitations} setInvitations={setInvitations} />
                                     : <></>
                 }
