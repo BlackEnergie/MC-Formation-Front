@@ -26,7 +26,6 @@ const RowDataFormateurs = (props) => {
                         {open ? <KeyboardArrowUp/> : <KeyboardArrowDown/>}
                     </IconButton>
                 </TableCell>
-                <TableCell align="center">{utilisateur.id}</TableCell>
                 <TableCell align="center">{utilisateur.nom}</TableCell>
                 <TableCell align="center">{utilisateur.prenom}</TableCell>
                 <TableCell align="center">{utilisateur.nomUtilisateur}</TableCell>
@@ -104,7 +103,6 @@ const Formateurs = (props: Props) => {
                 <TableHead>
                     <TableRow>
                         <TableCell></TableCell>
-                        <TableCell align="center">Id</TableCell>
                         <TableCell align="center">Nom</TableCell>
                         <TableCell align="center">Prénom</TableCell>
                         <TableCell align="center">Nom Utilisateur</TableCell>

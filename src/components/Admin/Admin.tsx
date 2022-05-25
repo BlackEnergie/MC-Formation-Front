@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import {PostMailSingUp, PostModificationActif} from '../../serverInteraction/PostAdmin';
 import useAxiosPrivate from '../../auth/hooks/useAxiosPrivate';
 import LoadingButton from '@mui/lab/LoadingButton';
-import {Box, Grid, MenuItem, Select, SelectChangeEvent, Tab, Tabs, TextField, Typography} from '@mui/material';
+import {Box, Divider, Grid, MenuItem, Select, SelectChangeEvent, Tab, Tabs, TextField, Typography} from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import MembresBN from './TabsAdmin/MembresBN';
 import {
@@ -81,8 +81,6 @@ const Admin = () => {
 
     const [refresh, setRefresh] = useState(true)
 
-    // TODO: Replacer les infos dans l'ordre des priorités
-
     const axiosPrivate = useAxiosPrivate()
 
     useEffect(() => {
@@ -136,7 +134,7 @@ const Admin = () => {
     const showTabs = () => {
         return tabs.map(tab => {
                 return (
-                    <Tab label={tab}/>
+                    <Tab sx={{fontWeight: 'bold'}} label={tab}/>
                 )
             }
         )
@@ -155,11 +153,12 @@ const Admin = () => {
         setSelectRole(event.target.value)
     }
 
-    const handleSubmit = async () => {
+    const submitInvite = async () => {
         try {
             setLoadingInvite(true)
             const response = await PostMailSingUp(axiosPrivate, email, selectRole)
             toast.success(response.data.message);
+            setValueTab(3)
             getInvitations()
         } catch (err) {
             toast.error(err.response.data.message);
@@ -169,7 +168,7 @@ const Admin = () => {
         setLoadingInvite(false);
     }
 
-    const validate = (e) => {
+    const validateInvite = (e) => {
         e.preventDefault();
         let validation = {email: true};
         let isValid = true;
@@ -179,7 +178,7 @@ const Admin = () => {
             toast.error("Reseignez l'adresse email")
         }
         if (isValid) {
-            handleSubmit();
+            submitInvite();
         }
         setIsValid(validation);
     }
@@ -289,7 +288,7 @@ const Admin = () => {
                             <LoadingButton
                                 sx={{height:'100%'}}
                                 fullWidth
-                                onClick={validate}
+                                onClick={validateInvite}
                                 endIcon={<SendIcon/>}
                                 loading={loadingInvite}
                                 loadingPosition="end"
@@ -308,6 +307,7 @@ const Admin = () => {
                       centered>
                     {showTabs()}
                 </Tabs>
+                <Divider/>
                 {
                     valueTab === 0 ? <Formateurs formateurs={formateurs}  isActifChange={isActifChange}/> :
                         valueTab === 1 ? <Associations associations={associations} isActifChange={isActifChange}/> :

@@ -28,7 +28,6 @@ const Associations = (props) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">Id</TableCell>
             <TableCell align="center">Nom Complet</TableCell>
             <TableCell align="center">Acronyme</TableCell>
             <TableCell align="center">College</TableCell>
@@ -42,7 +41,6 @@ const Associations = (props) => {
           {utilisateurs?.map((utilisateur: associationUserInfo) => {
             return (
               <TableRow key={utilisateur.id}>
-                <TableCell align="center">{utilisateur.id}</TableCell>
                 <TableCell align="center">{utilisateur.nomComplet}</TableCell>
                 <TableCell align="center">{utilisateur.acronyme}</TableCell>
                 <TableCell align="center">{utilisateur.college}</TableCell>

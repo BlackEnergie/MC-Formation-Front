@@ -3,6 +3,7 @@ export interface TimeObject {
     minutes: number;
     hours: number;
     days: number;
+    isPassed: boolean;
 }
 
 export const getTimeBetweenDates = (dateTo: Date, dateFrom: Date) => {
@@ -10,9 +11,11 @@ export const getTimeBetweenDates = (dateTo: Date, dateFrom: Date) => {
         seconds: 0,
         minutes: 0,
         hours: 0,
-        days: 0
+        days: 0,
+        isPassed: false
     };
     const msBetweenDates = (new Date(dateTo.toString()).getTime()) - (new Date(dateFrom.toString()).getTime());
+    let isPassed = msBetweenDates < 0;
     let seconds = Math.floor(msBetweenDates / 1000);
     let minutes = Math.floor(seconds / 60);
     let hours = Math.floor(minutes / 60);
@@ -26,6 +29,7 @@ export const getTimeBetweenDates = (dateTo: Date, dateFrom: Date) => {
     timeObject.minutes = minutes;
     timeObject.hours = hours;
     timeObject.days = days;
+    timeObject.isPassed = isPassed;
 
     return timeObject;
 }

@@ -26,7 +26,6 @@ const MembresBN = (props: Props) => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center">Id</TableCell>
                 <TableCell align="center">Poste</TableCell>
                 <TableCell align="center">Nom Utilisateur</TableCell>
                 <TableCell align="center">Email</TableCell>
@@ -37,7 +36,6 @@ const MembresBN = (props: Props) => {
               {utilisateurs?.map((utilisateur: membreBureauNationalUserInfo) => {
                 return (
                   <TableRow key={utilisateur.id}>
-                    <TableCell align="center">{utilisateur.id}</TableCell>
                     <TableCell align="center">{utilisateur.poste}</TableCell>
                     <TableCell align="center">
                       {utilisateur.nomUtilisateur}

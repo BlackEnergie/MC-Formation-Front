@@ -21,9 +21,10 @@ export enum EntryPoint {
     MEMBRES_BUREAU_NATIONAL_USER_INFO = '/utilisateur/membresBureauNational',
     FORMATEURS_USER_INFO = '/utilisateur/formateurs',
     INVITATIONS_INFO = '/utilisateur/invitations',
-    MODIFICATION_ACTIF = '/utilisateur/modification/actif/'
-
-} 
+    MODIFICATION_ACTIF = '/utilisateur/modification/actif/',
+    INVITATION_RELANCE = '/auth/signup/notify',
+    INVITATION_SUPPRIMER = '/auth/signup/invite/cancel'
+}
 
 export const headersTemplate = {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
