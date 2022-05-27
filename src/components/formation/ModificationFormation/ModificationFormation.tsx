@@ -85,10 +85,11 @@ const ModificationFormation = () => {
     const handleSubmit = async () => {
         try {
             const response = await PostFormation(axiosPrivate, formation);
-            toast.success("Formation enregistrée");
+            toast.success(response.data.message);
+            navigate('/formation/'+ formation.id)
         } catch (err) {
             console.log(err);
-            toast.error("Echec de sauvegarde");
+            toast.error(err.response.data.message)
         }
     };
 
@@ -99,7 +100,7 @@ const ModificationFormation = () => {
 
     return (
         <Container maxWidth={"xl"}>
-            <Link className="text-decoration-none" //to={'/formation/edit/' + formation.id}
+            <Link className="text-decoration-none"
                   title="Modifier la formation">
                 <Fab onClick={handleSubmit} sx={FabStyle} color="primary" aria-label="edit">
                     <SaveIcon/>

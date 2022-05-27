@@ -19,7 +19,6 @@ import Associations from './TabsAdmin/Associations';
 import Formateurs from './TabsAdmin/Formateurs';
 import Invitations from './TabsAdmin/Invitations';
 import Domaine from '../../api/model/Domaine';
-import { FaLessThanEqual } from 'react-icons/fa';
 
 interface Utilisateur {
     id: number,

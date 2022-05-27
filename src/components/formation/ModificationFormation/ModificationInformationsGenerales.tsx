@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Autocomplete, TextField, textFieldClasses} from "@mui/material";
+import {Autocomplete, TextField} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import TableCell, {tableCellClasses} from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -55,27 +55,21 @@ const listVille = [
 
 const ModificationInformationsGenerales = (props) => {
     const [liveness, setLiveness] = useState(0);
+    const [annee, setannee] = useState<Date | null>(new Date());
+
     let temporaireDonnee = props.formation;
     let tempFormateur = null;
-    let listeFormateurs = props.formateurs.map((item, index) => {
+
+    let listeFormateurs = props.formateurs.map((item) => {
         return {
             label: item.nom + " " + item.prenom,
             value: item,
             key: item.id,
-
         }
     });
-    const [annee, setannee] = React.useState<Date | null>(new Date());
 
     let cadreTemporaire = "";
 
-    const StyledTextField = styled(TextField)(({theme}) => ({
-        [`&.${textFieldClasses}`]: {
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.common.white,
-            fontSize: 20,
-        },
-    }));
     const StyledTableCell = styled(TableCell)(({theme}) => ({
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
@@ -88,6 +82,7 @@ const ModificationInformationsGenerales = (props) => {
             paddingBottom: 0,
         },
     }));
+
     const StyledTableCellHead = styled(TableCell)(({theme}) => ({
         [`&.${tableCellClasses.head}`]: {
             backgroundColor: theme.palette.primary.main,
@@ -100,25 +95,26 @@ const ModificationInformationsGenerales = (props) => {
             paddingBottom: 0,
         },
     }));
+
     const StyledTableRow = styled(TableRow)(({theme}) => ({
         '&:nth-of-type(odd)': {
             backgroundColor: theme.palette.action.hover,
         },
-        // hide last border
         '&:last-child td, &:last-child th': {
             border: 0,
         },
         height: 65,
     }));
+
     const StyledTableHead = styled(TableHead)(({theme}) => ({
         '&:nth-of-type(odd)': {
             fontWeight: 'bold',
         },
-        // hide last border
         '&:last-child td, &:last-child th': {
             border: 0,
         },
     }));
+
     const StyledTableRowInput = styled(TableRow)(({theme}) => ({
         backgroundColor: 'rgba(211,211,211,0.04)',
         height: 65,
@@ -171,7 +167,6 @@ const ModificationInformationsGenerales = (props) => {
 
 
     const handleItemDelete = (i, s) => {
-
         let newFormation = props.formation;
         switch (s) {
             case 'Domaine' :
@@ -187,6 +182,7 @@ const ModificationInformationsGenerales = (props) => {
         props.majFormation(newFormation);
         setLiveness(liveness + 1);
     }
+
     const handleAjout = (s, v) => {
         let newFormation = props.formation;
         switch (s) {
@@ -203,7 +199,7 @@ const ModificationInformationsGenerales = (props) => {
         setLiveness(liveness + 1);
     }
 
-    function checkannee() {
+    function checkAnnee() {
         if (!props.formation.cadre?.split(" ")[2]) {
             return annee;
         } else {
@@ -259,7 +255,7 @@ const ModificationInformationsGenerales = (props) => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Type d'évenment"
+                                    label="Type d'événement"
                                     InputProps={{
                                         ...params?.InputProps,
                                         type: 'search',
@@ -296,7 +292,7 @@ const ModificationInformationsGenerales = (props) => {
                             <DatePicker
                                 views={['year']}
                                 label="Année"
-                                value={checkannee()}
+                                value={checkAnnee()}
                                 onChange={(value) => {
                                     let anneeTemporaire = value.getFullYear();
                                     handleChangeCadre("annee", anneeTemporaire);
@@ -412,7 +408,7 @@ const ModificationInformationsGenerales = (props) => {
                                         renderInput={(params) => (
                                             <TextField
                                                 {...params}
-                                                label="Nom Prénom du formateur"
+                                                label="Formateur"
                                                 InputProps={{
                                                     ...params?.InputProps,
                                                     type: 'search',

@@ -2,11 +2,10 @@ import React, {useEffect, useState} from 'react';
 import Domaine from "../../../api/model/Domaine";
 import Demande from "../../../api/model/Demande";
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import { FetchDomaines } from '../../../serverInteraction/FetchData';
 import { PostDemande } from '../../../serverInteraction/PostDemande';
-import {Alert, Autocomplete, Box, Button, Divider, Fab, Grid, TextField, Typography} from '@mui/material';
-import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import {Alert, Autocomplete, Box, Button, Grid, TextField, Typography} from '@mui/material';
 import decodeToken from '../../../auth/decodeToken';
 import toast from 'react-hot-toast';
 
@@ -20,6 +19,7 @@ const DemandeFormation = () => {
     const [hasUnfilled, setHasUnfilled] = useState({selectedDomaines:"",sujet:"",detail:""});
     const [showWarning, setShowWarning] =useState({selectedDomaines:false,sujet:false,detail:false});
     const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
 
     const handleSubmit = async () => {
         let demande = mapFormToDemande();
@@ -27,6 +27,7 @@ const DemandeFormation = () => {
             const response = await PostDemande(axiosPrivate, demande);
             if (response.data.code == 201) {
                 toast.success(response.data.message);
+                navigate('/')
                 resetForm();
             } else {
                 toast.error(response.data.message);
@@ -39,7 +40,6 @@ const DemandeFormation = () => {
     const mapFormToDemande = () => {
         let demande = new Demande();
         let domainesArr = [];
-
         demande.sujet = sujet;
         demande.detail = detail;
         selectedDomaines.forEach(item => {
@@ -50,17 +50,15 @@ const DemandeFormation = () => {
             domainesArr.push(domaine);
         });
         demande.domaines=domainesArr;
-
         const token = decodeToken(localStorage.getItem('accessToken')).decoded;
         demande.nomUtilisateur = token.sub;
-
         return demande;
-
     }
 
     useEffect(() => {
         getDomaineList();
     }, [])
+
     const getDomaineList = async () => {
         try {
             const controller = new AbortController();
@@ -81,11 +79,9 @@ const DemandeFormation = () => {
     };
 
     const validate = () => {
-
         let hasUnfilled = {selectedDomaines:"",sujet:"",detail:""};
         let showWarning = {selectedDomaines:false,sujet:false,detail:false};
         let isValid = true;
-
         if (!sujet) {
             isValid=false;
             hasUnfilled["sujet"] = "Renseignez un sujet.";
@@ -139,20 +135,13 @@ const DemandeFormation = () => {
 
     return (
         <Box style={boxStyle} >
-            <Link to="/" id="linkAccueil">
-                <Fab sx={FabStyle} color="primary" aria-label="edit">
-                    <KeyboardReturnIcon/>
-                </Fab>
-            </Link>
             <Grid mt={2} container rowSpacing={0} columnSpacing={2} width="100%">
-                
                 <Typography variant="h4" width="100%" textAlign="center" color="primary">
                     Demande de formation
                 </Typography>
-
                 <Grid item mt={3} width="100%">
                     <Typography mb={1}>
-                        Indiquez le ou les domaines de formation ?
+                        Domaines de formation
                     </Typography>
                     <Autocomplete
                         value={selectedDomaines}
@@ -161,7 +150,6 @@ const DemandeFormation = () => {
                         disableClearable
                         options={listeDomaines}
                         fullWidth={true}
-                        //value={}
                         onChange={(event, value) => {
                             setSelectedDomaines(value);
                         }}
@@ -176,14 +164,16 @@ const DemandeFormation = () => {
                             />
                         )}
                     />
-                    {showWarning.selectedDomaines == true
-                        ? <Typography color="red" style={{marginTop: 20}}>{hasUnfilled.selectedDomaines}</Typography>
-                        : <></>
+                    {showWarning.selectedDomaines == true?
+                        <Alert severity="info" sx={{fontSize:10, height:35, padding:0}} >
+                            {hasUnfilled.selectedDomaines}
+                        </Alert>
+                        : <Typography></Typography>
                     }
                 </Grid>
                 <Grid item mt={3} width="100%">
                     <Typography mb={1}>
-                        Indiquez le sujet de la formation?
+                        Sujet de la formation
                     </Typography>
                     <TextField
                         value={sujet}
@@ -198,14 +188,16 @@ const DemandeFormation = () => {
                             }
                         }>
                     </TextField>
-                    {showWarning.sujet == true
-                      ? <Typography color="red" style={{marginTop: 20}}>{hasUnfilled.sujet}</Typography>
-                      : <></>
+                    {showWarning.sujet == true?
+                        <Alert severity="info" sx={{fontSize:10, height:35, padding:0}} >
+                            {hasUnfilled.sujet}
+                        </Alert>
+                        : <Typography></Typography>
                     }
                 </Grid>
                 <Grid item mt={3} width="100%">
                     <Typography mb={1}>
-                        Ajoutez des détails sur votre demande de formation
+                        Détails de la demande
                     </Typography>
                     <TextField
                         value={detail}
@@ -220,9 +212,11 @@ const DemandeFormation = () => {
                             }
                         }>
                     </TextField>
-                    {showWarning.detail == true
-                        ? <Typography color="red" style={{marginTop: 20}}>{hasUnfilled.detail}</Typography>
-                        : <></>
+                    {showWarning.detail == true?
+                        <Alert severity="info" sx={{fontSize:10, height:35, padding:0}} >
+                            {hasUnfilled.detail}
+                        </Alert>
+                        : <Typography></Typography>
                     }
 
                 </Grid>
