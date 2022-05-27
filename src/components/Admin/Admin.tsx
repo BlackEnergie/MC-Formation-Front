@@ -1,120 +1,324 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
-import {loader} from '../../utils/LoaderUtils';
-import {FaRegPaperPlane} from "react-icons/fa";
-import Select from "react-select";
-import {Link} from "react-router-dom";
-import {AiOutlineRollback} from "react-icons/ai";
-import { PostMailSingUp } from '../../serverInteraction/PostAdmin';
+import {PostMailSingUp, PostModificationActif} from '../../serverInteraction/PostAdmin';
 import useAxiosPrivate from '../../auth/hooks/useAxiosPrivate';
+import LoadingButton from '@mui/lab/LoadingButton';
+import {Box, Divider, Grid, MenuItem, Select, SelectChangeEvent, Tab, Tabs, TextField, Typography} from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import MembresBN from './TabsAdmin/MembresBN';
+import {
+    FetchAssociations,
+    FetchFormateurs,
+    FetchInvitations,
+    FetchMembresBureauNational
+} from '../../serverInteraction/FetchAdmin';
+import MembreBureauNational from '../../api/model/MembreBureauNational';
+import Association from '../../api/model/Association';
+import Formateur from '../../api/model/Formateur';
+import Associations from './TabsAdmin/Associations';
+import Formateurs from './TabsAdmin/Formateurs';
+import Invitations from './TabsAdmin/Invitations';
+import Domaine from '../../api/model/Domaine';
+import { FaLessThanEqual } from 'react-icons/fa';
+
+interface Utilisateur {
+    id: number,
+    email: string,
+    nomUtilisateur: string,
+    actif: boolean
+}
+
+export interface membreBureauNationalUserInfo extends MembreBureauNational, Utilisateur {
+    loading: boolean
+}
+
+export interface associationUserInfo extends Association, Utilisateur {
+    loading: boolean
+}
+
+export interface formateurUserInfo extends Formateur, Utilisateur {
+    loading: boolean
+    dateCreation: string,
+    domaines: Domaine[]
+}
+
+export interface createUserToken {
+    id: number,
+    email: string,
+    expirationDate: Date,
+    role: string,
+}
+
+const INITIAL_BN : membreBureauNationalUserInfo[] = []
+const INITIAL_ASSO : associationUserInfo[] = []
+const INITIAL_FORM : formateurUserInfo[] = []
 
 const Admin = () => {
 
+    interface menuItem {
+        value: string,
+        label: string
+    }
+
+    const roles: menuItem[] = [
+        {value: 'ROLE_FORMATEUR', label: 'Formateur'},
+        {value: 'ROLE_ASSO', label: 'Association'},
+        {value: 'ROLE_BN', label: 'Membre du Bureau National'}
+    ]
+
     const [email, setMail] = useState('');
-    const [hasUnfilled, setHasUnfilled] = useState({email: ""});
-    const [selectRole, setSelectRole] = useState({value: "ROLE_FORMATEUR", label: "Formateur"});
-    const [loading, setLoading] = useState(false)
+    const [isValid, setIsValid] = useState({email: true});
+    const [selectRole, setSelectRole] = useState(roles[0].value);
+    const [loadingInvite, setLoadingInvite] = useState(false)
+    const [valueTab, setValueTab] = useState(0)
+    const [membresBN, setMembresBN] = useState(INITIAL_BN)
+    const [associations, setAssociations] = useState(INITIAL_ASSO)
+    const [formateurs, setFormateurs] = useState(INITIAL_FORM)
+    const [invitations, setInvitations] = useState(undefined)
+    const [bnLoaded, setBNLoaded] = useState(false)
+    const [assoLoaded, setAssoLoaded] = useState(false)
+    const [formateursLoaded, setFormateursLoaded] = useState(false)
+
+    const [refresh, setRefresh] = useState(true)
 
     const axiosPrivate = useAxiosPrivate()
 
-    const optionsRole = [
-        {value: "ROLE_FORMATEUR", label: "Formateur"},
-        {value: "ROLE_ASSO", label: "Association"},
-        {value: "ROLE_BN", label: "Membre du Bureau National"}
+    useEffect(() => {
+        getAssociations();
+        getInvitations();
+        getFormateurs();
+        getMembresBN();
+    }, [])
+
+    useEffect(() => {
+        if(bnLoaded){
+            setMembresBN(membresBN.map(
+                (membre): membreBureauNationalUserInfo => {
+                  membre.loading = false;
+                  return membre;
+                }
+              ))
+        }
+    }, [bnLoaded])
+    
+    useEffect(() => {
+        if(assoLoaded){
+            setAssociations(associations.map(
+                (asso): associationUserInfo => {
+                  asso.loading = false;
+                  return asso;
+                }
+              ))
+        }
+    }, [assoLoaded])
+
+    useEffect(() => {
+        if(formateursLoaded){
+            setFormateurs(formateurs.map(
+                (form): formateurUserInfo => {
+                  form.loading = false;
+                  return form;
+                }
+              ))
+        }
+    }, [formateursLoaded])
+
+
+    const tabs = [
+        'Formateurs',
+        'Associations',
+        'Membres bureau national',
+        'Invitations en attente'
     ]
 
-    const handleSubmit = async () => {
-        try {
-            setLoading(true)
-            const role = selectRole.value;
-            const response = await PostMailSingUp(axiosPrivate, email, role)
-            toast.success(response.data.message);
-        } catch (err) {
-            toast.error(err.response.data.message);
-        }
-        setLoading(false);
+    const showTabs = () => {
+        return tabs.map(tab => {
+                return (
+                    <Tab sx={{fontWeight: 'bold'}} label={tab}/>
+                )
+            }
+        )
     }
 
-    const validate = (e) => {
+    const menuItemsRole = () => {
+        return roles.map((role: menuItem) => {
+                return (
+                    <MenuItem value={role.value}>{role.label}</MenuItem>
+                )
+            }
+        )
+    }
+
+    const handleChangeSelect = (event: SelectChangeEvent) => {
+        setSelectRole(event.target.value)
+    }
+
+    const submitInvite = async () => {
+        try {
+            setLoadingInvite(true)
+            const response = await PostMailSingUp(axiosPrivate, email, selectRole)
+            toast.success(response.data.message);
+            setValueTab(3)
+            getInvitations()
+        } catch (err) {
+            toast.error(err.response.data.message);
+            setIsValid({email: false})
+            setLoadingInvite(false);
+        }
+        setLoadingInvite(false);
+    }
+
+    const validateInvite = (e) => {
         e.preventDefault();
-        let hasUnfilled = {email: ""};
+        let validation = {email: true};
         let isValid = true;
         if (!email) {
             isValid = false;
-            hasUnfilled["email"] = "Renseigner l'adresse mail.";
+            validation.email = false;
+            toast.error("Reseignez l'adresse email")
         }
         if (isValid) {
-            handleSubmit();
-        } else {
-            setHasUnfilled(hasUnfilled);
+            submitInvite();
         }
+        setIsValid(validation);
+    }
+
+    const getMembresBN = async () => {
+        try {
+            const response = await FetchMembresBureauNational(axiosPrivate)
+            setMembresBN(response.data)
+            setBNLoaded(true)
+        } catch (err) {
+            console.log(err)
+            toast.error(err.response?.data?.message);
+        }
+    }
+
+    const getAssociations = async () => {
+        try {
+            const response = await FetchAssociations(axiosPrivate)
+            setAssociations(response.data)
+            setAssoLoaded(true)
+        } catch (err) {
+            console.log(err)
+            toast.error(err.response?.data?.message);
+        }
+    }
+
+    const getFormateurs = async () => {
+        try {
+            const response = await FetchFormateurs(axiosPrivate)
+            setFormateurs(response.data)
+            setFormateursLoaded(true)
+        } catch (err) {
+            console.log(err)
+            toast.error(err.response?.data?.message);
+        }
+    }
+
+    const getInvitations = async () => {
+        try {
+            const response = await FetchInvitations(axiosPrivate)
+            setInvitations(response.data)
+        } catch (err) {
+            console.log(err)
+            toast.error(err.response?.data?.message);
+        }
+    }
+
+    const changeActif = async (id: number) => {
+        try{
+            const response = await PostModificationActif(axiosPrivate, id)
+            toast.success(response?.data?.message)
+            return response.status == 200
+        }catch (err) {
+            toast.error(err.response?.data?.message)
+            return false
+        }
+    }
+
+    const isActifChange = (id: number) : boolean => {
+        let isOk = false;
+        changeActif(id).then((value) => {
+            isOk = value;
+        })
+
+        return isOk
+    }
+
+    const boxStyle = {
+        borderRadius: '.25rem',
+        padding: '1.5rem',
+        marginBottom: '1rem',
+        boxShadow: '0 .5rem 1rem rgba(0,0,0,.15)',
+        width: '75%',
+        align: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto'
     }
 
     return (
         <>
-            <div className="col-2 position-absolute">
-                <Link to="/" id="linkAccueil">
-                    <button type="button" id="buttonArriere"
-                            className="btn btn-primary d-flex align-items-center">
-                        <AiOutlineRollback className="Icones me-2"/>
-                        Revenir à l'accueil
-                    </button>
-                </Link>
-            </div>
-            <div className="col">
-                <div className="container shadow p-4 mb-3 bg-white rounded">
-                    <div className="row">
-                        <div className="col">
-                            <div className="row d-flex justify-content-between">
-                                <h3>Inviter des membres</h3>
-                            </div>
-                            <form className="row">
-                                <div className="col">
-                                    <label className="form-label fw-bold mb-2 mt-2">Adresse mail</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={email}
-                                        onChange={event => setMail(event.target.value)}
-                                        className="form-control"
-                                        placeholder="Ex : prenom@gmail.com"
-                                        id="email"/>
-                                    <div className="text-danger">{hasUnfilled.email}</div>
-                                </div>
-                                <div className="col">
-                                    <label className="form-label fw-bold mb-2 mt-2">Rôle</label>
-                                    <Select
-                                        value={selectRole}
-                                        onChange={(option) => {
-                                            setSelectRole(option);
-                                        }}
-                                        options={optionsRole}
-                                    />
-                                </div>
-                                <div className="col-2">
-                                    <label></label>
-                                    <div>
-                                        <button type="submit" value="Inviter" className="btn btn-mc mt-3"
-                                                onClick={validate}>
-                                            <FaRegPaperPlane className="Icones text-white"/>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="col-1 text-start">
-                                    <label></label>
-                                    <div className="mt-3">
-                                        {loading ? loader() : <></>}
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Box style={boxStyle}>
+                <Typography variant="h4" color="primary">Inviter des membres</Typography>
+                <form>
+                    <Grid mt={2} container rowSpacing={0} columnSpacing={2} minWidth="100%">
+                        <Grid item xs={6}>
+                            <TextField
+                                error={!isValid.email}
+                                fullWidth
+                                required
+                                label="Email"
+                                id="email"
+                                value={email}
+                                onChange={event => setMail(event.target.value)}
+                            />
+                        </Grid>
+                        <Grid item xs={5}>
+                            <Select
+                                fullWidth
+                                label="Rôle"
+                                value={selectRole}
+                                id="select-role"
+                                onChange={handleChangeSelect}>
+                                {menuItemsRole()}
+                            </Select>
+                        </Grid>
+                        <Grid item xs={1}>
+                            <LoadingButton
+                                sx={{height:'100%'}}
+                                fullWidth
+                                onClick={validateInvite}
+                                endIcon={<SendIcon/>}
+                                loading={loadingInvite}
+                                loadingPosition="end"
+                                variant="contained"
+                            >
+                                Inviter
+                            </LoadingButton>
+                        </Grid>
+                    </Grid>
+                </form>
+            </Box>
+            <Box style={boxStyle}>
+                <Typography variant="h4" color="primary">Gestion utilisateurs</Typography>
+                <Tabs value={valueTab}
+                      onChange={(event: React.SyntheticEvent, newValue: number) => setValueTab(newValue)}
+                      centered>
+                    {showTabs()}
+                </Tabs>
+                <Divider/>
+                {
+                    valueTab === 0 ? <Formateurs formateurs={formateurs}  isActifChange={isActifChange}/> :
+                        valueTab === 1 ? <Associations associations={associations} isActifChange={isActifChange}/> :
+                            valueTab === 2 ?
+                                <MembresBN membresBN={membresBN} isActifChange={isActifChange}/>
+                                : valueTab === 3 ? <Invitations invitations={invitations} setInvitations={setInvitations} />
+                                    : <></>
+                }
+            </Box>
         </>
     )
-
 }
-
 
 export default Admin;

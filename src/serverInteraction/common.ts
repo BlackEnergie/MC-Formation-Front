@@ -20,10 +20,17 @@ export enum EntryPoint {
     MODIFICATION_MOTDEPASSE_USER = '/utilisateur/modification/motdepasse',
     DEMANDE_FAVORABLE = '/utilisateur/demandesFavorables',
     FORMATEUR_DETAIL = '/utilisateur/formateur',
+    ASSOCIATIONS_USER_INFO = '/utilisateur/associations',
+    MEMBRES_BUREAU_NATIONAL_USER_INFO = '/utilisateur/membresBureauNational',
+    FORMATEURS_USER_INFO = '/utilisateur/formateurs',
+    INVITATIONS_INFO = '/utilisateur/invitations',
+    MODIFICATION_ACTIF = '/utilisateur/modification/actif/',
+    INVITATION_RELANCE = '/auth/signup/notify',
+    INVITATION_SUPPRIMER = '/auth/signup/invite/cancel',
     FORMATEUR_LISTE = '/data/formateurs',
     MODIFICATION_FORMATION = '/formation'
 } 
 
 export const headersTemplate = {
-    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
 }

@@ -142,6 +142,7 @@ function Filtres(data: formation[], filtre: filtre): formation[] {
   let checkFormateur: boolean;
   let checkDomaine: boolean;
   let checkDomaineUnit: boolean;
+  let checkFormUnit: boolean;
   data.map((data) => {
     checkFormateur = true;
     checkDomaine = true;
@@ -155,17 +156,18 @@ function Filtres(data: formation[], filtre: filtre): formation[] {
         ? data.nom.includes(filtre.sujet)
         : data.sujet.includes(filtre.sujet))
     ) {
-      data.formateurs.map((formateur) => {
-        if (
-          !filtre.formateurs.includes(formateur.prenom + " " + formateur.nom) &&
-          filtre.formateurs.length != 0
-        ) {
+
+      filtre.formateurs.forEach((nomComplet) => {
+        checkFormUnit = false;
+        data.formateurs.map((formateur) => {
+          if (formateur.prenom + " " + formateur.nom == nomComplet) {
+            checkFormUnit = true;
+          }
+        });
+        if (!checkFormUnit) {
           checkFormateur = false;
         }
       });
-      if (data.formateurs.length == 0 && filtre.formateurs.length != 0) {
-        checkFormateur = false;
-      }
 
       filtre.domaines.forEach((libelle) => {
         checkDomaineUnit = false;
