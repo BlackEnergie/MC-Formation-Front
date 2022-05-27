@@ -19,7 +19,9 @@ export enum EntryPoint {
     MODIFICATION_INFORMATION_USER = '/utilisateur/modification',
     MODIFICATION_MOTDEPASSE_USER = '/utilisateur/modification/motdepasse',
     DEMANDE_FAVORABLE = '/utilisateur/demandesFavorables',
-    FORMATEUR_DETAIL = '/utilisateur/formateur'
+    FORMATEUR_DETAIL = '/utilisateur/formateur',
+    FORMATEUR_LISTE = '/data/formateurs',
+    MODIFICATION_FORMATION = '/formation'
 } 
 
 export const headersTemplate = {
