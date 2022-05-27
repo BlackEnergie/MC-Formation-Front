@@ -176,11 +176,9 @@ const DemandeFormation = () => {
                             />
                         )}
                     />
-                    {showWarning.selectedDomaines == true?
-                        <Alert severity="info" sx={{fontSize:10, height:35, padding:0}} >
-                            {hasUnfilled.selectedDomaines}
-                        </Alert>
-                        : <Typography></Typography>
+                    {showWarning.selectedDomaines == true
+                        ? <Typography color="red" style={{marginTop: 20}}>{hasUnfilled.selectedDomaines}</Typography>
+                        : <></>
                     }
                 </Grid>
                 <Grid item mt={3} width="100%">
@@ -200,11 +198,9 @@ const DemandeFormation = () => {
                             }
                         }>
                     </TextField>
-                    {showWarning.sujet == true?
-                        <Alert severity="info" sx={{fontSize:10, height:35, padding:0}} >
-                            {hasUnfilled.sujet}
-                        </Alert>
-                        : <Typography></Typography>
+                    {showWarning.sujet == true
+                      ? <Typography color="red" style={{marginTop: 20}}>{hasUnfilled.sujet}</Typography>
+                      : <></>
                     }
                 </Grid>
                 <Grid item mt={3} width="100%">
@@ -224,11 +220,9 @@ const DemandeFormation = () => {
                             }
                         }>
                     </TextField>
-                    {showWarning.detail == true?
-                        <Alert severity="info" sx={{fontSize:10, height:35, padding:0}} >
-                            {hasUnfilled.detail}
-                        </Alert>
-                        : <Typography></Typography>
+                    {showWarning.detail == true
+                        ? <Typography color="red" style={{marginTop: 20}}>{hasUnfilled.detail}</Typography>
+                        : <></>
                     }
 
                 </Grid>
