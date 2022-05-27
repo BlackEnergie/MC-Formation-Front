@@ -7,6 +7,8 @@ import {AiFillSetting} from 'react-icons/ai';
 import jwtUtils from '../../../auth/decodeToken';
 import {FiLogOut} from 'react-icons/fi';
 import {IoIosAddCircleOutline} from 'react-icons/io';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
 
 const Header = (props) => {
 
@@ -85,14 +87,20 @@ const Header = (props) => {
                             {/*Partie Bouton Connexion / Déconnexion*/}
                             {
                                 props.login ? (
-                                    <div id="right-side-navbar">
-                                        <Nav.Link>
-                                            <button title="Déconnexion" onClick={deconnect}
-                                                    className="btn btn-outline-mc">
-                                                <FiLogOut className="Icones"/>
-                                            </button>
-                                        </Nav.Link>
-                                    </div>
+                                        <div id="right-side-navbar">
+                                            <Nav.Link>
+                                                <Link to="/compte">
+                                                    <button className="btn btn-outline-mc">
+                                                        <AccountCircleIcon></AccountCircleIcon>
+                                                    </button>
+                                                </Link>
+                                            </Nav.Link>
+                                            <Nav.Link>
+                                                <button title="Déconnexion" onClick={deconnect} className="btn btn-outline-mc">
+                                                    <FiLogOut className="Icones"/>
+                                                </button>
+                                            </Nav.Link>
+                                        </div>
                                 ) : (
                                     <></>
                                 )
