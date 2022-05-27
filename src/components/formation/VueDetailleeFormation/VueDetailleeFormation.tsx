@@ -14,11 +14,14 @@ import Formation from '../../../api/model/Formation';
 import InformationsFicheDeFormation from './InformationsFicheDeFormation';
 import FilConducteurFormation from './FilConducteurFormation';
 import {toast} from 'react-hot-toast';
-import {Fab, Skeleton} from '@mui/material';
+import {Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, Modal, Skeleton} from '@mui/material';
 import {Statut} from '../../../utils/StatutUtils';
 import InformationsDemande from './InformationsDemande';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from "react-router-dom";
+import { DeleteDemande } from '../../../serverInteraction/PostDemande';
+import decodeToken from '../../../auth/decodeToken';
 
 const VueDetailleeFormation = () => {
     const [formation, setFormation] = useState(new Formation());
@@ -26,10 +29,24 @@ const VueDetailleeFormation = () => {
     let {id} = useParams();
     const axiosPrivate = useAxiosPrivate()
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+
+    const token = decodeToken(localStorage.getItem("accessToken")).decoded;
+
+    const checkRoleBn = () => {
+        return token.role === "ROLE_BN";
+      };
 
     useEffect(() => {
         getFormationDetails();
     }, [])
+
+    const handleOpen = () => {
+        setOpen(true);
+      };
+      const handleClose = () => {
+        setOpen(false);
+      };
 
     const getFormationDetails = async () => {
         try {
@@ -42,6 +59,21 @@ const VueDetailleeFormation = () => {
             if (err.response?.data?.code === 403){
                 navigate('/')
             }
+        }
+    }
+
+    const deleteDemande= async () => {
+        handleClose();
+        try {
+            const response = await DeleteDemande(axiosPrivate, id)
+            if(response.data.code==200){
+                toast.success(response.data.message);
+                navigate('/');
+            }
+            
+        } catch (err) {
+            console.log(err)
+            toast.error(err.response?.data?.message);
         }
     }
 
@@ -74,12 +106,42 @@ const VueDetailleeFormation = () => {
                             {formation.nom ? formation.nom : formation.sujet}
                         </span>
                     </Typography>
-                    <Link className="text-decoration-none" to={'/formation/edit/' + formation.id}
-                          title="Modifier la formation">
-                        <Fab sx={FabStyle} color="primary" aria-label="edit">
-                            <EditIcon/>
-                        </Fab>
-                    </Link>
+                    <Box sx={{ '& > :not(style)': { mb: 10 } }}>
+                        <Link className="text-decoration-none" to={'/formation/edit/' + formation.id}
+                            title="Modifier la formation">
+                            <Fab sx={FabStyle} color="primary" aria-label="edit">
+                                <EditIcon/>
+                            </Fab>
+                        </Link>
+                        {checkRoleBn() && (formation.statut== Statut.DEMANDE.toUpperCase())
+                            ? <Fab sx={FabStyle} color="primary" aria-label="delete" onClick={handleOpen}>
+                                <DeleteIcon/>
+                            </Fab>
+                            :<></>
+                        }
+                       
+                    </Box>
+                    <Dialog
+                        open={open}
+                        onClose={() => handleClose()}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        >
+                        <DialogTitle
+                            id="alert-dialog-title"
+                            color="primary"
+                            textAlign="center"
+                        >Confirmez-vous la suppression ?
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>Êtes-vous sûrs de vouloir supprimer la demande.</DialogContentText>
+                            <DialogContentText>Cette action est irréversible.</DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Annuler</Button>
+                            <Button onClick={deleteDemande} color="error" >Supprimer</Button>
+                        </DialogActions>
+                    </Dialog>
                 </>
             }
             <Accordion defaultExpanded={true}>
