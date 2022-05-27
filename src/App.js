@@ -15,7 +15,10 @@ import Admin from './components/Admin/Admin';
 import MotDePasseOublie from './components/auth/MotDePasseOublie/MotDePasseOublie';
 import ReinitialisationMotDePasse from "./components/auth/MotDePasseOublie/ReinitialisationMotDePasse";
 import decodeToken from './auth/decodeToken';
+import MonCompte from "./components/Utilisateur/MonCompte";
+import ModificationMonCompte from "./components/Utilisateur/ModificationMonCompte";
 import toast from "react-hot-toast";
+import ModificationMotDePasse from './components/Utilisateur/ModificationMotDePasse';
 
 function App() {
 
@@ -82,10 +85,29 @@ function App() {
                             <ModificationFormation/>
                         </ProtectedRoute>}
                 />
-
+                <Route
+                path="compte"
+                element={
+                    <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={setRole()} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
+                        <MonCompte />
+                    </ProtectedRoute>}
+                />
+                <Route
+                    path="compte/modification/"
+                    element={
+                        <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={setRole()} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
+                            <ModificationMonCompte />
+                        </ProtectedRoute>}
+                />
+                <Route
+                    path="compte/modification/motdepasse"
+                    element={
+                        <ProtectedRoute redirectPath="/unauthorized" isLoggedIn={setRole()} isAllowed={['ROLE_BN','ROLE_ASSO', 'ROLE_FORMATEUR'].includes(role)}>
+                            <ModificationMotDePasse />
+                        </ProtectedRoute>}
+                />
                 <Route path="unauthorized" element={<Missing/>}/>
                 <Route path="inscription/:token" element={<FormulaireInscription/>}/>
-
                 {/* catch all */}
                 <Route path="*" element={<Missing/>}/>
             </Route>
