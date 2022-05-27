@@ -17,7 +17,7 @@ const Connexion = () => {
 
     const mapFormToUtilisateur = () => {
         let utilisateur = new Utilisateur();
-        utilisateur.nomUtilisateur = nomUtilisateur;
+        utilisateur.nomUtilisateur = nomUtilisateur.trim();
         utilisateur.password = hashPassword(pwd);
         return utilisateur;
     }
