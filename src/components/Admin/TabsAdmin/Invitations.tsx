@@ -12,14 +12,12 @@ const RowDataInvitations = (props) => {
     const [loadingRelance, setLoadingRelance] = useState(false)
     const [loadingSupprimer, setLoadingSupprimer] = useState(false)
     const [liveness, setLiveness] = useState(0)
-    const [isDeleted, setIsDeleted] = useState(false)
 
     const axiosPrivate = useAxiosPrivate()
     let userToken: createUserToken = props.userToken;
 
     useEffect(() => {
          userToken = props.userToken;
-         setIsDeleted(false)
     }, [props.userToken])
 
     const getColorFromTime = (time: TimeObject) => {
@@ -29,7 +27,6 @@ const RowDataInvitations = (props) => {
     }
 
     const getColoredClock = (time: TimeObject) => {
-        if (isDeleted) return <></>
         if (time.isPassed) return <CircleNotifications color="disabled"/>
         if (time.hours > 16) return <AccessTimeFilled color="success"/>;
         else if (time.hours < 8) return <AccessTimeFilled color="warning"/>;
@@ -70,10 +67,12 @@ const RowDataInvitations = (props) => {
         try {
             setLoadingSupprimer(true)
             const response = await PostCancelInvitation(axiosPrivate, userToken.id)
+            if(response.data.code===200)
             setLoadingSupprimer(false)
             if (response.data?.code === 200) {
                 toast.success(response.data.message)
-                setIsDeleted(true)
+                userToken.id=null;
+                setLiveness(liveness + 1)
             }
         } catch (e) {
             toast.error(e.response.data?.message)
@@ -82,32 +81,37 @@ const RowDataInvitations = (props) => {
     }
 
     return (
-        <TableRow key={userToken.id}>
-            <TableCell align="center" >{userToken.email}</TableCell>
-            <TableCell align="center" >{userToken.role}</TableCell>
-            <TableCell align="center" >{afficherValidite(userToken.expirationDate)}</TableCell>
-            <TableCell align="center" >
-                <LoadingButton
-                    disabled={isDeleted}
-                    loading={loadingRelance}
-                    color={getColorFromTime(getTimeObjectFromNow(userToken.expirationDate))}
-                    variant="outlined"
-                    title="Prolonger et notifier"
-                    onClick={() => postRelance()}
-                    endIcon={getColoredClock(getTimeObjectFromNow(userToken.expirationDate))}>
-                    Relancer
-                </LoadingButton>
-                <LoadingButton
-                    disabled={isDeleted}
-                    loading={loadingSupprimer}
-                    color="error"
-                    variant="outlined"
-                    title="Supprimer définitivement l'invitation"
-                    onClick={() => postSupprimerInvitation()}>
-                    <Delete/>
-                </LoadingButton>
-            </TableCell>
-        </TableRow>
+        <>
+        {!userToken.id 
+            ?
+            <></>
+            :
+            <TableRow key={userToken.id}>
+                <TableCell align="center" >{userToken.email}</TableCell>
+                <TableCell align="center" >{userToken.role}</TableCell>
+                <TableCell align="center" >{afficherValidite(userToken.expirationDate)}</TableCell>
+                <TableCell align="center" >
+                    <LoadingButton
+                        loading={loadingRelance}
+                        color={getColorFromTime(getTimeObjectFromNow(userToken.expirationDate))}
+                        variant="outlined"
+                        title="Prolonger et notifier"
+                        onClick={() => postRelance()}
+                        endIcon={getColoredClock(getTimeObjectFromNow(userToken.expirationDate))}>
+                        Relancer
+                    </LoadingButton>
+                    <LoadingButton
+                        loading={loadingSupprimer}
+                        color="error"
+                        variant="outlined"
+                        title="Supprimer définitivement l'invitation"
+                        onClick={() => postSupprimerInvitation()}>
+                        <Delete/>
+                    </LoadingButton>
+                </TableCell>
+            </TableRow>
+       }
+    </>
     )
 }
 
