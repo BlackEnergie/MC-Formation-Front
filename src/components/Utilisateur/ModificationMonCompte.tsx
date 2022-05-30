@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import {PutUpdateUser} from '../../serverInteraction/PutUser';
 import toast from "react-hot-toast";
+import jwtUtils from '../../../src/auth/decodeToken';
 import UtilisateurInfo from "../../api/model/UtilisateurInfo";
 import {FetchDomaines} from "../../serverInteraction/FetchData";
 import Domaine from "../../api/model/Domaine";
@@ -55,6 +56,8 @@ function AffichageModificationMonCompte() {
 
     const [information, setInformation] = useState(null);
     const [utilisateur, setUtilisateur] = useState(initialUtilisateur);
+    const [hasUnfilled, setHasUnfilled] = useState({acronyme:"",college:"",nomComplet:"",ville:"",poste:"",nom:"",prenom:"",email:""});
+    const [showWarning, setShowWarning] = useState({acronyme:false,college:false,nomComplet:false,ville:false,poste:false,nom:false,prenom:false,email:false});
     const [liveness, setLiveness] = useState(0);
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -100,18 +103,81 @@ function AffichageModificationMonCompte() {
         }
     }
 
+    const validate = () => {
+        let token = jwtUtils(localStorage.getItem('accessToken')).decoded;
+        let hasUnfilled = {acronyme:"",college:"",nomComplet:"",ville:"",poste:"",nom:"",prenom:"",email:""};
+        let showWarning = {acronyme:false,college:false,nomComplet:false,ville:false,poste:false,nom:false,prenom:false,email:false};
+        let isValid = true;
+        if (token!== null && token.role === 'ROLE_ASSO') {
+            if(utilisateur.association.acronyme ==""){
+                isValid = false;
+                hasUnfilled["acronyme"] = "Renseignez un acronyme.";
+                showWarning["acronyme"] = true;
+            }
+            if(utilisateur.association.college ==""){
+                isValid = false;
+                hasUnfilled["college"] = "Renseignez un collège.";
+                showWarning["college"] = true;
+                
+            }
+            if(utilisateur.association.nomComplet ==""){
+                isValid = false;
+                hasUnfilled["nomComplet"] = "Renseignez un nom complet.";
+                showWarning["nomComplet"] = true;
+                
+            }
+            if(utilisateur.association.ville ==""){
+                isValid = false;
+                hasUnfilled["ville"] = "Renseignez une ville.";
+                showWarning["ville"] = true;
+                
+            }
+        }
+        if(token!== null && token.role === 'ROLE_BN'){
+            if(utilisateur.membreBureauNational.poste ==""){
+                isValid = false;
+                hasUnfilled["poste"] = "Renseignez un poste.";
+                showWarning["poste"] = true;
 
+            }
+        }
+        if(token!== null && token.role === 'ROLE_FORMATEUR'){
+            if(utilisateur.formateur.nom ==""){
+                isValid = false;
+                hasUnfilled["nom"] = "Renseignez un nom.";
+                showWarning["nom"] = true;
+
+            }
+            if(utilisateur.formateur.prenom ==""){
+                isValid = false;
+                hasUnfilled["prenom"] = "Renseignez un prénom.";
+                showWarning["prenom"] = true;
+            }
+        }
+        if(utilisateur.email==""){
+            isValid = false;
+            hasUnfilled["email"] = "Renseignez une adresse mail";
+            showWarning["email"] = true;
+        }
+        if (isValid) {
+            handleSubmit();
+        } else {
+            setHasUnfilled(hasUnfilled);
+            setShowWarning(showWarning);
+        }
+
+    }
     const handleSubmit = async () => {
-        console.log(utilisateur);
         try {
             const response = await PutUpdateUser(axiosPrivate, utilisateur);
             if (response.data.code == 200) {
                 toast.success(response.data.message);
+                navigate("/compte");
             } else {
                 toast.error(response.data.message);
             }
         } catch (err) {
-            toast.error('Une erreur est survenu');
+            toast.error(err.response?.data?.message);
             console.error(err);
         }
     }
@@ -128,6 +194,7 @@ function AffichageModificationMonCompte() {
                             <Typography variant="h4" color="primary">Mon Compte</Typography>
                             <TextField
                                 id="outlined-required"
+                                error={showWarning.acronyme}
                                 label="Acronyme"
                                 hidden={utilisateur?.association?.acronyme == undefined ? true : false}
                                 value={utilisateur?.association?.acronyme}
@@ -141,9 +208,15 @@ function AffichageModificationMonCompte() {
                                     setLiveness(liveness + 1);
                                 }}
                             />
+                            {showWarning.acronyme
+                            ?
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.acronyme}</Typography>
+                            : <></>
+                            }
                             <TextField
                                 id="outlined-required"
                                 label="Nom Complet"
+                                error={showWarning.nomComplet}
                                 hidden={utilisateur?.association?.nomComplet == undefined ? true : false}
                                 value={utilisateur?.association?.nomComplet}
                                 style={{
@@ -156,9 +229,15 @@ function AffichageModificationMonCompte() {
                                     setLiveness(liveness + 1);
                                 }}
                             />
+                            {showWarning.nomComplet
+                            ?
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.nomComplet}</Typography>
+                            : <></>
+                            }
                             <TextField
                                 id="outlined-required"
                                 label="Nom"
+                                error={showWarning.nom}
                                 hidden={utilisateur?.formateur?.nom == undefined ? true : false}
                                 value={utilisateur?.formateur?.nom}
                                 style={{
@@ -171,9 +250,15 @@ function AffichageModificationMonCompte() {
                                     setLiveness(liveness + 1);
                                 }}
                             />
+                            {showWarning.nom
+                            ?
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.nom}</Typography>
+                            : <></>
+                            }
                             <TextField
                                 id="outlined-required"
                                 label="Prénom"
+                                error={showWarning.prenom}
                                 hidden={utilisateur?.formateur?.prenom == undefined ? true : false}
                                 value={utilisateur?.formateur?.prenom}
                                 style={{
@@ -186,6 +271,11 @@ function AffichageModificationMonCompte() {
                                     setLiveness(liveness + 1);
                                 }}
                             />
+                             {showWarning.prenom
+                            ?
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.prenom}</Typography>
+                            : <></>
+                            }
                             {!(loading && loadingUser) ?
                                 <Autocomplete
                                     multiple
@@ -222,6 +312,7 @@ function AffichageModificationMonCompte() {
                             <TextField
                                 id="outlined-required"
                                 label="Poste"
+                                error={showWarning.poste}
                                 hidden={utilisateur?.membreBureauNational?.poste == undefined ? true : false}
                                 value={utilisateur?.membreBureauNational?.poste}
                                 style={{
@@ -234,9 +325,15 @@ function AffichageModificationMonCompte() {
                                     setLiveness(liveness + 1);
                                 }}
                             />
+                             {showWarning.poste
+                            ?
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.poste}</Typography>
+                            : <></>
+                            }
                             <TextField
                                 id="outlined-required"
                                 label="Ville"
+                                error={showWarning.ville}
                                 hidden={utilisateur?.association?.ville == undefined ? true : false}
                                 value={utilisateur?.association?.ville}
                                 style={{
@@ -249,9 +346,15 @@ function AffichageModificationMonCompte() {
                                     setLiveness(liveness + 1);
                                 }}
                             />
+                            {showWarning.ville
+                            ?
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.ville}</Typography>
+                            : <></>
+                            }
                             <TextField
                                 id="outlined-required"
                                 label="Collège"
+                                error={showWarning.college}
                                 hidden={utilisateur?.association?.college == undefined ? true : false}
                                 value={utilisateur?.association?.college}
                                 style={{
@@ -264,9 +367,15 @@ function AffichageModificationMonCompte() {
                                     setLiveness(liveness + 1);
                                 }}
                             />
+                             {showWarning.college
+                            ?
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.college}</Typography>
+                            : <></>
+                            }
                             <TextField
                                 id="outlined-required"
-                                label="Adresse Mail"
+                                label="Adresse mail"
+                                error={showWarning.email}
                                 hidden={utilisateur?.email == undefined ? true : false}
                                 value={utilisateur?.email}
                                 style={{
@@ -280,6 +389,11 @@ function AffichageModificationMonCompte() {
 
                                 }}
                             />
+                            {showWarning.email
+                            ?
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.email}</Typography>
+                            : <></>
+                            }
                             <Box textAlign='center'>
                                 <Link to="/compte" style={{textDecoration:'none'}}>
                                     <Button
@@ -299,7 +413,7 @@ function AffichageModificationMonCompte() {
                                         marginTop: 15,
                                         marginBottom:15
                                     }}
-                                    onClick={handleSubmit}
+                                    onClick={validate}
                                 >
                                     Valider
                                 </Button>

@@ -16,6 +16,7 @@ import {domaines} from "../../Accueil/ComposantAccueil/FiltreAccueil";
 import {Accordion, AccordionDetails, AccordionSummary, Container, Fab, Link, Skeleton, Typography} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SaveIcon from '@mui/icons-material/Save';
+import InformationsDemande from '../VueDetailleeFormation/InformationsDemande';
 
 const ModificationFormation = () => {
     const FabStyle = {
@@ -123,6 +124,23 @@ const ModificationFormation = () => {
             }
             {!loading ?
                 <>
+                    <Accordion defaultExpanded={false}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header">
+                            <Typography
+                                fontWeight="bold"
+                                color="primary"
+                                component="h1"
+                                variant="h5">
+                                Informations demande
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <InformationsDemande formation={formation} />
+                        </AccordionDetails>
+                    </Accordion>
                     <Accordion defaultExpanded={true}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon/>}
@@ -146,7 +164,6 @@ const ModificationFormation = () => {
                             expandIcon={<ExpandMoreIcon/>}
                             aria-controls="panel2a-content"
                             id="panel2a-header">
-
                             <Typography
                                 fontWeight="bold"
                                 color="primary"

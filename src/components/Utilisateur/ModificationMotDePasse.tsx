@@ -32,9 +32,8 @@ interface State {
 
 function ModificationMotDePasse() {
     const utilisateur = new UtilisateurModificationMotDePasse();
-    const [errPassword, setErrPassword] = useState(null);
-    const [errNewPassword, setErrNewPassword] = useState(null);
-    const [errConfirmPassword, setErrConfirmPassword] = useState(null);
+    const [hasUnfilled, setHasUnfilled] = useState({password:"",newPassword:"",confirmPassword:"",badMatch:""});
+    const [showWarning, setShowWarning] = useState({password:false,newPassword:false,confirmPassword:false,badMatch:false});
     const axiosPrivate = useAxiosPrivate();
 
     const [values, setValues] = React.useState<State>({
@@ -72,35 +71,50 @@ function ModificationMotDePasse() {
             setValues({...values, [prop]: event.target.value});
         };
 
-    const handleSubmit = async () => {
-        setErrNewPassword(null);
-        setErrPassword(null);
-        setErrConfirmPassword(null);
+
+    const validate = () => {
+        let hasUnfilled = {password:"",newPassword:"",confirmPassword:"",badMatch:""};
+        let showWarning = {password:false,newPassword:false,confirmPassword:false,badMatch:false};
+        let isValid = true;
         if (values.password == "") {
-            setErrPassword("Le champ ancien mot de passe est obligatoire");
+            isValid=false;
+            hasUnfilled["password"] = "Le champ ancien mot de passe est obligatoire";
+            showWarning["password"] = true;
         }
         if (values.newpassword == "") {
-            setErrNewPassword("Le champ nouveau mot de passe est obligatoire");
+            isValid = false;
+            hasUnfilled["newPassword"] = "Le champ nouveau mot de passe est obligatoire";
+            showWarning["newPassword"] = true;
         }
         if (values.confirmpassword != values.newpassword) {
-            setErrConfirmPassword("Les mots de passe ne correspondent pas");
+            isValid = false;
+            hasUnfilled["badMatch"] = "Les mots de passe ne correspondent pas";
+            showWarning["badMatch"] = true;
         }
         if (values.confirmpassword == "") {
-            setErrConfirmPassword("Le champ confirmation du nouveau mot de passe est obligatoire");
+            isValid = false;
+            hasUnfilled["confirmPassword"] = "Le champ confirmation du nouveau mot de passe est obligatoire";
+            showWarning["confirmPassword"] = true;
         }
-        if (values.password != "" && values.newpassword != "" && values.confirmpassword != "" && values.confirmpassword == values.newpassword) {
+        if (isValid) {
+            handleSubmit();
+        } else {
+            setHasUnfilled(hasUnfilled);
+            setShowWarning(showWarning);
+        }
+    }
 
-            try {
-                utilisateur.password = hashPassword(values.password)
-                utilisateur.newPassword = hashPassword(values.newpassword)
-                let response = await PutUserPassword(axiosPrivate, utilisateur);
-                if (response.data.code == 200) {
-                    toast.success(response.data.message);
-                }
-                navigate("/compte");
-            } catch (err) {
-                toast.error(err.response?.data?.message);
+    const handleSubmit = async () => {
+        try {
+            utilisateur.password = hashPassword(values.password)
+            utilisateur.newPassword = hashPassword(values.newpassword)
+            let response = await PutUserPassword(axiosPrivate, utilisateur);
+            if (response.data.code == 200) {
+                toast.success(response.data.message);
             }
+            navigate("/compte");
+        } catch (err) {
+            toast.error(err.response?.data?.message);
         }
     }
 
@@ -116,7 +130,7 @@ function ModificationMotDePasse() {
                             passe</Typography>
                         <InputLabel>Ancien mot de passe</InputLabel>
                         <Input
-                            error={errPassword}
+                            error={showWarning.password}
                             required
                             name="password"
                             type={values.showPassword ? "text" : "password"}
@@ -134,9 +148,9 @@ function ModificationMotDePasse() {
                                 </InputAdornment>
                             }
                         />
-                        {errPassword != null
+                        {showWarning.password
                             ?
-                            <Typography color="red" style={{marginBottom: 20}}>{errPassword}</Typography>
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.password}</Typography>
                             : <></>
                         }
                     </Box>
@@ -144,7 +158,7 @@ function ModificationMotDePasse() {
                         <InputLabel>Nouveau mot de passe</InputLabel>
                         <Input
                             required
-                            error={errNewPassword}
+                            error={showWarning.newPassword}
                             name="new-password"
                             type={values.showNewPassword ? "text" : "password"}
                             id="new-password"
@@ -161,16 +175,16 @@ function ModificationMotDePasse() {
                                 </InputAdornment>
                             }
                         />
-                        {errNewPassword != null
+                        {showWarning.newPassword
                             ?
-                            <Typography color="red" style={{marginBottom: 20}}>{errNewPassword}</Typography>
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.newPassword}</Typography>
                             : <></>
                         }
                     </Box>
                     <Box textAlign={'center'}>
                         <InputLabel>Confirmation du nouveau mot de passe</InputLabel>
                         <Input
-                            error={errConfirmPassword}
+                            error={showWarning.confirmPassword}
                             required
                             name="confirmation-password"
                             type={values.showConfirmPassword ? "text" : "password"}
@@ -188,9 +202,9 @@ function ModificationMotDePasse() {
                                 </InputAdornment>
                             }
                         />
-                        {errConfirmPassword != null
+                        {showWarning.confirmPassword
                             ?
-                            <Typography color="red" style={{marginBottom: 20}}>{errConfirmPassword}</Typography>
+                            <Typography color="red" style={{marginBottom: 20}}>{hasUnfilled.confirmPassword}</Typography>
                             : <></>
                         }
                     </Box>
@@ -213,7 +227,7 @@ function ModificationMotDePasse() {
                                 marginTop: 15,
                                 marginBottom: 20
                             }}
-                            onClick={handleSubmit}
+                            onClick={validate}
                         >
                             Enregistrer
                         </Button>

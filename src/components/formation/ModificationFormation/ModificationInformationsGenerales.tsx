@@ -140,7 +140,6 @@ const ModificationInformationsGenerales = (props) => {
                 }
                 break;
         }
-        console.log(items.cadre)
         props.majFormation(items);
     };
 
@@ -161,7 +160,6 @@ const ModificationInformationsGenerales = (props) => {
                 break;
         }
         items.cadre = cadreTemporaire;
-        console.log(items.cadre)
         props.majFormation(items);
     };
 
@@ -247,7 +245,6 @@ const ModificationInformationsGenerales = (props) => {
                             defaultValue={props.formation.cadre?.split(" ")[0]}
                             options={listEvenement}
                             onChange={(event, value) => {
-                                console.log(event);
                                 let eventTemporaire = value;
                                 handleChangeCadre("event", eventTemporaire);
                             }}

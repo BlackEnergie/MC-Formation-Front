@@ -14,7 +14,7 @@ import Formation from '../../../api/model/Formation';
 import InformationsFicheDeFormation from './InformationsFicheDeFormation';
 import FilConducteurFormation from './FilConducteurFormation';
 import {toast} from 'react-hot-toast';
-import {Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, Modal, Skeleton} from '@mui/material';
+import {Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, Skeleton} from '@mui/material';
 import {Statut} from '../../../utils/StatutUtils';
 import InformationsDemande from './InformationsDemande';
 import EditIcon from '@mui/icons-material/Edit';
@@ -107,19 +107,19 @@ const VueDetailleeFormation = () => {
                         </span>
                     </Typography>
                     <Box sx={{ '& > :not(style)': { mb: 10 } }}>
+                        {
+                            checkRoleBn() && (formation.statut === Statut.DEMANDE.toUpperCase())
+                            ? <Fab sx={FabStyle} title="Supprimer la demande" color="primary" aria-label="delete" onClick={handleOpen}>
+                                <DeleteIcon/>
+                            </Fab>
+                            :<></>
+                        }
                         <Link className="text-decoration-none" to={'/formation/edit/' + formation.id}
                             title="Modifier la formation">
                             <Fab sx={FabStyle} color="primary" aria-label="edit">
                                 <EditIcon/>
                             </Fab>
                         </Link>
-                        {checkRoleBn() && (formation.statut== Statut.DEMANDE.toUpperCase())
-                            ? <Fab sx={FabStyle} color="primary" aria-label="delete" onClick={handleOpen}>
-                                <DeleteIcon/>
-                            </Fab>
-                            :<></>
-                        }
-                       
                     </Box>
                     <Dialog
                         open={open}
