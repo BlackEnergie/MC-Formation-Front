@@ -156,7 +156,6 @@ function Filtres(data: formation[], filtre: filtre): formation[] {
         ? data.nom.includes(filtre.sujet)
         : data.sujet.includes(filtre.sujet))
     ) {
-
       filtre.formateurs.forEach((nomComplet) => {
         checkFormUnit = false;
         data.formateurs.map((formateur) => {
@@ -652,7 +651,11 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
                             >
                               {row.association.acronyme}
                             </TableCell>
-                            <TableCell align="center" hidden={checkRoleAsso()}>
+                            <TableCell
+                              align="center"
+                              hidden={checkRoleAsso()}
+                              title={formateurList(row.formateurs).join(", ")}
+                            >
                               {row.formateurs.length > 0
                                 ? formateurList(row.formateurs).join(", ")
                                     .length > 15
@@ -816,7 +819,14 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
                               {checkRoleAsso() &&
                               row.association.id !== token.id &&
                               statutToString(row?.statut) !== "Passée" ? (
-                                <Button sx={{padding:0, minWidth:'24px', maxWidth:'24px'}} onClick={() => postLikeFormation(row)}>
+                                <Button
+                                  sx={{
+                                    padding: 0,
+                                    minWidth: "24px",
+                                    maxWidth: "24px",
+                                  }}
+                                  onClick={() => postLikeFormation(row)}
+                                >
                                   {row?.associationsFavorables?.some(
                                     (association) => association.id === token.id
                                   ) ? (
