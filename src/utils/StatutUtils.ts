@@ -5,6 +5,13 @@ export enum Statut{
     PASSEE = "Passée"
 }
 
+export const optionsStatut =[
+    {value: 'DEMANDE', label:'Demande'},
+    {value: 'A_ATTRIBUER', label:'À attribuer'},
+    {value: 'A_VENIR', label:'À venir'},
+    {value: 'PASSEE', label:'Passée'},
+]
+
 export const statutToString = (statut) => {
     let str = statut;
     switch (statut) {

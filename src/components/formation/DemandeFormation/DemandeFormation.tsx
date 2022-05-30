@@ -1,27 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import Domaine from "../../../api/model/Domaine";
 import Demande from "../../../api/model/Demande";
-import toast from 'react-hot-toast';
-import Select from 'react-select';
 import useAxiosPrivate from '../../../auth/hooks/useAxiosPrivate';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
-import decodeToken from "../../../auth/decodeToken";
-import {AiOutlineRollback} from "react-icons/ai";
+import {useNavigate} from 'react-router-dom';
 import { FetchDomaines } from '../../../serverInteraction/FetchData';
 import { PostDemande } from '../../../serverInteraction/PostDemande';
+import {Alert, Autocomplete, Box, Button, Grid, TextField, Typography} from '@mui/material';
+import decodeToken from '../../../auth/decodeToken';
+import toast from 'react-hot-toast';
 
 const DemandeFormation = () => {
-    {/* state formulaire */
-    }
+
+    const INITIAL_DOMAINE: Domaine[] = [];
+    const [domaine, setDomaine] = useState(INITIAL_DOMAINE);
     const [sujet, setSujet] = useState('');
     const [detail, setDetail] = useState('');
-    const [domaines, setDomaines] = useState([]);
-    const [hasUnfilled, setHasUnfilled] = useState({domaines:"",sujet:"",detail:""});
-    const [options, setOptions] = useState([]);
-
+    const [selectedDomaines, setSelectedDomaines] = useState([]);
+    const [hasUnfilled, setHasUnfilled] = useState({selectedDomaines:"",sujet:"",detail:""});
+    const [showWarning, setShowWarning] =useState({selectedDomaines:false,sujet:false,detail:false});
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
-    const location = useLocation();
 
     const handleSubmit = async () => {
         let demande = mapFormToDemande();
@@ -29,177 +27,214 @@ const DemandeFormation = () => {
             const response = await PostDemande(axiosPrivate, demande);
             if (response.data.code == 201) {
                 toast.success(response.data.message);
-                resetForm()
+                navigate('/')
+                resetForm();
             } else {
                 toast.error(response.data.message);
             }
         } catch (err) {
-            toast.error('Une erreur est survenu');
+            toast.error('Une erreur est survenue');
             console.error(err);
         }
     }
-
     const mapFormToDemande = () => {
-        let demande = new Demande()
-        let domainesArr = []
+        let demande = new Demande();
+        let domainesArr = [];
         demande.sujet = sujet;
         demande.detail = detail;
-        const token = decodeToken(localStorage.getItem('accessToken')).decoded;
-        demande.nomUtilisateur = token.sub
-        domaines.forEach(element => {
+        selectedDomaines.forEach(item => {
             let domaine = new Domaine();
-            domaine.code = element.value;
+            domaine.code = item.value.code;
+            domaine.libelle = item.value.libelle;
+            domaine.description = item.value.description;
             domainesArr.push(domaine);
-        })
-        demande.domaines = domainesArr;
+        });
+        demande.domaines=domainesArr;
+        const token = decodeToken(localStorage.getItem('accessToken')).decoded;
+        demande.nomUtilisateur = token.sub;
         return demande;
     }
+
+    useEffect(() => {
+        getDomaineList();
+    }, [])
+
+    const getDomaineList = async () => {
+        try {
+            const controller = new AbortController();
+
+            const resDomaines = await FetchDomaines(axiosPrivate, controller);
+            setDomaine(resDomaines?.data);
+        } catch (err) {
+            console.log(err)
+        }
+    };
 
     const resetForm = () => {
         setSujet('');
         setDetail('');
-        setHasUnfilled({domaines:"",sujet:"",detail:""});
-        setDomaines([]);
-    }
+        setHasUnfilled({selectedDomaines:"",sujet:"",detail:""});
+        setSelectedDomaines([]);
+        setShowWarning({selectedDomaines:false,sujet:false,detail:false});
+    };
 
     const validate = () => {
-
-        let hasUnfilled = {domaines:"",sujet:"",detail:""};
+        let hasUnfilled = {selectedDomaines:"",sujet:"",detail:""};
+        let showWarning = {selectedDomaines:false,sujet:false,detail:false};
         let isValid = true;
-
         if (!sujet) {
-            isValid = false;
-            hasUnfilled["sujet"] = "Renseigner un sujet.";
+            isValid=false;
+            hasUnfilled["sujet"] = "Renseignez un sujet.";
+            showWarning["sujet"] = true;
         }
         if (!detail) {
             isValid = false;
-            hasUnfilled["detail"] = "Renseigner les détails de la demande.";
+            hasUnfilled["detail"] = "Renseignez les détails de la demande.";
+            showWarning["detail"] = true;
         }
-        if (domaines.length === 0) {
+        if (selectedDomaines.length === 0) {
             isValid = false;
-            hasUnfilled["domaines"] = "Renseigner au moins un domaine.";
+            hasUnfilled["selectedDomaines"] = "Renseignez au moins un domaine.";
+            showWarning["selectedDomaines"] = true;
         }
         if (isValid) {
             handleSubmit();
         } else {
             setHasUnfilled(hasUnfilled);
+            setShowWarning(showWarning);
         }
     }
 
-    useEffect(() => {
+    const FabStyle = {
+        margin: 0,
+        top: 70,
+        right: 'auto',
+        bottom: 'auto',
+        left: 40,
+        position: 'fixed',
+    };
+    const boxStyle = {
+        borderRadius: '.25rem',
+        padding: '1.5rem',
+        marginBottom: '1rem',
+        boxShadow: '0 .5rem 1rem rgba(0,0,0,.15)',
+        width: '50%',
+        align: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto'
+    };
+    let listeDomaines = domaine.map((item, index) => {
+        return {
+            label: item.libelle,
+            value: item,
+            key: item.code,
 
-        let isMounted = true;
-        let optionsArray = []
-        const controller = new AbortController();
-
-        const getDomaines = async () => {
-            try {
-                const response = await FetchDomaines(axiosPrivate, controller);
-                for (const element of response.data) {
-                    optionsArray.push({value: element.code, label: element.libelle});
-                }
-                isMounted && setOptions(optionsArray);
-            } catch (err) {
-                console.error(err);
-                navigate('/connexion', {state: {from: location}, replace: true});
-            }
         }
+    });
 
-        getDomaines();
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        }
-    }, [])
 
     return (
-        <div className="DemandeFormation">
-            <div className="col-2 position-absolute">
-                <Link to="/" id="linkAccueil">
-                    <button type="button" id="buttonArriere"
-                            className="btn btn-primary d-flex align-items-center">
-                        <AiOutlineRollback className="Icones me-2"/>
-                        Revenir à l'accueil
-                    </button>
-                </Link>
-            </div>
-            <div className="row justify-content-md-center mt-1">
-                <div className="col col-lg-5">
-                    <h3 className="color-mc">
-                        Demande de formation
-                    </h3>
-                    <hr/>
-                </div>
-            </div>
-            <div className="row justify-content-md-center">
-                <div className="col col-lg-5 ">
-                    <form>
-                        <div className="form-group mb-3">
-                            <label htmlFor="name" className="form-label">Indiquez le ou les domaines de formation ?</label>
-                            <SelectComp domaines={domaines} options={options} handleChange={setDomaines}/>
-                            <div className="text-danger">{hasUnfilled.domaines}</div>
-                        </div>
-                        <div className="form-group mb-3">
-                            <label htmlFor="sujet" className="form-label">Indiquez le sujet de la formation</label>
-                            <input
-                                type="text"
-                                name="sujet"
-                                value={sujet}
-                                onChange={event => setSujet(event.target.value)}
-                                className="form-control"
-                                placeholder="Ex : Trésorerie"
-                                id="email"/>
-                            <div className="text-danger">{hasUnfilled.sujet}</div>
-                        </div>
-                        <div className="form-group mb-3">
-                            <label htmlFor="detail" className="form-label">Ajoutez des détails sur votre demande de
-                                formation</label>
-                            <textarea
-                                name="detail"
-                                value={detail}
-                                onChange={event => setDetail(event.target.value)}
-                                placeholder="Date souhaité, déroulement, pré-requis, ..."
-                                className="form-control"
-                                rows={7} />
-                            <div className="text-danger">{hasUnfilled.detail}</div>
-                        </div>
-                        <div className="d-flex justify-content-center">
-                            <div className="p-2">
-                                <button type="button" className="btn btn-mc" onClick={validate}>
-                                    Valider
-                                </button>
-                            </div>
-                            <div className="p-2">
-                                <button type="button" className="btn btn-mc" onClick={resetForm}>
-                                    Effacer
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <Box style={boxStyle} >
+            <Grid mt={2} container rowSpacing={0} columnSpacing={2} width="100%">
+                <Typography variant="h4" width="100%" textAlign="center" color="primary">
+                    Demande de formation
+                </Typography>
+                <Grid item mt={3} width="100%">
+                    <Typography mb={1}>
+                        Domaines de formation
+                    </Typography>
+                    <Autocomplete
+                        value={selectedDomaines}
+                        multiple
+                        id="free-solo-2-demo"
+                        disableClearable
+                        options={listeDomaines}
+                        fullWidth={true}
+                        onChange={(event, value) => {
+                            setSelectedDomaines(value);
+                        }}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Domaines"
+                                InputProps={{
+                                    ...params.InputProps,
+                                    type: "search",
+                                }}
+                            />
+                        )}
+                    />
+                    {showWarning.selectedDomaines == true?
+                        <Alert severity="info" sx={{fontSize:10, height:35, padding:0}} >
+                            {hasUnfilled.selectedDomaines}
+                        </Alert>
+                        : <Typography></Typography>
+                    }
+                </Grid>
+                <Grid item mt={3} width="100%">
+                    <Typography mb={1}>
+                        Sujet de la formation
+                    </Typography>
+                    <TextField
+                        value={sujet}
+                        fullWidth={true}
+                        variant="standard"
+                        inputProps={{style: {fontSize: 12}}}
+                        size="small"
+                        multiline={true}
+                        onChange={
+                            (event) => {
+                                setSujet(event.target.value);
+                            }
+                        }>
+                    </TextField>
+                    {showWarning.sujet == true?
+                        <Alert severity="info" sx={{fontSize:10, height:35, padding:0}} >
+                            {hasUnfilled.sujet}
+                        </Alert>
+                        : <Typography></Typography>
+                    }
+                </Grid>
+                <Grid item mt={3} width="100%">
+                    <Typography mb={1}>
+                        Détails de la demande
+                    </Typography>
+                    <TextField
+                        value={detail}
+                        fullWidth={true}
+                        variant="standard"
+                        inputProps={{style: {fontSize: 12}}}
+                        size="small"
+                        multiline={true}
+                        onChange={
+                            (event) => {
+                                setDetail(event.target.value);
+                            }
+                        }>
+                    </TextField>
+                    {showWarning.detail == true?
+                        <Alert severity="info" sx={{fontSize:10, height:35, padding:0}} >
+                            {hasUnfilled.detail}
+                        </Alert>
+                        : <Typography></Typography>
+                    }
+
+                </Grid>
+                <Grid item mt={3} width="100%" sx={{display:'flex', justifyContent: 'center',}}>
+                    <Button variant="contained" color="primary" type="submit" sx={{marginRight:1}} onClick={validate}>
+                        Valider
+                    </Button>
+                    <Button variant="contained" color="primary" type="submit" sx={{marginLeft:1}} onClick={resetForm}>
+                        Reset
+                    </Button>
+                </Grid>
+            </Grid>
+
+        </Box>
     );
 }
 
 export default DemandeFormation;
-
-const SelectComp = ({domaines, options, handleChange}) => {
-
-    return (
-        <Select
-            isMulti
-            isClearable
-            isSearchable
-            defaultValue={domaines}
-            value={domaines}
-            placeholder="Veuillez selectionner au moins un domaine"
-            onChange={handleChange}
-            options={options}
-        />
-    );
-}
 
 
 

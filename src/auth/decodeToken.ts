@@ -20,6 +20,7 @@ const decodeToken = ( jwt ) => {
     }
     catch (err) {
         console.log(err);
+        window.location.replace("/connexion")
     }
 
     return resultat;
