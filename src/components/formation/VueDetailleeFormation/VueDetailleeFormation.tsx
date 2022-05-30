@@ -14,7 +14,7 @@ import Formation from '../../../api/model/Formation';
 import InformationsFicheDeFormation from './InformationsFicheDeFormation';
 import FilConducteurFormation from './FilConducteurFormation';
 import {toast} from 'react-hot-toast';
-import {Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, Modal, Skeleton} from '@mui/material';
+import {Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, Skeleton} from '@mui/material';
 import {Statut} from '../../../utils/StatutUtils';
 import InformationsDemande from './InformationsDemande';
 import EditIcon from '@mui/icons-material/Edit';

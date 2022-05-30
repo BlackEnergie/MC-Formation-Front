@@ -193,7 +193,7 @@ const ModificationFilConducteur = (props) => {
         }else{
             return(
                 <Typography>
-                    Vous n'avez pas défini la durée la formation
+                    Vous n'avez pas défini la durée de la formation
                 </Typography>
                 )
         }
