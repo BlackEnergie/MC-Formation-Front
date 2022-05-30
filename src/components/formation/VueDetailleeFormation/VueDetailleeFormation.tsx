@@ -107,19 +107,19 @@ const VueDetailleeFormation = () => {
                         </span>
                     </Typography>
                     <Box sx={{ '& > :not(style)': { mb: 10 } }}>
+                        {
+                            checkRoleBn() && (formation.statut === Statut.DEMANDE.toUpperCase())
+                            ? <Fab sx={FabStyle} title="Supprimer la demande" color="primary" aria-label="delete" onClick={handleOpen}>
+                                <DeleteIcon/>
+                            </Fab>
+                            :<></>
+                        }
                         <Link className="text-decoration-none" to={'/formation/edit/' + formation.id}
                             title="Modifier la formation">
                             <Fab sx={FabStyle} color="primary" aria-label="edit">
                                 <EditIcon/>
                             </Fab>
                         </Link>
-                        {checkRoleBn() && (formation.statut== Statut.DEMANDE.toUpperCase())
-                            ? <Fab sx={FabStyle} color="primary" aria-label="delete" onClick={handleOpen}>
-                                <DeleteIcon/>
-                            </Fab>
-                            :<></>
-                        }
-                       
                     </Box>
                     <Dialog
                         open={open}

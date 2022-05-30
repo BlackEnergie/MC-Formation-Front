@@ -471,7 +471,6 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
                 options={fullFiltre.statut}
                 value={statutFiltre}
                 onChange={(event, value) => {
-                  console.log(value);
                   setStatutFiltre(value);
                   newfiltre.statut = value;
                   SetFiltre(newfiltre);
