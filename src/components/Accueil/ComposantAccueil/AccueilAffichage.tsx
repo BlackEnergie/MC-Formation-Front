@@ -148,9 +148,9 @@ function Filtres(data: formation[], filtre: filtre): formation[] {
     checkDomaine = true;
     if (
       (filtre.statut.includes(statutToString(data.statut)) ||
-        filtre.statut.length == 0) &&
-      (filtre.cadre.length == 0 || filtre.cadre.includes(data.cadre)) &&
-      (filtre.asso.length == 0 ||
+        filtre.statut.length === 0) &&
+      (filtre.cadre.length === 0 || filtre.cadre.includes(data.cadre)) &&
+      (filtre.asso.length === 0 ||
         filtre.asso.includes(data.association.acronyme)) &&
       (data.nom
         ? data.nom.includes(filtre.sujet)
@@ -159,7 +159,7 @@ function Filtres(data: formation[], filtre: filtre): formation[] {
       filtre.formateurs.forEach((nomComplet) => {
         checkFormUnit = false;
         data.formateurs.map((formateur) => {
-          if (formateur.prenom + " " + formateur.nom == nomComplet) {
+          if (formateur.prenom + " " + formateur.nom === nomComplet) {
             checkFormUnit = true;
           }
         });
@@ -171,7 +171,7 @@ function Filtres(data: formation[], filtre: filtre): formation[] {
       filtre.domaines.forEach((libelle) => {
         checkDomaineUnit = false;
         data.domaines.map((domaine) => {
-          if (domaine.libelle == libelle) {
+          if (domaine.libelle === libelle) {
             checkDomaineUnit = true;
           }
         });
@@ -290,7 +290,7 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
       affectation.idFormation = row.id;
       affectation.idUtilisateur = token.id;
       const response = await FetchAssignFormateur(axiosPrivate, affectation);
-      if (response.data.code == 200) {
+      if (response.data.code === 200) {
         unFilteredData[unFilteredData.indexOf(row)] = response.data.formation;
         data = Filtres(unFilteredData, filtre);
         setLiveness(liveness + 1);
@@ -308,7 +308,7 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
       interesser.idFormation = row.id;
       interesser.idUtilisateur = token.id;
       const response = await FetchLikeFormation(axiosPrivate, interesser);
-      if (response.data.code == 200) {
+      if (response.data.code === 200) {
         unFilteredData[unFilteredData.indexOf(row)] = response.data.formation;
         data = Filtres(unFilteredData, filtre);
         setLiveness(liveness + 1);
@@ -625,7 +625,7 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
                               {statutToString(row.statut)}
                             </TableCell>
                             <TableCell align="center">
-                              {row.cadre == null
+                              {row.cadre === null
                                 ? ADeterminerText()
                                 : row.cadre}
                             </TableCell>
@@ -666,7 +666,7 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
                                 : ADeterminerText()}
                             </TableCell>
                             <TableCell align="center">
-                              {row.date == null ? ADeterminerText() : row.date}
+                              {row.date === null ? ADeterminerText() : row.date}
                             </TableCell>
                             <TableCell align="center">
                               {checkRoleBn() ||
@@ -719,7 +719,7 @@ function AccueilAffichage(unFilteredData: formation[], userInfo: UserInfo) {
                                           </TableCell>
                                           <TableCell>
                                             {" "}
-                                            {row?.cadre == null
+                                            {row?.cadre === null
                                               ? ADeterminerText()
                                               : row?.cadre}
                                           </TableCell>
