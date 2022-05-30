@@ -7,3 +7,10 @@ export function PostDemande(axios: AxiosInstance, demande: Demande) {
         headers: headersTemplate
     });
 }
+
+export function DeleteDemande(axios:AxiosInstance, id : String){
+    return axios.post(EntryPoint.DEMANDE_SUPPRESSION+id,{},{
+        headers: headersTemplate
+    });
+
+}

@@ -7,3 +7,21 @@ export function FetchDomaines(axios: AxiosInstance, controller: AbortController)
         headers: headersTemplate
     });
 }
+
+export function FetchFormateur(axios: AxiosInstance) {
+    return axios.get(EntryPoint.FORMATEUR_DETAIL, {
+        headers: headersTemplate
+    });
+}
+
+export function FetchListeFormateurs(axios: AxiosInstance) {
+    return axios.get(EntryPoint.FORMATEUR_LISTE, {
+        headers: headersTemplate
+    });
+}
+
+export function FetchDemandesFavorables (axios: AxiosInstance) {
+    return axios.get(EntryPoint.DEMANDE_FAVORABLE, {
+        headers: headersTemplate
+    });
+}

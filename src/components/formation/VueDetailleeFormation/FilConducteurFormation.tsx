@@ -11,14 +11,9 @@ import TableHead from '@mui/material/TableHead';
 import Partie from '../../../api/model/Partie';
 import Typography from '@mui/material/Typography';
 
-const FilConducteurFormation = (formation) => {
-    let parties: Partie[] | undefined;
+const FilConducteurFormation = (props) => {
 
-    try {
-        parties = formation.formation.parties ? JSON.parse(formation.formation.parties) : undefined;
-    } catch (e) {
-        console.error(e);
-    }
+    let parties: Partie[] = props.formation.parties;
 
     const StyledTableCell = styled(TableCell)(({theme}) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -50,23 +45,30 @@ const FilConducteurFormation = (formation) => {
         },
     }));
 
-    const AfficherDataFilConducteur = parties?.map(
-        (partie) => {
-            return (
-                <StyledTableRow key={partie.id}>
-                    <StyledTableCell>{partie.plan}</StyledTableCell>
-                    <StyledTableCell>{partie.timing}</StyledTableCell>
-                    <StyledTableCell>{partie.contenu}</StyledTableCell>
-                    <StyledTableCell>{partie.methodologie}</StyledTableCell>
-                </StyledTableRow>
-            )
-        }
-    )
+    const AfficherDataFilConducteur =
+        parties?.length > 0 ?
+            parties?.map(
+                (partie) => {
+                    return (
+                        <StyledTableRow key={partie.id}>
+                            <StyledTableCell width={200}>{partie.plan}</StyledTableCell>
+                            <StyledTableCell width={100}>{partie.timing} min</StyledTableCell>
+                            <StyledTableCell>{partie.contenu}</StyledTableCell>
+                            <StyledTableCell width={300}>{partie.methodologie}</StyledTableCell>
+                        </StyledTableRow>
+                    )
+                }
+            ) : <StyledTableRow>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+            </StyledTableRow>
 
     return (
         <Grid>
             <Typography
-                sx={{ flex: '1 1 100%', p:1 }}
+                sx={{flex: '1 1 100%', p: 1}}
                 variant="h5"
                 color="primary"
                 id="tableTitle"
