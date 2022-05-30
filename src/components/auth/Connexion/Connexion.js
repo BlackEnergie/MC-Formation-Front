@@ -6,6 +6,7 @@ import {hashPassword} from "../../../utils/PasswordUtils";
 import {toast} from "react-hot-toast";
 import { PostConnexion } from '../../../serverInteraction/PostConnexion';
 import { Link as LinkMui } from '@mui/material';
+import {MAIN_URL} from "../../../serverInteraction/common";
 
 const Connexion = () => {
 
@@ -31,7 +32,7 @@ const Connexion = () => {
             const accessToken = response?.data?.accessToken;
             localStorage.setItem("accessToken", accessToken);
             setLogin(true);
-            window.location.href = '/';
+            window.location.href = MAIN_URL;
             toast.success("Connecté en tant que '" + nomUtilisateur + "'");
         } catch (err) {
             let errMsg = 'La connexion a échoué';

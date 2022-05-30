@@ -62,6 +62,7 @@ const VueDetailleeFormation = () => {
         }
     }
 
+
     const deleteDemande= async () => {
         handleClose();
         try {

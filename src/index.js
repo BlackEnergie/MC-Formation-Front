@@ -13,9 +13,10 @@ import {
   Route,
   Routes,
 } from 'react-router-dom';
+import {MAIN_URL} from "./serverInteraction/common";
 ReactDOM.render(
     <React.StrictMode>
-      <BrowserRouter>
+      <BrowserRouter basename={MAIN_URL}>
         <AuthProvider>
           <ThemeProvider theme={theme}>
               <Routes>
