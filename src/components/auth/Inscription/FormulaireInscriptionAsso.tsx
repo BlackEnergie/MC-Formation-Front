@@ -12,7 +12,7 @@ const FormulaireInscriptionAsso = () => {
     const [acronyme, setAcronyme] = useState('');
     const [nomComplet, setNomComplet] = useState('');
     const [ville, setVille] = useState('');
-    const [college, setCollege] = useState('');
+    const [college, setCollege] = useState('A');
     const [mdp1, setMdp1] = useState('');
     const [mdp2, setMdp2] = useState('');
     const [mdp, setMdp] = useState('');
