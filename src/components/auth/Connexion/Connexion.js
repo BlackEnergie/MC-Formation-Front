@@ -1,12 +1,11 @@
 import './Connexion.css';
 import React, {useState} from 'react';
 import Utilisateur from "../../../api/model/Utilisateur";
-import axios from '../../../api/axios';
-import {useOutletContext} from 'react-router-dom';
+import {Link, useOutletContext} from 'react-router-dom';
 import {hashPassword} from "../../../utils/PasswordUtils";
 import {toast} from "react-hot-toast";
-
-const LOGIN_URL = '/auth/signin';
+import { PostConnexion } from '../../../serverInteraction/PostConnexion';
+import { Link as LinkMui } from '@mui/material';
 
 const Connexion = () => {
 
@@ -14,27 +13,21 @@ const Connexion = () => {
 
     const [nomUtilisateur, setNomUtilisateur] = useState('');
     const [pwd, setPwd] = useState('');
-    const [errMsg, setErrMsg] = useState('');
+    //const [errMsg, setErrMsg] = useState('');
 
     const mapFormToUtilisateur = () => {
         let utilisateur = new Utilisateur();
-        utilisateur.nomUtilisateur = nomUtilisateur;
+        utilisateur.nomUtilisateur = nomUtilisateur.trim();
         utilisateur.password = hashPassword(pwd);
         return utilisateur;
     }
-
+    
     const handleSubmit = async (e) => {
 
         e.preventDefault();
         const utilisateur = mapFormToUtilisateur();
         try {
-            const response = await axios.post(LOGIN_URL,
-                JSON.stringify(utilisateur),
-                {
-                    headers: {'Content-Type': 'application/json'},
-                    withCredentials: false,
-                }
-            );
+            const response = await PostConnexion(utilisateur)
             const accessToken = response?.data?.accessToken;
             localStorage.setItem("accessToken", accessToken);
             setLogin(true);
@@ -86,7 +79,9 @@ const Connexion = () => {
                            alt="buttonConnexion"/>
                 </form>
                 <div id="contactVP">
-                    <a href="/">Entrer en contact avec VP Formation</a>
+                    <Link to="/motDePasseOublie">
+                        <LinkMui color="primary">Mot de passe oublié ?</LinkMui>
+                    </Link>
                 </div>
             </div>
         </>
