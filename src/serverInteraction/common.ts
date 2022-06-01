@@ -1,4 +1,5 @@
-export const BASE_URL = "http://mcformation.eu-west-3.elasticbeanstalk.com/";
+export const CORS_REDIRECT = "https://cors-anywhere.herokuapp.com/"
+export const BASE_URL = CORS_REDIRECT + "http://mcformationback.blackenergy.click/";
 
 export enum EntryPoint {
     ALL_FORMATION = '/formations',
